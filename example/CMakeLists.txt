@@ -1,8 +1,9 @@
 foreach(execid
-  cnn
+  cnn_mnist
   cnn_from_keras
+  dense_mnist
   dense_from_keras
-  mnist
+  get_set_network_params
   simple
   sine
 )

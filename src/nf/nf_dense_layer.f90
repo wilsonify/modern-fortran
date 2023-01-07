@@ -4,7 +4,7 @@ module nf_dense_layer
   !! It is used internally by the layer type.
   !! It is not intended to be used directly by the user.
 
-  use nf_activation, only: activation_function
+  use nf_activation_1d, only: activation_function
   use nf_base_layer, only: base_layer
 
   implicit none
@@ -27,11 +27,20 @@ module nf_dense_layer
     real, allocatable :: dw(:,:) ! weight gradients
     real, allocatable :: db(:) ! bias gradients
 
+    procedure(activation_function), pointer, nopass :: &
+      activation => null()
+    procedure(activation_function), pointer, nopass :: &
+      activation_prime => null()
+
   contains
 
     procedure :: backward
     procedure :: forward
+    procedure :: get_num_params
+    procedure :: get_params
+    procedure :: set_params
     procedure :: init
+    procedure :: set_activation
     procedure :: update
 
   end type dense_layer
@@ -74,6 +83,32 @@ module nf_dense_layer
         !! Input from the previous layer
     end subroutine forward
 
+    pure module function get_num_params(self) result(num_params)
+       !! Return the number of parameters in this layer.
+       class(dense_layer), intent(in) :: self
+         !! Dense layer instance
+       integer :: num_params
+         !! Number of parameters in this layer
+    end function get_num_params
+
+    pure module function get_params(self) result(params)
+      !! Return the parameters of this layer.
+      !! The parameters are ordered as weights first, biases second.
+      class(dense_layer), intent(in) :: self
+        !! Dense layer instance
+      real, allocatable :: params(:)
+        !! Parameters of this layer
+    end function get_params
+
+    module subroutine set_params(self, params)
+      !! Set the parameters of this layer.
+      !! The parameters are ordered as weights first, biases second.
+      class(dense_layer), intent(in out) :: self
+        !! Dense layer instance
+      real, intent(in) :: params(:)
+        !! Parameters of this layer
+    end subroutine set_params
+
     module subroutine init(self, input_shape)
       !! Initialize the layer data structures.
       !!
@@ -83,6 +118,14 @@ module nf_dense_layer
       integer, intent(in) :: input_shape(:)
         !! Shape of the input layer
     end subroutine init
+
+    elemental module subroutine set_activation(self, activation)
+      !! Set the activation functions.
+      class(dense_layer), intent(in out) :: self
+        !! Layer instance
+      character(*), intent(in) :: activation
+        !! String with the activation function name
+    end subroutine set_activation
 
     module subroutine update(self, learning_rate)
       !! Update the weights and biases.
