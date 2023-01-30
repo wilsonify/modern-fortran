@@ -7,5 +7,6 @@ RUN adduser $USERNAME sudo
 USER $USERNAME
 WORKDIR /home/$USERNAME
 RUN sudo apt-get install -yq git curl && \
-    sudo apt-get install --no-install-recommends -yq make cmake gfortran libcoarrays-dev libopenmpi-dev open-coarrays-bin && \
+    sudo apt-get install --no-install-recommends -yq  \
+    make cmake gfortran libcoarrays-dev libopenmpi-dev open-coarrays-bin && \
     sudo apt-get clean -q
