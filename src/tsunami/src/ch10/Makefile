@@ -19,4 +19,4 @@ tsunami: tsunami.f90 $(OBJS)
 mod_field.o: mod_field.f90 mod_io.o mod_parallel.o
 
 clean:
-	$(RM) tsunami *.o *.mod
+	$(RM) tsunami *.o *.mod *.dat
