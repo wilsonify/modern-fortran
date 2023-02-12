@@ -20,13 +20,23 @@ OBJS = mod_diff.o mod_field.o mod_io.o mod_parallel.o
 # Create an object file from a module file
 %.o: %.mod
 
-all: tsunami
+all: clean tsunami tsunami_h_1000.dat tsunami.gif
 
 tsunami: tsunami.f90 $(OBJS)
 	$(FC) $(FCFLAGS) $< $(OBJS) -o $@
 
+# run a simulation
+tsunami_h_1000.dat: tsunami
+	./tsunami
+
+tsunami.gif: tsunami_h_1000.dat
+	python plot_2d_water_elevation.py
 
 mod_field.o: mod_field.f90 mod_diff.o mod_io.o mod_parallel.o
 
 clean:
-	$(RM) tsunami *.o *.mod
+	$(RM) tsunami *.o
+	$(RM) *.mod
+	$(RM) *.dat
+	$(RM) *.png
+	$(RM) *.gif
