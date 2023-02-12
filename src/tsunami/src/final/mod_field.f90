@@ -66,14 +66,14 @@ contains
   end function field_constructor
 
   subroutine assign_field(self, f)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     class(Field), intent(in) :: f
     call from_field(self, f)
     call self % sync_edges()
   end subroutine assign_field
 
   pure subroutine assign_real_scalar(self, a)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), intent(in) :: a
     self % data = a
   end subroutine assign_real_scalar
@@ -97,7 +97,7 @@ contains
     ! from Field instance source. Used to initialize a 
     ! Field from another Field without invoking the 
     ! assignment operator.
-    type(Field), intent(in out) :: target
+    type(Field), intent(inout) :: target
     type(Field), intent(in) :: source
     target % name = source % name
     target % lb = source % lb
@@ -125,7 +125,7 @@ contains
   end function gather
 
   subroutine init_gaussian(self, decay, ic, jc)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), intent(in) :: decay
     integer(int32), intent(in) :: ic, jc
     integer(int32) :: i, j
@@ -190,7 +190,7 @@ contains
   end function field_sub_field
 
   subroutine sync_edges(self)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), allocatable, save :: edge(:,:)[:]
 
     associate(is => self % lb(1), ie => self % ub(1),&

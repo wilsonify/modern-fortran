@@ -11,7 +11,7 @@ contains
   pure subroutine set_gaussian(x, icenter, decay)
     ! Sets the values of x to a Gaussian shape centered on icenter
     ! that decays with the given input decay.
-    real(real32), intent(in out) :: x(:)
+    real(real32), intent(inout) :: x(:)
     integer(int32), intent(in) :: icenter
     real(real32), intent(in) :: decay
     integer(int32) :: i

@@ -62,7 +62,7 @@ contains
   pure subroutine set_gaussian(x, icenter, decay)
     ! Sets the values of x to a Gaussian shape centered on icenter
     ! that decays with the given input decay.
-    real, intent(in out) :: x(:)
+    real, intent(inout) :: x(:)
     integer, intent(in) :: icenter
     real, intent(in) :: decay
     integer :: i
