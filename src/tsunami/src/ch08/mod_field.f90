@@ -66,19 +66,19 @@ contains
   end function field_constructor
 
   pure subroutine assign_array(self, a)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), intent(in) :: a(:,:)
     self % data = a
   end subroutine assign_array
 
   pure subroutine assign_const_int(self, a)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     integer(real32), intent(in) :: a
     self % data = a
   end subroutine assign_const_int
 
   pure subroutine assign_const_real(self, a)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), intent(in) :: a
     self % data = a
   end subroutine assign_const_real
@@ -114,7 +114,7 @@ contains
   end function gather
 
   pure subroutine set_gaussian(self, decay, ic, jc)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), intent(in) :: decay ! the rate of decay of gaussian
     integer(int32), intent(in) :: ic, jc ! center indices of the gaussian blob
     integer(int32) :: i, j
@@ -192,7 +192,7 @@ contains
   end function field_sub_field
 
   subroutine sync_edges(self)
-    class(Field), intent(in out) :: self
+    class(Field), intent(inout) :: self
     real(real32), allocatable :: edge(:,:)[:]
     integer(int32) :: is, ie, js, je
 

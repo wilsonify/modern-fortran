@@ -12,7 +12,7 @@ module mod_boundary
 contains
 
   subroutine reflective_boundary(u, v, h)
-    real(rk), allocatable, intent(in out) :: u(:,:), v(:,:), h(:,:)
+    real(rk), allocatable, intent(inout) :: u(:,:), v(:,:), h(:,:)
     integer(ik) :: ims, ime, jms, jme
     associate(ims => lbound(u, dim=1), ime => ubound(u, dim=1),&
               jms => lbound(u, dim=2), jme => ubound(u, dim=2))
