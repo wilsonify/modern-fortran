@@ -7,3 +7,6 @@
 [submodule "src/neural-fortran/external/json-fortran"]
 	path = src/neural-fortran/external/json-fortran
 	url = https://github.com/jacobwilliams/json-fortran
+[submodule "src/neural-fortran/external/h5fortran"]
+	path = src/neural-fortran/external/h5fortran
+	url = https://github.com/geospace-code/h5fortran
