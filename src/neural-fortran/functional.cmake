@@ -5,6 +5,8 @@
 #)
 # FetchContent_Populate(functional)
 
+set(functional_SOURCE_DIR external/functional-fortran)
+
 add_library(functional ${functional_SOURCE_DIR}/src/functional.f90)
 target_include_directories(functional PUBLIC
 $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>

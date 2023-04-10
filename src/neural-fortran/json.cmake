@@ -7,7 +7,7 @@
 # )
 
 # FetchContent_Populate(jsonfortran)
-
+set(jsonfortran_SOURCE_DIR external/json-fortran)
 SET(JSON_REAL_KIND "REAL64")
 SET(JSON_INT_KIND "INT32")
 
