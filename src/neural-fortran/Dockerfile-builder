@@ -1,0 +1,10 @@
+
+FROM neural-fortran-base:latest
+
+# Install packages that we want to make available at build time
+RUN apt-get update && apt-get install -y \
+git \
+build-essential \
+gcc \
+gfortran \
+cmake

@@ -11,6 +11,10 @@ project(neural-fortran LANGUAGES C Fortran)
 include(options.cmake)
 include(compilers.cmake)
 include(functional.cmake)
+include(hdf5.cmake)
+find_library(HDF5_LIB hdf5)
+message(STATUS "HDF5 library path: ${HDF5_LIB}")
+
 include(h5fortran.cmake)
 include(json.cmake)
 
@@ -71,10 +75,6 @@ target_link_libraries(neural PRIVATE
 # Remove leading or trailing whitespace
 # string(REGEX REPLACE "^ | $" "" LIBS "${LIBS}")
 
-if(${PROJECT_NAME}_BUILD_TESTING)
-  enable_testing()
-  add_subdirectory(test)
-endif()
 
 if(${PROJECT_NAME}_BUILD_EXAMPLES)
   add_subdirectory(example)
