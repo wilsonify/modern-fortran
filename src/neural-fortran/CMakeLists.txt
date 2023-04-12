@@ -11,15 +11,16 @@ LANGUAGES C Fortran
 )
 
 enable_testing()
+find_package(HDF5 REQUIRED COMPONENTS Fortran)
 
-include(FetchContent)
+# Add git submodules
+add_subdirectory(external/functional-fortran)
+add_library(functional::functional ALIAS functional)
 
-include(cmake/options.cmake)
-include(cmake/compilers.cmake)
+add_subdirectory(external/h5fortran)
 
-include(cmake/functional.cmake)
-include(cmake/h5fortran.cmake)
-include(cmake/json.cmake)
+add_subdirectory(external/json-fortran)
+add_library(jsonfortran::jsonfortran ALIAS jsonfortran)
 
 # library to archive (libneural.a)
 FILE(GLOB NF_SRCS *.f90 nf/*.f90 np/io/*.f90)
@@ -38,4 +39,3 @@ install(TARGETS neural)
 
 # Remove leading or trailing whitespace
 string(REGEX REPLACE "^ | $" "" LIBS "${LIBS}")
-
