@@ -1,13 +1,13 @@
 # use our own CMake script to build jsonfortran instead of jsonfortran/CMakelists.txt
 
-# FetchContent_Declare(jsonfortran
-#  GIT_REPOSITORY https://github.com/jacobwilliams/json-fortran
-#  GIT_TAG 8.3.0
-#  GIT_SHALLOW true
-# )
+FetchContent_Declare(jsonfortran
+  GIT_REPOSITORY https://github.com/jacobwilliams/json-fortran
+  GIT_TAG 8.3.0
+  GIT_SHALLOW true
+)
 
-# FetchContent_Populate(jsonfortran)
-set(jsonfortran_SOURCE_DIR external/json-fortran)
+FetchContent_Populate(jsonfortran)
+
 SET(JSON_REAL_KIND "REAL64")
 SET(JSON_INT_KIND "INT32")
 
@@ -30,7 +30,6 @@ $<INSTALL_INTERFACE:include>
 )
 
 add_library(jsonfortran::jsonfortran INTERFACE IMPORTED GLOBAL)
-
 target_link_libraries(jsonfortran::jsonfortran INTERFACE jsonfortran)
 
 install(TARGETS jsonfortran)
