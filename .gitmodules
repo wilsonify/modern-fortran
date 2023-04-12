@@ -6,10 +6,13 @@
 	url = https://github.com/sustrik/libdill.git
 [submodule "src/neural-fortran/external/json-fortran"]
 	path = src/neural-fortran/external/json-fortran
-	url = https://github.com/jacobwilliams/json-fortran
+	url = https://github.com/jacobwilliams/json-fortran.git
 [submodule "src/neural-fortran/external/h5fortran"]
 	path = src/neural-fortran/external/h5fortran
-	url = https://github.com/geospace-code/h5fortran
+	url = https://github.com/wavebitscientific/h5fortran.git
 [submodule "src/neural-fortran/external/hdf5"]
 	path = src/neural-fortran/external/hdf5
 	url = https://github.com/HDFGroup/hdf5.git
+[submodule "src/neural-fortran/external/functional-fortran"]
+	path = src/neural-fortran/external/functional-fortran
+	url = https://github.com/wavebitscientific/functional-fortran.git
