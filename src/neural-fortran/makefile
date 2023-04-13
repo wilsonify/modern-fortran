@@ -1,4 +1,4 @@
-cdver_file = echo "1.0.0" > $(1) && date +%Y-%m-%d >> $(1)
+ver_file = echo "1.0.0" > $(1) && date +%Y-%m-%d >> $(1)
 all: clean build/neural-fortran.txt
 
 clean:
@@ -21,7 +21,7 @@ build/neural-fortran.txt: build/neural-fortran-builder.txt
 	docker build --progress=plain -f Dockerfile -t neural-fortran:latest . && $(call ver_file, $@)
 
 docker-run: build/neural-fortran.txt
-	docker run --rm --name nf -i -t neural-fortran-builder:latest /bin/bash
+	docker run --rm --name nf -i -t neural-fortran:latest /bin/bash
 
 download:
 	curl -LO https://github.com/neural-fortran/keras-snippets/files/9667603/keras_reshape.tar.gz

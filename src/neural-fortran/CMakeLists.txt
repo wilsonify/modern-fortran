@@ -18,12 +18,12 @@ add_subdirectory(external/functional-fortran)
 add_library(functional::functional ALIAS functional)
 
 add_subdirectory(external/h5fortran)
-
+add_library(h5fortran::h5fortran ALIAS h5fortran)
 add_subdirectory(external/json-fortran)
 add_library(jsonfortran::jsonfortran ALIAS jsonfortran)
 
 # library to archive (libneural.a)
-FILE(GLOB NF_SRCS *.f90 nf/*.f90 np/io/*.f90)
+FILE(GLOB NF_SRCS *.f90 nf/*.f90 nf/io/*.f90)
 add_library(neural
   ${NF_SRCS}
 )
