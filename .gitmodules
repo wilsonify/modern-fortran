@@ -1,6 +1,3 @@
-[submodule "external/OpenCoarrays"]
-	path = external/OpenCoarrays
-	url = https://github.com/sourceryinstitute/OpenCoarrays
 [submodule "external/libdill"]
 	path = external/libdill
 	url = https://github.com/sustrik/libdill.git
