@@ -6,19 +6,20 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Default build Release")
 endif()
 
-project(neural-fortran
-LANGUAGES C Fortran
-)
+project(neural-fortran LANGUAGES C Fortran )
 
 enable_testing()
 find_package(HDF5 REQUIRED COMPONENTS Fortran)
-
+include(compilers.cmake)
+include(options.cmake)
 # Add git submodules
 add_subdirectory(external/functional-fortran)
 add_library(functional::functional ALIAS functional)
+find_library(functional::functional functional HINTS ${CMAKE_INSTALL_PREFIX}/lib)
 
 add_subdirectory(external/h5fortran)
-add_library(h5fortran::h5fortran ALIAS h5fortran)
+file(MAKE_DIRECTORY ${h5fortran_BINARY_DIR}/include)
+#add_library(h5fortran::h5fortran ALIAS h5fortran)
 add_subdirectory(external/json-fortran)
 add_library(jsonfortran::jsonfortran ALIAS jsonfortran)
 
