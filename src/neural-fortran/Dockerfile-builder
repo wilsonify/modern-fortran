@@ -12,3 +12,12 @@ RUN apt-get install -y libhdf5-dev
 RUN apt-get install -y curl
 RUN apt-get install -y libmpich-dev
 RUN apt-get install -y mpich
+
+# Install OpenCoarrays 2.8.0
+COPY external /external
+RUN mkdir -p /external/OpenCoarrays/build
+WORKDIR /external/OpenCoarrays/build
+RUN cmake ..
+RUN make
+RUN make install
+RUN caf --version && cafrun --version
