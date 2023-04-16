@@ -16,3 +16,6 @@
 [submodule "src/neural-fortran/external/functional-fortran"]
 	path = src/neural-fortran/external/functional-fortran
 	url = https://github.com/wavebitscientific/functional-fortran.git
+[submodule "src/neural-fortran/external/OpenCoarrays"]
+	path = src/neural-fortran/external/OpenCoarrays
+	url = https://github.com/sourceryinstitute/OpenCoarrays
