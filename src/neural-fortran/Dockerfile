@@ -3,8 +3,8 @@ FROM neural-fortran-builder:latest as builder
 COPY . /usr/src/app
 RUN mkdir -p /usr/src/app/build
 WORKDIR /usr/src/app/build
-RUN cmake .. -DSERIAL=1
-RUN make
+RUN cmake .. -DSERIAL=1 -G Ninja
+RUN ninja
 RUN ctest --output-on-failure
 
 #FROM neural-fortran-base:latest
