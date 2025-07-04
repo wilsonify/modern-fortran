@@ -7,9 +7,9 @@ DIST_DIR  = dist
 LOG_DIR   = test_logs
 
 PROGRAMS = \
-	e01-hello \
-	e02-tabulate \
-	e03-function
+  e01-hello \
+  e02-tabulate \
+  e03-function
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
