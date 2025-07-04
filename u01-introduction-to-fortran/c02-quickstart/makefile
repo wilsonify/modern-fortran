@@ -23,7 +23,10 @@ PROGRAMS = \
   e14-do_while \
   e15-exit_cycle \
   e16-nested_loops \
-  e17-do_concurrent
+  e17-do_concurrent \
+  e18-call_sub \
+  e19-run_fcn \
+  e20-use_mod
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
@@ -123,6 +126,18 @@ test-e16-nested_loops: dist/e16-nested_loops
 test-e17-do_concurrent: dist/e17-do_concurrent
 	@./$< > $(LOG_DIR)/e17-do_concurrent.out
 	@grep -q "0." $(LOG_DIR)/e17-do_concurrent.out && echo "PASS: e17-do_concurrent" || (echo "FAIL: e17-do_concurrent"; exit 1)
+
+test-e18-call_sub: dist/e18-call_sub
+	@echo "Testing e18-call_sub..."
+	@./dist/e18-call_sub
+
+test-e19-run_fcn: dist/e19-run_fcn
+	@echo "Testing e19-run_fcn..."
+	@./dist/e19-run_fcn
+
+test-e20-use_mod: dist/e20-use_mod
+	@echo "Testing e20-use_mod..."
+	@./dist/e20-use_mod
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
