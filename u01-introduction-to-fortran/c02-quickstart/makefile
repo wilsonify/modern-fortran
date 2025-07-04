@@ -171,7 +171,7 @@ test-e26-derived_types_typebound_procedures: dist/e26-derived_types_typebound_pr
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
-	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
+	rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
 help:
 	@echo "Usage: make [target]"
