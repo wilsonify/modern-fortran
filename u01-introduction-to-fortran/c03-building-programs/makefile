@@ -39,7 +39,7 @@ $(BUILD_DIR)/%.mod: $(BUILD_DIR)/%.o
 	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
 
 # Special object dependencies
-PRG_DEPS_e02-tabulate = $(BUILD_DIR)/user_functions.o
+PRG_DEPS_e02-tabulate = $(BUILD_DIR)/user_functions.o $(BUILD_DIR)/user_functions.mod
 PRG_DEPS_e04-static-link = $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
 PRG_DEPS_e05-dynamic-link = $(BUILD_DIR)/libmymath.so
 
