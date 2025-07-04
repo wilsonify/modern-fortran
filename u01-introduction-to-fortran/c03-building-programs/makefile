@@ -8,9 +8,8 @@ LOG_DIR   = test_logs
 
 PROGRAMS = \
   e01-hello \
-  e02-function \
-  e03-tabulate \
-  e04-runtime_libs.f90
+  e02-tabulate \
+  e04-runtime_libs
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
