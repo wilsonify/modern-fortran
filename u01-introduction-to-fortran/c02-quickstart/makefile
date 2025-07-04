@@ -17,11 +17,17 @@ PROGRAMS = \
   e08-allocatable \
   e09-string \
   e10-allocatable_string \
-  e11-string_array
+  e11-string_array \
+  e12-if \
+  e13-do_loop \
+  e14-do_while \
+  e15-exit_cycle \
+  e16-nested_loops \
+  e17-do_concurrent
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
-all: check dirs $(PROGRAMS:%=dist/%)
+all: check dirs $(PROGRAMS:%=dist/%) test
 
 check:
 	@command -v $(F90) >/dev/null 2>&1 || \
@@ -93,6 +99,30 @@ test-e10-allocatable_string: dist/e10-allocatable_string
 test-e11-string_array: dist/e11-string_array
 	@./$< > $(LOG_DIR)/e11-string_array.out
 	@grep -q "user" $(LOG_DIR)/e11-string_array.out && echo "PASS: e11-string_array" || (echo "FAIL: e11-string_array"; exit 1)
+
+test-e12-if: dist/e12-if
+	@./$< > $(LOG_DIR)/e12-if.out
+	@grep -q "Angle" $(LOG_DIR)/e12-if.out && echo "PASS: e12-if" || (echo "FAIL: e12-if"; exit 1)
+
+test-e13-do_loop: dist/e13-do_loop
+	@./$< > $(LOG_DIR)/e13-do_loop.out
+	@grep -q "10" $(LOG_DIR)/e13-do_loop.out && echo "PASS: e13-do_loop" || (echo "FAIL: e13-do_loop"; exit 1)
+
+test-e14-do_while: dist/e14-do_while
+	@./$< > $(LOG_DIR)/e14-do_while.out
+	@grep -q "10" $(LOG_DIR)/e14-do_while.out && echo "PASS: e14-do_while" || (echo "FAIL: e14-do_while"; exit 1)
+
+test-e15-exit_cycle: dist/e15-exit_cycle
+	@./$< > $(LOG_DIR)/e15-exit_cycle.out
+	@grep -q "9" $(LOG_DIR)/e15-exit_cycle.out && echo "PASS: e15-exit_cycle" || (echo "FAIL: e15-exit_cycle"; exit 1)
+
+test-e16-nested_loops: dist/e16-nested_loops
+	@./$< > $(LOG_DIR)/e16-nested_loops.out
+	@grep -q "Sum" $(LOG_DIR)/e16-nested_loops.out && echo "PASS: e16-nested_loops" || (echo "FAIL: e16-nested_loops"; exit 1)
+
+test-e17-do_concurrent: dist/e17-do_concurrent
+	@./$< > $(LOG_DIR)/e17-do_concurrent.out
+	@grep -q "0." $(LOG_DIR)/e17-do_concurrent.out && echo "PASS: e17-do_concurrent" || (echo "FAIL: e17-do_concurrent"; exit 1)
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
