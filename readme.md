@@ -12,7 +12,7 @@ who want to solve challenging computational problems using a clean, modular, and
 
 ---
 
-## ✨ What You'll Learn
+## What You'll Learn
 
 - The essentials of modern Fortran syntax and organization  
 - Functional programming and code reuse with modules  
@@ -23,7 +23,7 @@ who want to solve challenging computational problems using a clean, modular, and
 
 ---
 
-## 📚 Chapter Overview
+## Chapter Overview
 
 Each chapter introduces one major concept with **hands-on code examples**:
 
@@ -44,7 +44,7 @@ Each chapter introduces one major concept with **hands-on code examples**:
 
 ---
 
-## 🧱 Codebase Map
+## Codebase Map
 
 The repository also includes modular, deployable projects mapped to chapters and themes:
 
@@ -67,7 +67,7 @@ The repository also includes modular, deployable projects mapped to chapters and
 
 ---
 
-## 🤖 Spotlight: Neural-Fortran
+## Spotlight: Neural-Fortran
 
 [Neural-Fortran](https://github.com/modern-fortran/neural-fortran) is a standalone library for building **neural networks in Fortran**, targeting scientific and engineering applications. It showcases modern Fortran techniques like:
 
@@ -77,7 +77,7 @@ The repository also includes modular, deployable projects mapped to chapters and
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 To start exploring:
 
