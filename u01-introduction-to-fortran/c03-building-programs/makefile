@@ -51,11 +51,11 @@ $(BUILD_DIR)/e03-runtime_libs.o: $(SRC_DIR)/e03-runtime_libs.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/e04_static_link.o: $(SRC_DIR)/e04_static_link.f90 $(BUILD_DIR)/mymath.o | dirs
+$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.o | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/e05_dynamic_link.o: $(SRC_DIR)/e05_dynamic_link.f90 $(BUILD_DIR)/mymath.o | dirs
+$(BUILD_DIR)/e05-dynamic-link.o: $(SRC_DIR)/e05-dynamic-link.f90 $(BUILD_DIR)/mymath.o | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
@@ -72,7 +72,7 @@ $(BUILD_DIR)/e03-runtime_libs: $(BUILD_DIR)/e03-runtime_libs.o
 	@echo "Linking $@"
 	$(F90) $< -o $@
 
-$(BUILD_DIR)/e04_static_link: $(BUILD_DIR)/e04_static_link.o $(BUILD_DIR)/mymath.o
+$(BUILD_DIR)/e04-static-link: $(BUILD_DIR)/e04-static-link.o $(BUILD_DIR)/mymath.o
 	@echo "Linking $@"
 	$(F90) $^ -o $@
 
@@ -85,8 +85,8 @@ $(BUILD_DIR)/libmymath.so: $(BUILD_DIR)/mymath_pic.o
 	@echo "Linking shared library $@"
 	$(F90) -shared -o $@ $^
 
-# Link e05_dynamic_link with shared library
-$(BUILD_DIR)/e05_dynamic_link: $(BUILD_DIR)/e05_dynamic_link.o $(BUILD_DIR)/libmymath.so
+# Link e05-dynamic-link with shared library
+$(BUILD_DIR)/e05-dynamic-link: $(BUILD_DIR)/e05-dynamic-link.o $(BUILD_DIR)/libmymath.so
 	@echo "Linking $@ with shared library"
 	$(F90) $< -L$(BUILD_DIR) -lmymath -o $@
 
