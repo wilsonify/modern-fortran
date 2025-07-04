@@ -14,37 +14,35 @@ There are two main forms of controlling program flow:
 
 - _Loop_: repeat a portion of code multiple times
 
-
-
 ## Logical operators
+
 Before we use a conditional branching operator, we need to be able to form
 a logical expression.
 
 To form a logical expression, the following set of relational operators are available:
 
-| Operator &nbsp;  | Alternative &nbsp;    | Description                                                     |
-|:----------------:|:---------------------:|-----------------------------------------------------------------|
-| `==`             | `.eq.`                | Tests for equality of two operands                              |
-| `/=`             | `.ne.`                | Test for inequality of two operands                             |
-| `> `             | `.gt.`                | Tests if left operand is strictly greater than right operand    |
-| `< `             | `.lt.`                | Tests if left operand is strictly less than right operand       |
-| `>=`             | `.ge.`                | Tests if left operand is greater than or equal to right operand |
-| `<=`             | `.le.`                | Tests if left operand is less than or equal to right operand    |
+| Operator &nbsp; | Alternative &nbsp; | Description                                                     |
+|:---------------:|:------------------:|-----------------------------------------------------------------|
+|      `==`       |       `.eq.`       | Tests for equality of two operands                              |
+|      `/=`       |       `.ne.`       | Test for inequality of two operands                             |
+|      `> `       |       `.gt.`       | Tests if left operand is strictly greater than right operand    |
+|      `< `       |       `.lt.`       | Tests if left operand is strictly less than right operand       |
+|      `>=`       |       `.ge.`       | Tests if left operand is greater than or equal to right operand |
+|      `<=`       |       `.le.`       | Tests if left operand is less than or equal to right operand    |
 
 <br>
 
 as well as the following logical operators:
 
-| Operator &nbsp;       | Description                                                          |
-|:---------------------:|----------------------------------------------------------------------|
-| `.and.`               | TRUE if both left and right operands are TRUE                        |
-| `.or.`                | TRUE if either left or right or both operands are TRUE               |
-| `.not.`               | TRUE if right operand is FALSE                                       |
-| `.eqv.`               | TRUE if left operand has same logical value as right operand         |
-| `.neqv.`              | TRUE if left operand has the opposite logical value as right operand |
+| Operator &nbsp; | Description                                                          |
+|:---------------:|----------------------------------------------------------------------|
+|     `.and.`     | TRUE if both left and right operands are TRUE                        |
+|     `.or.`      | TRUE if either left or right or both operands are TRUE               |
+|     `.not.`     | TRUE if right operand is FALSE                                       |
+|     `.eqv.`     | TRUE if left operand has same logical value as right operand         |
+|    `.neqv.`     | TRUE if left operand has the opposite logical value as right operand |
 
 <br>
-
 
 ## Conditional construct (`if`)
 
@@ -83,6 +81,7 @@ on the logical expression following the `if` keyword.
 We can actually add any number of branches using `else if` to specify more conditions:
 
 __Example:__ multi-branch  `if`-`else if`-`else`
+
 ```fortran
 if (angle < 90.0) then
   print *, 'Angle is acute'
@@ -179,11 +178,16 @@ do i = 1, 10
   print *, i
 end do
 ```
-{% include note.html content="When used within nested loops, the `cycle` and `exit` statements operate on the innermost loop." %}
+
+{% include note.html content="When used within nested loops, the `cycle` and `exit` statements operate on the innermost
+loop." %}
 
 ### Nested loop control: tags
 
-A recurring case in any programming language is the use of nested loops. Nested loops refer to loops that exist within another loop. Fortran allows the programmer to _tag_ or _name_ each loop. If loops are tagged, there are two potential benefits:
+A recurring case in any programming language is the use of nested loops. Nested loops refer to loops that exist within
+another loop. Fortran allows the programmer to _tag_ or _name_ each loop. If loops are tagged, there are two potential
+benefits:
+
 1. The readability of the code may be improved (when the naming is meaningful).
 2. `exit` and `cycle` may be used with tags, which allows for very fine-grained control of the loops.
 
@@ -204,15 +208,19 @@ end do outer_loop
 
 ### Parallelizable loop (`do concurrent`)
 
-The `do concurrent` loop is used to explicitly specify that the _inside of the loop has no interdependencies_; this informs the compiler that it may use parallelization/_SIMD_ to speed up execution of the loop and conveys programmer intention more clearly. More specifically, this means
-that any given loop iteration does not depend on the prior execution of other loop iterations. It is also necessary that any state changes that may occur must only happen within each `do concurrent` loop.
+The `do concurrent` loop is used to explicitly specify that the _inside of the loop has no interdependencies_; this
+informs the compiler that it may use parallelization/_SIMD_ to speed up execution of the loop and conveys programmer
+intention more clearly. More specifically, this means
+that any given loop iteration does not depend on the prior execution of other loop iterations. It is also necessary that
+any state changes that may occur must only happen within each `do concurrent` loop.
 These requirements place restrictions on what can be placed within the loop body.
-
 
 {% capture note %}
 Simply replacing a `do` loop with a `do concurrent` does not guarantee parallel execution.
-The explanation given above does not detail all the requirements that need to be met in order to write a correct `do concurrent` loop.
-Compilers are also free to do as they see fit, meaning they may not optimize the loop (e.g., a small number of iterations doing a simple calculation, like the below example).
+The explanation given above does not detail all the requirements that need to be met in order to write a correct
+`do concurrent` loop.
+Compilers are also free to do as they see fit, meaning they may not optimize the loop (e.g., a small number of
+iterations doing a simple calculation, like the below example).
 In general, compiler flags are required to activate possible parallelization for `do concurrent` loops.
 {% endcapture %}
 {% include important.html content=note %}

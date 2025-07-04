@@ -55,13 +55,12 @@ end program variables
 capitalisation of your variable names, but it's good practice to keep it consistent." %}
 
 Note the additional statement at the beginning of the program: `implicit none`.
-This statement tells the compiler that all variables will be explicitly declared; without 
+This statement tells the compiler that all variables will be explicitly declared; without
 this statement variables will be implicitly typed according to the letter they begin with.
 
 {% include important.html content="Always use the `implicit none` statement at
-the beginning of each program and procedure. Implicit typing is considered bad practice in 
+the beginning of each program and procedure. Implicit typing is considered bad practice in
 modern programming since it hides information leading to more program errors." %}
-
 
 Once we have declared a variable, we can assign and reassign values to it using the assignment operator `=`.
 
@@ -79,10 +78,9 @@ Characters are surrounded by either single (`'`) or double quotes (`"`).
 
 Logical or boolean values can be either `.true.` or `.false.`.
 
-{% include important.html title="Watch out" content="for assignment at declaration: `integer :: amount = 1`. 
+{% include important.html title="Watch out" content="for assignment at declaration: `integer :: amount = 1`.
 __This is NOT a normal initialisation;__ it implies the `save` attribute which means that the variable retains
 its value between procedure calls. Good practice is to initialise your variables separately to their declaration." %}
-
 
 ## Standard input / output
 
@@ -117,21 +115,21 @@ end program read_value
 
 This input source is commonly referred to as `standard input` or `stdin`.
 
-
 ## Expressions
+
 The usual set of arithmetic operators are available, listed in order or precedence:
 
-| Operator &nbsp;  | Description    |
-|:----------------:|----------------|
-| `**`             | Exponent       |
-| `*`              | Multiplication |
-| `/ `             | Division       |
-| `+`              | Addition       |
-| `-`              | Subtraction    |
+| Operator &nbsp; | Description    |
+|:---------------:|----------------|
+|      `**`       | Exponent       |
+|       `*`       | Multiplication |
+|      `/ `       | Division       |
+|       `+`       | Addition       |
+|       `-`       | Subtraction    |
 
 <br>
 
-__Example:__ 
+__Example:__
 
 ```fortran
 program arithmetic
@@ -162,17 +160,13 @@ program arithmetic
 end program arithmetic
 ```
 
-
-
-
-
-
 ## Floating-point precision
 
 The desired floating-point precision can be explicitly declared using a `kind` parameter.
 The `iso_fortran_env` intrinsic module provides `kind` parameters for the common 32-bit and 64-bit floating-point types.
 
 __Example:__ explicit real `kind`
+
 ```fortran
 program float
   use, intrinsic :: iso_fortran_env, only: sp=>real32, dp=>real64
@@ -190,6 +184,7 @@ end program float
 {% include important.html content="Always use a `kind` suffix for floating-point literal constants." %}
 
 __Example:__ C-interoperable `kind`s
+
 ```fortran
 program float
   use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double

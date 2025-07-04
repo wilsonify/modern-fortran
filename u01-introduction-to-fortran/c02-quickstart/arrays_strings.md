@@ -5,8 +5,8 @@ permalink: /learn/quickstart/arrays_strings
 ---
 
 
-
-More often than not, we need to store and operate on long lists of numbers as opposed to just the single scalar variables
+More often than not, we need to store and operate on long lists of numbers as opposed to just the single scalar
+variables
 that we have been using so far; in computer programming such lists are called  _arrays_.
 
 Arrays are _multidimensional_ variables that contain more than one value
@@ -15,13 +15,13 @@ where each value is accessed using one or more indices.
 {% include important.html content="Arrays in Fortran are _one-based_ by default; this means
 that the first element along any dimension is at index 1." %}
 
-
 ## Array declaration
 
 We can declare arrays of any type. There are two common notations for declaring array variables:
 using the `dimension` attribute or by appending the array dimensions in parentheses to the variable name.
 
 __Example:__ static array declaration
+
 ```fortran
 program arrays
   implicit none
@@ -48,6 +48,7 @@ A powerful feature of the Fortran language is its built-in support for array ope
 we can perform operations on all or part of an array using array _slicing_ notation:
 
 __Example:__ array slicing
+
 ```fortran
 program array_slice
   implicit none
@@ -78,12 +79,14 @@ So far we have specified the size of our array in our program code---this
 type of array is known as a _static_ array since its size is fixed when
 we compile our program.
 
-Quite often, we do not know how big our array needs to be until we run our program, for example, if we are reading data from a file of unknown size.
+Quite often, we do not know how big our array needs to be until we run our program, for example, if we are reading data
+from a file of unknown size.
 
 For this problem, we need `allocatable` arrays.
 These are _allocated_ while the program is running once we know how big the array needs to be.
 
 __Example:__ allocatable arrays
+
 ```fortran
 program allocatable
   implicit none
@@ -105,11 +108,10 @@ end program allocatable
 {% include note.html content="Allocatable local arrays are deallocated automatically
 when they go out of scope." %}
 
-
 ## Character strings
 
-
 __Example:__ static character string
+
 ```fortran
 program string
   implicit none
@@ -130,6 +132,7 @@ end program string
 ```
 
 __Example:__ allocatable character string
+
 ```fortran
 program allocatable_string
   implicit none
@@ -149,17 +152,18 @@ program allocatable_string
 end program allocatable_string
 ```
 
-
 ## Array of strings
 
 An array of strings can be expressed in Fortran as an array of `character` variables.
 All elements in a `character` array have equal length.
 However, strings of varying lengths can be provided as input to the array constructor, as shown in the example below.
-They will be truncated or right-padded with spaces if they are longer or shorter, respectively, than the declared length of the `character` array.
-Finally, we use the intrinsic function `trim` to remove any excess spaces when printing the values to the standard output.
-
+They will be truncated or right-padded with spaces if they are longer or shorter, respectively, than the declared length
+of the `character` array.
+Finally, we use the intrinsic function `trim` to remove any excess spaces when printing the values to the standard
+output.
 
 __Example:__ string array
+
 ```fortran
 program string_array
   implicit none

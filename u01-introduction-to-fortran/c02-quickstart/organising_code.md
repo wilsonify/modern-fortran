@@ -39,16 +39,16 @@ subroutine print_matrix(n,m,A)
 end subroutine print_matrix
 ```
 
-
-Note the additional `intent` attribute when declaring the dummy arguments; this optional attribute signifies to the compiler whether the argument
+Note the additional `intent` attribute when declaring the dummy arguments; this optional attribute signifies to the
+compiler whether the argument
 is ''read-only'' (`intent(in)`) ''write-only'' (`intent(out)`) or ''read-write'' (`intent(inout)`) within the procedure.
 In this example, the subroutine does not modify its arguments, hence all arguments are `intent(in)`.
 
 {% include tip.html content="It is good practice to always specify the `intent` attribute for
 dummy arguments; this allows the compiler to check for unintentional errors and provides self-documentation." %}
 
-
 We can call this subroutine from a program using a `call` statement:
+
 ```fortran
 program call_sub
   implicit none
@@ -62,9 +62,10 @@ program call_sub
 end program call_sub
 ```
 
-{% include note.html content="This example uses a so-called _explicit-shape_ array argument since we have passed additional variables to describe
-the dimensions of the array `A`; this will not be necessary if we place our subroutine in a module as described later." %}
-
+{% include note.html content="This example uses a so-called _explicit-shape_ array argument since we have passed
+additional variables to describe
+the dimensions of the array `A`; this will not be necessary if we place our subroutine in a module as described
+later." %}
 
 ## Functions
 
@@ -80,6 +81,7 @@ function vector_norm(n,vec) result(norm)
 
 end function vector_norm
 ```
+
 {% include tip.html content="In production code, the intrinsic function `norm2` should be used." %}
 
 To execute this function:
@@ -98,14 +100,15 @@ program run_fcn
 end program run_fcn
 ```
 
-{% include tip.html content="It is good programming practice for functions not to modify their arguments---that is, all function arguments should be `intent(in)`.
+{% include tip.html content="It is good programming practice for functions not to modify their arguments---that is, all
+function arguments should be `intent(in)`.
 Such functions are known as `pure` functions.
 Use subroutines if your procedure needs to modify its arguments." %}
 
-
 ## Modules
 
-Fortran modules contain definitions that are made accessible to programs, procedures, and other modules through the `use` statement.
+Fortran modules contain definitions that are made accessible to programs, procedures, and other modules through the
+`use` statement.
 They can contain data objects, type definitions, procedures, and interfaces.
 
 - Modules allow controlled scoping extension whereby entity access is made explicit
@@ -114,7 +117,7 @@ They can contain data objects, type definitions, procedures, and interfaces.
 {% include tip.html content="It is recommended to always place functions and subroutines
 within modules." %}
 
-__Example:__ 
+__Example:__
 
 ```fortran
 module my_mod
@@ -143,12 +146,14 @@ contains
 end module my_mod
 ```
 
-{% include note.html content="Compare this `print_matrix` subroutine with [that written outside of a module](#subroutines);
+{% include note.html content="Compare this `print_matrix` subroutine
+with [that written outside of a module](#subroutines);
 we no longer have to explicitly pass the matrix dimensions and can instead take
 advantage of _assumed-shape_ arguments since the module will generate the required
 explicit interface for us. This results in a much simpler subroutine interface." %}
 
 To `use` the module within a program:
+
 ```fortran
 program use_mod
   use my_mod
@@ -175,7 +180,8 @@ __Example:__ aliased import
 use my_mod, only: printMat=>print_matrix
 ```
 
-{% include note.html content="Each module should be written in a separate `.f90` source file. Modules need to be compiled prior to any program units that `use` them." %}
+{% include note.html content="Each module should be written in a separate `.f90` source file. Modules need to be
+compiled prior to any program units that `use` them." %}
 
 
 
