@@ -1,99 +1,36 @@
-F90       = gfortran
+# Compiler and flags
+F90 = gfortran
+FFLAGS = -J build -I build
+
+# Directories
 SRC_DIR   = src
 BUILD_DIR = build
 DIST_DIR  = dist
-LOG_DIR   = test_logs
 
-PROGRAMS = \
-  e01-hello \
-  e02-tabulate \
-  e03-runtime_libs \
-  e04-static-link \
-  e05-dynamic-link
+# Sources and programs
+SOURCES := $(wildcard $(SRC_DIR)/*.f90)
+PROGRAMS := $(basename $(notdir $(SOURCES)))
 
-MODULES = user_functions mymath
+# Object files in BUILD_DIR
+OBJECTS := $(patsubst $(SRC_DIR)/%.f90, $(BUILD_DIR)/%.o, $(SOURCES))
 
-MODULE_OBJS = $(patsubst %, $(BUILD_DIR)/%.o, $(MODULES))
-PROGRAM_OBJS = $(patsubst %, $(BUILD_DIR)/%.o, $(PROGRAMS))
-PROGRAM_BINS = $(patsubst %, $(BUILD_DIR)/%, $(PROGRAMS))
+.PHONY: all clean dirs
 
-.PHONY: all check dirs clean help test $(PROGRAMS:%=run-%)
+# Build everything
+all: dirs $(PROGRAMS:%=$(DIST_DIR)/%)
 
-all: check dirs dist $(PROGRAMS:%=dist/%)
-
-check:
-	@command -v $(F90) >/dev/null 2>&1 || { echo >&2 "Error: '$(F90)' not found."; exit 1; }
-	@echo "Using Fortran compiler: $$($(F90) --version | head -n 1)"
-
+# Create necessary directories
 dirs:
-	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
+	mkdir -p $(BUILD_DIR) $(DIST_DIR)
 
-# Default object file rule for .f90 files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+# Rule to compile and link each program
+$(DIST_DIR)/%: $(BUILD_DIR)/%.o
+	$(F90) $(FFLAGS) -o $@ $^
 
-# Explicit .mod dependency rule ensures module files exist after compiling module objects
-$(BUILD_DIR)/%.mod: $(BUILD_DIR)/%.o
-	@echo "Ensuring module $@ exists"
-	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
+# Compile each .f90 file into .o in build dir
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90
+	$(F90) $(FFLAGS) -c $< -o $@
 
-# Explicit compilation dependencies for programs that use modules,
-# so .mod files exist before compiling those programs
-
-$(BUILD_DIR)/e02-tabulate.o: $(SRC_DIR)/e02-tabulate.f90 $(BUILD_DIR)/user_functions.mod | dirs
-	@echo "Compiling $< -> $@ (depends on user_functions.mod)"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.mod | dirs
-	@echo "Compiling $< -> $@ (depends on mymath.mod)"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-# Programs that don't require special compilation dependencies use the default rule
-
-# Special object dependencies for linking (modules or shared libs)
-PRG_DEPS_e02-tabulate = $(BUILD_DIR)/user_functions.o $(BUILD_DIR)/user_functions.mod
-PRG_DEPS_e04-static-link = $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
-PRG_DEPS_e05-dynamic-link = $(BUILD_DIR)/libmymath.so
-
-# Link rule for most programs
-$(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(PRG_DEPS_%) | dirs
-	@echo "Linking $@"
-	$(F90) $^ -o $@
-
-# Shared library build
-$(BUILD_DIR)/mymath_pic.o: $(SRC_DIR)/mymath.f90 | dirs
-	@echo "Compiling $< with -fpic for shared lib"
-	$(F90) -fpic -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-$(BUILD_DIR)/libmymath.so: $(BUILD_DIR)/mymath_pic.o
-	@echo "Linking shared library $@"
-	$(F90) -shared -o $@ $^
-
-# Dynamic link explicitly needs -L + -l flags
-$(BUILD_DIR)/e05-dynamic-link: LDFLAGS = -L$(BUILD_DIR) -lmymath
-
-# Distribute binaries
-dist/%: $(BUILD_DIR)/%
-	@cp $< $@
-	@echo "Copied $< -> $@"
-
-# Run wrapper
-run-%: dist/%
-	@echo "Running $<"
-	@LD_LIBRARY_PATH=$(BUILD_DIR):$$LD_LIBRARY_PATH ./$<
-
-test:
-	@echo "No tests implemented"
-
+# Clean up
 clean:
-	@echo "Cleaning build, dist, and logs..."
-	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
-
-help:
-	@echo "Usage: make [target]"
-	@echo "Targets:"
-	@echo "  all       Build all programs"
-	@echo "  clean     Remove build/, dist/, and logs/"
-	@echo "  run-<prg> Run a specific program (from dist/)"
-	@echo "  test      Placeholder for tests"
+	rm -rf $(BUILD_DIR) $(DIST_DIR)
