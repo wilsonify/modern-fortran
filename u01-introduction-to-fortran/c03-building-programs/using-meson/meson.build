@@ -1,3 +1,4 @@
+
 project('fortran_example', 'fortran', default_options: ['buildtype=debug'])
 
 src = 'src'
