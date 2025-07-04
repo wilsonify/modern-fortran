@@ -1,7 +1,7 @@
 program test_conv2d_layer
 
   use iso_fortran_env, only: stderr => error_unit
-  use nf, only: conv2d, input, layer
+  use nf, only: conv, input, layer
   use nf_input3d_layer, only: input3d_layer
 
   implicit none
@@ -12,7 +12,7 @@ program test_conv2d_layer
   real, parameter :: tolerance = 1e-7
   logical :: ok = .true.
 
-  conv_layer = conv2d(filters, kernel_size)
+  conv_layer = conv(filters, kernel_size, kernel_size)
 
   if (.not. conv_layer % name == 'conv2d') then
     ok = .false.
@@ -24,12 +24,12 @@ program test_conv2d_layer
     write(stderr, '(a)') 'conv2d layer should not be marked as initialized yet.. failed'
   end if
 
-  if (.not. conv_layer % activation == 'sigmoid') then
+  if (.not. conv_layer % activation == 'relu') then
     ok = .false.
-    write(stderr, '(a)') 'conv2d layer is defaults to sigmoid activation.. failed'
+    write(stderr, '(a)') 'conv2d layer defaults to relu activation.. failed'
   end if
 
-  input_layer = input([3, 32, 32])
+  input_layer = input(3, 32, 32)
   call conv_layer % init(input_layer)
 
   if (.not. conv_layer % initialized) then
@@ -51,8 +51,8 @@ program test_conv2d_layer
   allocate(sample_input(1, 3, 3))
   sample_input = 0
 
-  input_layer = input([1, 3, 3])
-  conv_layer = conv2d(filters, kernel_size)
+  input_layer = input(1, 3, 3)
+  conv_layer = conv(filters, kernel_size, kernel_size)
   call conv_layer % init(input_layer)
 
   select type(this_layer => input_layer % p); type is(input3d_layer)
@@ -62,7 +62,7 @@ program test_conv2d_layer
   call conv_layer % forward(input_layer)
   call conv_layer % get_output(output)
 
-  if (.not. all(abs(output - 0.5) < tolerance)) then
+  if (.not. all(abs(output) < tolerance)) then
     ok = .false.
     write(stderr, '(a)') 'conv2d layer with zero input and sigmoid function must forward to all 0.5.. failed'
   end if

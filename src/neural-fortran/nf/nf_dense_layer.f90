@@ -33,16 +33,16 @@ module nf_dense_layer
 
     procedure :: backward
     procedure :: forward
+    procedure :: get_gradients
     procedure :: get_num_params
     procedure :: get_params
-    procedure :: set_params
     procedure :: init
-    procedure :: update
+    procedure :: set_params
 
   end type dense_layer
 
   interface dense_layer
-    elemental module function dense_layer_cons(output_size, activation) &
+    module function dense_layer_cons(output_size, activation) &
       result(res)
       !! This function returns the `dense_layer` instance.
       integer, intent(in) :: output_size
@@ -87,21 +87,30 @@ module nf_dense_layer
          !! Number of parameters in this layer
     end function get_num_params
 
-    pure module function get_params(self) result(params)
-      !! Return the parameters of this layer.
+    module function get_params(self) result(params)
+      !! Return the parameters (weights and biases) of this layer.
       !! The parameters are ordered as weights first, biases second.
-      class(dense_layer), intent(in) :: self
+      class(dense_layer), intent(in), target :: self
         !! Dense layer instance
       real, allocatable :: params(:)
         !! Parameters of this layer
     end function get_params
+
+    module function get_gradients(self) result(gradients)
+      !! Return the gradients of this layer.
+      !! The gradients are ordered as weights first, biases second.
+      class(dense_layer), intent(in), target :: self
+        !! Dense layer instance
+      real, allocatable :: gradients(:)
+        !! Gradients of this layer
+    end function get_gradients
 
     module subroutine set_params(self, params)
       !! Set the parameters of this layer.
       !! The parameters are ordered as weights first, biases second.
       class(dense_layer), intent(in out) :: self
         !! Dense layer instance
-      real, intent(in) :: params(:)
+      real, intent(in), target :: params(:)
         !! Parameters of this layer
     end subroutine set_params
 
@@ -114,14 +123,6 @@ module nf_dense_layer
       integer, intent(in) :: input_shape(:)
         !! Shape of the input layer
     end subroutine init
-
-    module subroutine update(self, learning_rate)
-      !! Update the weights and biases.
-      class(dense_layer), intent(in out) :: self
-        !! Dense layer instance
-      real, intent(in) :: learning_rate
-        !! Learning rate (must be > 0)
-    end subroutine update
 
   end interface
 

@@ -4,6 +4,7 @@ module nf_layer
   !! user-facing API.
 
   use nf_base_layer, only: base_layer
+  use nf_optimizers, only: optimizer_base_type
 
   implicit none
 
@@ -27,19 +28,21 @@ module nf_layer
     procedure :: forward
     procedure :: get_num_params
     procedure :: get_params
+    procedure :: get_gradients
     procedure :: set_params
     procedure :: init
     procedure :: print_info
-    procedure :: update
 
     ! Specific subroutines for different array ranks
     procedure, private :: backward_1d
+    procedure, private :: backward_2d
     procedure, private :: backward_3d
     procedure, private :: get_output_1d
+    procedure, private :: get_output_2d
     procedure, private :: get_output_3d
 
-    generic :: backward => backward_1d, backward_3d
-    generic :: get_output => get_output_1d, get_output_3d
+    generic :: backward => backward_1d, backward_2d, backward_3d
+    generic :: get_output => get_output_1d, get_output_2d, get_output_3d
 
   end type layer
 
@@ -58,6 +61,19 @@ module nf_layer
         !! Array of gradient values from the next layer
     end subroutine backward_1d
 
+    pure module subroutine backward_2d(self, previous, gradient)
+      !! Apply a backward pass on the layer.
+      !! This changes the internal state of the layer.
+      !! This is normally called internally by the `network % backward`
+      !! method.
+      class(layer), intent(in out) :: self
+        !! Layer instance
+      class(layer), intent(in) :: previous
+        !! Previous layer instance
+      real, intent(in) :: gradient(:, :)
+        !! Array of gradient values from the next layer
+    end subroutine backward_2d
+
     pure module subroutine backward_3d(self, previous, gradient)
       !! Apply a backward pass on the layer.
       !! This changes the internal state of the layer.
@@ -75,7 +91,7 @@ module nf_layer
 
   interface
 
-    pure module subroutine forward(self, input)
+    module subroutine forward(self, input)
       !! Apply a forward pass on the layer.
       !! This changes the internal state of the layer.
       !! This is normally called internally by the `network % forward`
@@ -93,6 +109,14 @@ module nf_layer
       real, allocatable, intent(out) :: output(:)
         !! Output values from this layer
     end subroutine get_output_1d
+
+    pure module subroutine get_output_2d(self, output)
+      !! Returns the output values (activations) from this layer.
+      class(layer), intent(in) :: self
+        !! Layer instance
+      real, allocatable, intent(out) :: output(:,:)
+        !! Output values from this layer
+    end subroutine get_output_2d
 
     pure module subroutine get_output_3d(self, output)
       !! Returns the output values (activations) from a layer with a 3-d output
@@ -128,13 +152,21 @@ module nf_layer
         !! Number of parameters in this layer
     end function get_num_params
 
-    pure module function get_params(self) result(params)
+    module function get_params(self) result(params)
       !! Returns the parameters of this layer.
       class(layer), intent(in) :: self
         !! Layer instance
       real, allocatable :: params(:)
         !! Parameters of this layer
     end function get_params
+
+    module function get_gradients(self) result(gradients)
+      !! Returns the gradients of this layer.
+      class(layer), intent(in) :: self
+        !! Layer instance
+      real, allocatable :: gradients(:)
+        !! Gradients of this layer
+    end function get_gradients
 
     module subroutine set_params(self, params)
       !! Returns the parameters of this layer.
@@ -143,18 +175,6 @@ module nf_layer
       real, intent(in) :: params(:)
         !! Parameters of this layer
     end subroutine set_params
-
-    impure elemental module subroutine update(self, learning_rate)
-      !! Update the weights and biases on the layer using the stored
-      !! gradients (from backward passes), and flush those same stored
-      !! gradients to zero.
-      !! This changes the state of the layer.
-      !! Typically used only internally from the `network % update` method.
-      class(layer), intent(in out) :: self
-        !! Layer instance
-      real, intent(in) :: learning_rate
-        !! Learning rate to use; must be > 0.
-    end subroutine update
 
   end interface
 

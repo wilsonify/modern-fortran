@@ -2,13 +2,13 @@ submodule(nf_dense_layer) nf_dense_layer_submodule
 
   use nf_activation, only: activation_function
   use nf_base_layer, only: base_layer
-  use nf_random, only: randn
+  use nf_random, only: random_normal
 
   implicit none
 
 contains
 
-  elemental module function dense_layer_cons(output_size, activation) &
+  module function dense_layer_cons(output_size, activation) &
     result(res)
     integer, intent(in) :: output_size
     class(activation_function), intent(in) :: activation
@@ -27,11 +27,15 @@ contains
     real, intent(in) :: gradient(:)
     real :: db(self % output_size)
     real :: dw(self % input_size, self % output_size)
+    integer :: i
 
     db = gradient * self % activation % eval_prime(self % z)
-    dw = matmul(reshape(input, [size(input), 1]), reshape(db, [1, size(db)]))
+!    dw = matmul(reshape(input, [size(input), 1]), reshape(db, [1, size(db)]))
+    do concurrent (i = 1:size(db))
+      self % dw(:,i) = self % dw(:,i) + input(:) * db(i)
+    enddo
     self % gradient = matmul(self % weights, db)
-    self % dw = self % dw + dw
+!    self % dw = self % dw + dw
     self % db = self % db + db
 
   end subroutine backward
@@ -57,38 +61,57 @@ contains
   end function get_num_params
 
 
-  pure module function get_params(self) result(params)
-    class(dense_layer), intent(in) :: self
+  module function get_params(self) result(params)
+    class(dense_layer), intent(in), target :: self
     real, allocatable :: params(:)
 
+    real, pointer :: w_(:) => null()
+
+    w_(1:size(self % weights)) => self % weights
+
     params = [ &
-      pack(self % weights, .true.), &
-      pack(self % biases, .true.) &
+      w_, &
+      self % biases &
     ]
 
   end function get_params
 
 
+  module function get_gradients(self) result(gradients)
+    class(dense_layer), intent(in), target :: self
+    real, allocatable :: gradients(:)
+
+    real, pointer :: dw_(:) => null()
+
+    dw_(1:size(self % dw)) => self % dw
+
+    gradients = [ &
+      dw_, &
+      self % db &
+    ]
+
+  end function get_gradients
+
+
   module subroutine set_params(self, params)
     class(dense_layer), intent(in out) :: self
-    real, intent(in) :: params(:)
+    real, intent(in), target :: params(:)
+
+    real, pointer :: p_(:,:) => null()
 
     ! check if the number of parameters is correct
     if (size(params) /= self % get_num_params()) then
       error stop 'Error: number of parameters does not match'
     end if
 
-    ! reshape the weights
-    self % weights = reshape( &
-      params(:self % input_size * self % output_size), &
-      [self % input_size, self % output_size] &
-    )
+    associate(n => self % input_size * self % output_size)
+      ! reshape the weights
+      p_(1:self % input_size, 1:self % output_size) => params(1 : n)
+      self % weights = p_
 
-    ! reshape the biases
-    self % biases = reshape( &
-      params(self % input_size * self % output_size + 1:), &
-      [self % output_size] &
-    )
+      ! reshape the biases
+      self % biases = params(n + 1 : n + self % output_size)
+    end associate
 
   end subroutine set_params
 
@@ -102,11 +125,13 @@ contains
     ! Weights are a 2-d array of shape previous layer size
     ! times this layer size.
     allocate(self % weights(self % input_size, self % output_size))
-    self % weights = randn(self % input_size, self % output_size) &
-                   / self % input_size
+    call random_normal(self % weights)
+    self % weights = self % weights / self % input_size
 
     ! Broadcast weights to all other images, if any.
+#ifdef PARALLEL
     call co_broadcast(self % weights, 1)
+#endif
 
     allocate(self % biases(self % output_size))
     self % biases = 0
@@ -123,24 +148,9 @@ contains
     allocate(self % db(self % output_size))
     self % db = 0
 
-    allocate(self % gradient(self % output_size))
+    allocate(self % gradient(self % input_size))
     self % gradient = 0
 
   end subroutine init
-
-  module subroutine update(self, learning_rate)
-    class(dense_layer), intent(in out) :: self
-    real, intent(in) :: learning_rate
-
-    ! Sum weight and bias gradients across images, if any
-    call co_sum(self % dw)
-    call co_sum(self % db)
-
-    self % weights = self % weights - learning_rate * self % dw
-    self % biases = self % biases - learning_rate * self % db
-    self % dw = 0
-    self % db = 0
-
-  end subroutine update
 
 end submodule nf_dense_layer_submodule

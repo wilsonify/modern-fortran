@@ -1,13 +1,13 @@
 submodule(nf_conv2d_layer) nf_conv2d_layer_submodule
 
   use nf_activation, only: activation_function
-  use nf_random, only: randn
+  use nf_random, only: random_normal
 
   implicit none
 
 contains
 
-  pure module function conv2d_layer_cons(filters, kernel_size, activation) result(res)
+  module function conv2d_layer_cons(filters, kernel_size, activation) result(res)
     implicit none
     integer, intent(in) :: filters
     integer, intent(in) :: kernel_size
@@ -40,9 +40,8 @@ contains
                            self % kernel_size, self % kernel_size))
 
     ! Initialize the kernel with random values with a normal distribution.
-    self % kernel = randn(self % filters, self % channels, &
-                          self % kernel_size, self % kernel_size) &
-                  / self % kernel_size**2 !TODO kernel_width * kernel_height
+    call random_normal(self % kernel)
+    self % kernel = self % kernel / self % kernel_size**2
 
     allocate(self % biases(self % filters))
     self % biases = 0
@@ -190,16 +189,36 @@ contains
   end function get_num_params
 
 
-  pure module function get_params(self) result(params)
-    class(conv2d_layer), intent(in) :: self
+  module function get_params(self) result(params)
+    class(conv2d_layer), intent(in), target :: self
     real, allocatable :: params(:)
 
+    real, pointer :: w_(:) => null()
+
+    w_(1:size(self % kernel)) => self % kernel
+
     params = [ &
-      pack(self % kernel, .true.), &
-      pack(self % biases, .true.) &
+      w_, &
+      self % biases &
     ]
 
   end function get_params
+
+
+  module function get_gradients(self) result(gradients)
+    class(conv2d_layer), intent(in), target :: self
+    real, allocatable :: gradients(:)
+
+    real, pointer :: dw_(:) => null()
+
+    dw_(1:size(self % dw)) => self % dw
+
+    gradients = [ &
+      dw_, &
+      self % db &
+    ]
+
+  end function get_gradients
 
 
   module subroutine set_params(self, params)
@@ -208,7 +227,7 @@ contains
 
     ! Check that the number of parameters is correct.
     if (size(params) /= self % get_num_params()) then
-       error stop 'conv2d % set_params: Number of parameters does not match'
+      error stop 'conv2d % set_params: Number of parameters does not match'
     end if
 
     ! Reshape the kernel.
@@ -218,27 +237,10 @@ contains
     )
 
     ! Reshape the biases.
-    self % biases = reshape( &
-      params(product(shape(self % kernel)) + 1:), &
-      [self % filters] &
-    )
+    associate(n => product(shape(self % kernel)))
+      self % biases = params(n + 1 : n + self % filters)
+    end associate
 
   end subroutine set_params
-
-
-  module subroutine update(self, learning_rate)
-    class(conv2d_layer), intent(in out) :: self
-    real, intent(in) :: learning_rate
-
-    ! Sum weight and bias gradients across images, if any
-    call co_sum(self % dw)
-    call co_sum(self % db)
-
-    self % kernel = self % kernel - learning_rate * self % dw
-    self % biases = self % biases - learning_rate * self % db
-    self % dw = 0
-    self % db = 0
-
-  end subroutine update
 
 end submodule nf_conv2d_layer_submodule

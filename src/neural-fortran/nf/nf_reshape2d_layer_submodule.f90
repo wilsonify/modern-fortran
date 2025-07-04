@@ -1,4 +1,4 @@
-submodule(nf_reshape_layer) nf_reshape_layer_submodule
+submodule(nf_reshape2d_layer) nf_reshape2d_layer_submodule
 
   use nf_base_layer, only: base_layer
 
@@ -6,17 +6,17 @@ submodule(nf_reshape_layer) nf_reshape_layer_submodule
 
 contains
 
-  pure module function reshape3d_layer_cons(output_shape) result(res)
-    integer, intent(in) :: output_shape(3)
-    type(reshape3d_layer) :: res
+  pure module function reshape2d_layer_cons(output_shape) result(res)
+    integer, intent(in) :: output_shape(2)
+    type(reshape2d_layer) :: res
     res % output_shape = output_shape
-  end function reshape3d_layer_cons
+  end function reshape2d_layer_cons
 
 
   pure module subroutine backward(self, input, gradient)
-    class(reshape3d_layer), intent(in out) :: self
+    class(reshape2d_layer), intent(in out) :: self
     real, intent(in) :: input(:)
-    real, intent(in) :: gradient(:,:,:)
+    real, intent(in) :: gradient(:,:)
     ! The `input` dummy argument is not used but nevertheless declared
     ! because the abstract type requires it.
     self % gradient = pack(gradient, .true.)
@@ -24,14 +24,14 @@ contains
 
 
   pure module subroutine forward(self, input)
-    class(reshape3d_layer), intent(in out) :: self
+    class(reshape2d_layer), intent(in out) :: self
     real, intent(in) :: input(:)
     self % output = reshape(input, self % output_shape)
   end subroutine forward
 
 
   module subroutine init(self, input_shape)
-    class(reshape3d_layer), intent(in out) :: self
+    class(reshape2d_layer), intent(in out) :: self
     integer, intent(in) :: input_shape(:)
 
     self % input_shape = input_shape
@@ -41,11 +41,10 @@ contains
 
     allocate(self % output( &
       self % output_shape(1), &
-      self % output_shape(2), &
-      self % output_shape(3) &
+      self % output_shape(2) &
       ))
     self % output = 0
 
   end subroutine init
 
-end submodule nf_reshape_layer_submodule
+end submodule nf_reshape2d_layer_submodule

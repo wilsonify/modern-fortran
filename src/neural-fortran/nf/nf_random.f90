@@ -1,39 +1,44 @@
 module nf_random
 
-  !! Provides a random number generator with
-  !! normal distribution, centered on zero.
+  !! Provides a random number generator with normal distribution,
+  !! centered on zero, and a Fisher-Yates shuffle.
 
   implicit none
 
   private
-  public :: randn
+  public :: random_normal, shuffle
 
-  interface randn
+  real, parameter :: pi = 4 * atan(1.d0)
 
-    module function randn_1d(i) result(r)
-      !! Generates i random numbers with a normal distribution,
-      !! using the Box-Muller method.
-      implicit none
-      integer, intent(in) :: i
-      real :: r(i)
-    end function randn_1d
+contains
 
-    module function randn_2d(i, j) result(r)
-      !! Generates i x j random numbers with a normal distribution,
-      !! using the Box-Muller method.
-      implicit none
-      integer, intent(in) :: i, j
-      real :: r(i,j)
-    end function randn_2d
+  impure elemental subroutine random_normal(x)
+    !! Sample random numbers from a normal distribution using a Box-Muller
+    !! formula.
+    real, intent(out) :: x
+      !! Scalar or array to be filled with random numbers
+    real :: u(2)
+    call random_number(u)
+    u(1) = 1 - u(1)
+    x = sqrt(- 2 * log(u(1))) * cos(2 * pi * u(2))
+  end subroutine random_normal
 
-    module function randn_4d(i, j, k, l) result(r)
-      !! Generates i x j x k x l random numbers with a normal distribution,
-      !! using the Box-Muller method.
-      implicit none
-      integer, intent(in) :: i, j, k, l
-      real :: r(i,j,k,l)
-    end function randn_4d
 
-  end interface randn
+  subroutine shuffle(x)
+    !! Fisher-Yates shuffle.
+    real, intent(in out) :: x(:)
+      !! Array to shuffle
+    integer :: i, j
+    real :: r, temp
+
+    do i = size(x), 2, -1
+      call random_number(r)
+      j = floor(r * i) + 1
+      temp = x(i)
+      x(i) = x(j)
+      x(j) = temp
+    end do
+
+  end subroutine shuffle
 
 end module nf_random

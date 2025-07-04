@@ -30,18 +30,18 @@ module nf_conv2d_layer
 
   contains
 
-    procedure :: init
     procedure :: forward
     procedure :: backward
+    procedure :: get_gradients
     procedure :: get_num_params
     procedure :: get_params
+    procedure :: init
     procedure :: set_params
-    procedure :: update
 
   end type conv2d_layer
 
   interface conv2d_layer
-    pure module function conv2d_layer_cons(filters, kernel_size, activation) &
+    module function conv2d_layer_cons(filters, kernel_size, activation) &
       result(res)
       !! `conv2d_layer` constructor function
       integer, intent(in) :: filters
@@ -89,13 +89,23 @@ module nf_conv2d_layer
         !! Number of parameters
     end function get_num_params
 
-    pure module function get_params(self) result(params)
-      !! Get the parameters of the layer.
-      class(conv2d_layer), intent(in) :: self
+    module function get_params(self) result(params)
+      !! Return the parameters (weights and biases) of this layer.
+      !! The parameters are ordered as weights first, biases second.
+      class(conv2d_layer), intent(in), target :: self
         !! A `conv2d_layer` instance
       real, allocatable :: params(:)
         !! Parameters to get
     end function get_params
+
+    module function get_gradients(self) result(gradients)
+      !! Return the gradients of this layer.
+      !! The gradients are ordered as weights first, biases second.
+      class(conv2d_layer), intent(in), target :: self
+        !! A `conv2d_layer` instance
+      real, allocatable :: gradients(:)
+        !! Gradients to get
+    end function get_gradients
 
     module subroutine set_params(self, params)
       !! Set the parameters of the layer.
@@ -104,14 +114,6 @@ module nf_conv2d_layer
       real, intent(in) :: params(:)
         !! Parameters to set
     end subroutine set_params
-
-    module subroutine update(self, learning_rate)
-      !! Update the weights and biases.
-      class(conv2d_layer), intent(in out) :: self
-        !! Dense layer instance
-      real, intent(in) :: learning_rate
-        !! Learning rate (must be > 0)
-    end subroutine update
 
   end interface
 
