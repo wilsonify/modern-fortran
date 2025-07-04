@@ -10,7 +10,7 @@ PROGRAMS = \
   e02-tabulate \
   e03-runtime_libs \
   e04-static-link \
-  e05_dynamic_link
+  e05-dynamic-link
 
 # Modules and their sources
 MODULES = user_functions mymath
