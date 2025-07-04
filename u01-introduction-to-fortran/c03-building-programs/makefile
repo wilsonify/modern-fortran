@@ -1,49 +1,67 @@
-# Makefile: Build Fortran source into ./build and ./dist directories
+# Makefile for Fortran tutorial projects with structured build/dist directories
 
-F90        = gfortran
-SRC        = hello.f90
-OBJ        = $(SRC:.f90=.o)
-BUILD_DIR  = build
-DIST_DIR   = dist
-OBJ_FILES  = $(addprefix $(BUILD_DIR)/, $(OBJ))
-EXE_NAME   = hello
-EXE_PATH   = $(DIST_DIR)/$(EXE_NAME)
+F90       = gfortran
+SRC_DIR   = src
+BUILD_DIR = build
+DIST_DIR  = dist
+LOG_DIR   = test_logs
 
-# Default target: build executable
-all: check dirs $(EXE_PATH)
+PROGRAMS = \
+	e01-hello \
+	e02-tabulate \
+	e03-function
 
-# Check if compiler is available
+.PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
+
+all: check dirs $(PROGRAMS:%=dist/%) test
+
 check:
 	@command -v $(F90) >/dev/null 2>&1 || \
-	  { echo "Error: $(F90) not found in PATH"; exit 1; }
+	{ echo >&2 "Error: '$(F90)' is not installed or not in your PATH."; exit 1; }
+	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
 
-# Create required directories
 dirs:
-	@mkdir -p $(BUILD_DIR) $(DIST_DIR)
+	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Compile source to object file in ./build
-$(BUILD_DIR)/%.o: %.f90 | dirs
-	$(F90) -c $< -J$(BUILD_DIR) -I$(BUILD_DIR) -o $@
+# Build rules
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
+	@echo "Compiling $< -> $@"
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-# Link object files into executable in ./dist
-$(EXE_PATH): $(OBJ_FILES)
-	$(F90) $(OBJ_FILES) -o $@
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o
+	@echo "Linking $@"
+	$(F90) $< -o $@
 
-# Remove all generated files
+dist/%: $(BUILD_DIR)/%
+	@cp $< $@
+	@echo "Copied $< -> $@"
+
+# Run a specific program
+run-%: dist/%
+	@echo "Running $<:"
+	@./$<
+
+# Test runners
+test: check dirs $(PROGRAMS:%=test-%)
+
+
 clean:
-	rm -rf $(BUILD_DIR) $(DIST_DIR)
+	@echo "Cleaning build, dist, and test logs..."
+	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Help message
 help:
 	@echo "Usage: make [target]"
 	@echo ""
-	@echo "Targets:"
-	@echo "  all     - Build executable from source"
-	@echo "  clean   - Remove build and distribution directories"
-	@echo "  help    - Show this help message"
+	@echo "Main targets:"
+	@echo "  all         Compile and distribute all tutorial programs"
+	@echo "  test        Run available tests (non-interactive only)"
+	@echo "  clean       Remove build/, dist/, and test_logs/"
 	@echo ""
-	@echo "Structure:"
-	@echo "  Object files: $(BUILD_DIR)/"
-	@echo "  Executable:   $(EXE_PATH)"
-
-.PHONY: all clean help check dirs
+	@echo "Program targets:"
+	@echo "  $(PROGRAMS:%=dist/%)"
+	@echo ""
+	@echo "Run targets:"
+	@echo "  $(PROGRAMS:%=run-%)"
+	@echo ""
+	@echo "Test targets:"
+	@echo "  $(PROGRAMS:%=test-%)"
