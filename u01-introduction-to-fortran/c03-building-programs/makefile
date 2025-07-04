@@ -33,12 +33,25 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-# Explicit .mod dependency rule
+# Explicit .mod dependency rule ensures module files exist after compiling module objects
 $(BUILD_DIR)/%.mod: $(BUILD_DIR)/%.o
 	@echo "Ensuring module $@ exists"
 	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
 
-# Special object dependencies
+# Explicit compilation dependencies for programs that use modules,
+# so .mod files exist before compiling those programs
+
+$(BUILD_DIR)/e02-tabulate.o: $(SRC_DIR)/e02-tabulate.f90 $(BUILD_DIR)/user_functions.mod | dirs
+	@echo "Compiling $< -> $@ (depends on user_functions.mod)"
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+
+$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.mod | dirs
+	@echo "Compiling $< -> $@ (depends on mymath.mod)"
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+
+# Programs that don't require special compilation dependencies use the default rule
+
+# Special object dependencies for linking (modules or shared libs)
 PRG_DEPS_e02-tabulate = $(BUILD_DIR)/user_functions.o $(BUILD_DIR)/user_functions.mod
 PRG_DEPS_e04-static-link = $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
 PRG_DEPS_e05-dynamic-link = $(BUILD_DIR)/libmymath.so
