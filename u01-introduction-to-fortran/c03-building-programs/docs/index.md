@@ -38,12 +38,12 @@ it is simple to express in source code, a lot of things actually happen
 when the executable that is built from this code runs:
 
 * A process is started on the computer in such a way that it can write
-to the console — the window (DOS-box, xterm, ...) at which you type the
-program's name.
+  to the console — the window (DOS-box, xterm, ...) at which you type the
+  program's name.
 * It writes the text "Hello!" to the console. To do so it must properly
-interact with the console.
+  interact with the console.
 * When done, it finishes, cleaning up all the resources (memory,
-connection to the console etc.) it took.
+  connection to the console etc.) it took.
 
 Fortunately, as a programmer in a high-level language you do not need to
 consider all these details. In fact, this is the sort of things that is

@@ -14,7 +14,7 @@ Depending on the size of your project and the purpose of project different
 options for the build automation can be used.
 
 First, your integrated development environment probably provides a way to build
-your program. A popular cross-platform  tool is Microsoft's
+your program. A popular cross-platform tool is Microsoft's
 <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>,
 but others exist, such as
 <a href="https://atom.io/" target="_blank" rel="noopener">Atom</a>,
@@ -52,7 +52,6 @@ learn a complex programming language first to add a new source file.
 Finally, consider what other project are using, those you are depending on and
 those that use (or will use) your project as dependency.
 
-
 ## Using make as build tool
 
 The most well-known and commonly used build system is called ``make``.
@@ -61,7 +60,9 @@ called ``Makefile`` or ``makefile``, which usually leads to compiling a program
 from the provided source code.
 
 {% include tip.html
-   content="For an in-depth ``make`` tutorial lookup its info page. There is an online version of this <a href=\"https://www.gnu.org/software/make/manual/make.html\" target=\"_blank\" rel=\"noopener\">info page</a>, available."
+content="For an in-depth ``make`` tutorial lookup its info page. There is an online version of this <a
+href=\"https://www.gnu.org/software/make/manual/make.html\" target=\"_blank\" rel=\"noopener\">info page</a>,
+available."
 %}
 
 We will start with the basics from your clean source directory. Create and open
@@ -83,7 +84,8 @@ the second thing to note is that ``make`` is always printing the command it is
 running, finally, we see the result of running ``echo "all"``.
 
 {% include note.html
-   content="We call the entry point of our ``Makefile`` always *all* by convention, but you can choose whatever name you like."
+content="We call the entry point of our ``Makefile`` always *all* by convention, but you can choose whatever name you
+like."
 %}
 
 {% capture note %}
@@ -286,7 +288,6 @@ completely or in parts.
 {% endcapture %}
 {% include note.html title="Note" content=note %}
 
-
 ### Recursively expanded variables
 
 Commonly seen in many projects are recursively expanded variables (declared with
@@ -311,7 +312,8 @@ You should find the expected (or maybe unexpected) printout after running ``make
     echo -I./include -I/opt/some_dep/include -O
     -I./include -I/opt/some_dep/include -O
 
-{% include note.html content="appending with ``+=`` to an undefined variable will produce a recursively expanded variable with this state being inherited for all further appending." %}
+{% include note.html content="appending with ``+=`` to an undefined variable will produce a recursively expanded
+variable with this state being inherited for all further appending." %}
 
 While, it seems like an interesting feature to use, it tends to lead to
 surprising and unexpected outcomes. Usually, when defining variables like your
@@ -328,12 +330,12 @@ include_dirs += -I/opt/some_dep/include
 FFLAGS := $(include_dirs) -O
 ```
 
-{% include important.html content="always think of a ``Makefile`` as a whole set of rules, it must be parsed completely before any rule can be evaluated." %}
+{% include important.html content="always think of a ``Makefile`` as a whole set of rules, it must be parsed completely
+before any rule can be evaluated." %}
 
 You can use whatever kind of variables you like most, mixing them should be done
 carefully, of course. It is important to be aware of the differences between the
 two kinds and the respective implications.
-
 
 ### Comments and whitespace
 
@@ -380,7 +382,6 @@ All in all, none of this solutions will make your ``Makefile`` more readable,
 therefore, it is prudent to pay extra attention to whitespace and comments when
 writing and using ``make``.
 
-
 ## The meson build system
 
 After you have learned the basics of ``make``, which we call a low-level build
@@ -397,6 +398,7 @@ The default low-level build-system of ``meson`` is called ``ninja``.
 Let's have a look at a complete ``meson.build`` file:
 
 <!-- meson is unknown by the highlighter, python looks okayish -->
+
 ```python
 project('my_proj', 'fortran', meson_version: '>=0.49')
 executable('my_prog', files('tabulate.f90', 'functions.f90'))
@@ -458,7 +460,6 @@ platforms as well.
 
 The documentation of ``meson`` can be found at the
 <a href="https://mesonbuild.com/" target="_blank" rel="noopener">meson-build webpage</a>.
-
 
 ## Creating a CMake project
 
@@ -543,7 +544,7 @@ add_executable("my_prog" "tabulate.f90" "functions.f90")
 ```
 
 We specified that we have a Fortran project and told CMake to create an executable
-``my_prog`` from  the files ``tabulate.f90`` and ``functions.f90``.
+``my_prog`` from the files ``tabulate.f90`` and ``functions.f90``.
 CMake knows the details how to build the executable from the specified sources,
 so we do not have to worry about the actual steps in the build process.
 

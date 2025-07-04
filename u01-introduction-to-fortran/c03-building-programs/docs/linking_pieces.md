@@ -78,8 +78,8 @@ The second step invokes the compiler in such a way that:
 
 * it compiles the file "tabulate.f90" (using the module file);
 * it invokes the linker to combine the object files tabulate.o and functions.o into an
-executable program — with the default name "a.out" or "a.exe" (if you
-want a different name, use the option "-o").
+  executable program — with the default name "a.out" or "a.exe" (if you
+  want a different name, use the option "-o").
 
 What you do not see in general is that the linker also adds a number of
 extra files in this link step, the run-time libraries. These run-time

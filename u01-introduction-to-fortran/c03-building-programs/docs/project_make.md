@@ -8,11 +8,13 @@ We briefly discussed the basics of ``make``. This chapter gives ideas
 and strategies to scale ``make`` for larger projects.
 
 Before going into detail with ``make``, consider a few points:
+
 1. ``make`` is a Unix tool and might give you a hard time when porting to non-Unix
    platforms. That said, there are also different flavors of ``make`` available,
    not all might support the features you want to use.
 2. While ``make`` gives you full control over the build process, it also
-   means you are responsible for the entire build process, and you have to specify the rules for every detail of your project.
+   means you are responsible for the entire build process, and you have to specify the rules for every detail of your
+   project.
    You might find yourself spending a significant amount of time writing and
    maintaining your ``Makefile`` instead of developing your source code.
 3. You can work with your ``Makefile``, but think about other developers
@@ -29,13 +31,14 @@ package index, which (at the time of writing) use build systems other
 than ``make``. This guide should present a general recommended style to write
 ``make``, but also serve as demonstration of useful and interesting features.
 
-{% include tip.html content="Even if you find ``make`` unsuitable to build your project, it is *the* tool to automate workflows defined by files. Maybe you can leverage its power in a different context." %}
-
+{% include tip.html content="Even if you find ``make`` unsuitable to build your project, it is *the* tool to automate
+workflows defined by files. Maybe you can leverage its power in a different context." %}
 
 ## Getting started
 
 For this part we will work with
-<a href="https://github.com/jacobwilliams/fortran-csv-module/tree/1.2.0" target="_blank" rel="noopener"> the Fortran CSV module (v1.2.0)</a>.
+<a href="https://github.com/jacobwilliams/fortran-csv-module/tree/1.2.0" target="_blank" rel="noopener"> the Fortran CSV
+module (v1.2.0)</a>.
 Our goal is to write a ``Makefile`` to compile this project to a static library.
 Start by cloning the repository
 
@@ -44,7 +47,8 @@ git clone https://github.com/jacobwilliams/fortran-csv-module -b 1.2.0
 cd fortran-csv-module
 ```
 
-{% include note.html content="For this part we will work with the code from tag ``1.2.0``, to make it as reproducible as possible. Feel free to use the latest version or another project instead." %}
+{% include note.html content="For this part we will work with the code from tag ``1.2.0``, to make it as reproducible as
+possible. Feel free to use the latest version or another project instead." %}
 
 This project uses FoBiS as build system, and you can check the
 ``build.sh`` for options used with FoBiS. We are about to write a ``Makefile``
@@ -158,7 +162,6 @@ build artifacts and the source code, unless you put extra effort into implementi
 a build directory.
 Also, right now the the source files and dependencies are specified explicitly,
 which results in several additional lines even for such a simple project.
-
 
 ## Automatically generated dependencies
 
@@ -459,7 +462,8 @@ Building your project with ``make`` should give an output similar to
 Once the dependency files are generated, ``make`` will only update them if the
 source changes and not require to rebuild them again for every invocation.
 
-{% include tip.html content="With correct dependencies you can leverage parallel execution of your ``Makefile``, just use the ``-j`` flag to create multiple ``make`` processes." %}
+{% include tip.html content="With correct dependencies you can leverage parallel execution of your ``Makefile``, just
+use the ``-j`` flag to create multiple ``make`` processes." %}
 
 Since dependencies can now be generated automatically, there is no need to specify
 the source files explicitly, the ``wildcard`` function can be used to determine

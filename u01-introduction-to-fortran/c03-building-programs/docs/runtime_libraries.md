@@ -37,21 +37,21 @@ complications and history. Here we merely scratch the surface:
 
 _On Linux:_
 
-   * The environment variable `LD_LIBRARY_PATH` is used. It consists of a
-list of directories to be searched, each directory separated via colons
-(:) from the others. For instance: `/usr/lib:/usr/local/lib` — typical
-system directories.
-   * At the link step you can also use an option to set `RPATH`, a list
-of directories that is put into the executable file itself.
-   * Then there are several system directories that are searched.
+* The environment variable `LD_LIBRARY_PATH` is used. It consists of a
+  list of directories to be searched, each directory separated via colons
+  (:) from the others. For instance: `/usr/lib:/usr/local/lib` — typical
+  system directories.
+* At the link step you can also use an option to set `RPATH`, a list
+  of directories that is put into the executable file itself.
+* Then there are several system directories that are searched.
 
 _On Windows:_
 
-   * The directory containing the executable program may also contain
-dynamic libraries.
-   * The environment variable "PATH" is used. Again a list of directories
-to be searched, but now the separating character is the semicolon (;).
-   * A set of system directories is searched.
+* The directory containing the executable program may also contain
+  dynamic libraries.
+* The environment variable "PATH" is used. Again a list of directories
+  to be searched, but now the separating character is the semicolon (;).
+* A set of system directories is searched.
 
 Unfortunately, the details can change from one version of the operating
 system to the next. The above is merely an indication — use tools like

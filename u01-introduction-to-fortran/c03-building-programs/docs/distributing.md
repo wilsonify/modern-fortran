@@ -54,6 +54,7 @@ supply the module intermediate files. These files are compiler-specific, but so 
 the static libraries you build.
 
 ## Distributing the tabulation program
+
 As shown above, the tabulation program can be built with the user-defined function
 in a dynamic library. This enables you to:
 
