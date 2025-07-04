@@ -51,7 +51,7 @@ $(BUILD_DIR)/e03-runtime_libs.o: $(SRC_DIR)/e03-runtime_libs.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.o | dirs
+$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.mod | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
@@ -72,7 +72,7 @@ $(BUILD_DIR)/e03-runtime_libs: $(BUILD_DIR)/e03-runtime_libs.o
 	@echo "Linking $@"
 	$(F90) $< -o $@
 
-$(BUILD_DIR)/e04-static-link: $(BUILD_DIR)/e04-static-link.o $(BUILD_DIR)/mymath.o
+$(BUILD_DIR)/e04-static-link: $(BUILD_DIR)/e04-static-link.o $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
 	@echo "Linking $@"
 	$(F90) $^ -o $@
 
@@ -98,6 +98,10 @@ $(BUILD_DIR)/user_functions.o: $(SRC_DIR)/user_functions.f90 | dirs
 $(BUILD_DIR)/mymath.o: $(SRC_DIR)/mymath.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+
+$(BUILD_DIR)/mymath.mod: $(BUILD_DIR)/mymath.o
+	@echo "Ensuring module $@ exists"
+	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
 
 # Copy to dist directory
 dist/%: $(BUILD_DIR)/%
