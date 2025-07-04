@@ -1,7 +1,7 @@
 # Makefile for Fortran tutorial projects with structured build/dist directories
 
 F90       = gfortran
-SRC_DIR   = .
+SRC_DIR   = src
 BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
@@ -151,7 +151,8 @@ test-e21-derived_types_basic: dist/e21-derived_types_basic
 
 test-e22-derived_types_sequence: dist/e22-derived_types_sequence
 	@./$< > $(LOG_DIR)/e22-derived_types_sequence.out
-	@grep -q "pair%i = 1" $(LOG_DIR)/e22-derived_types_sequence.out && echo "PASS: e22-derived_types_sequence" || (echo "FAIL: e22-derived_types_sequence"; exit 1)
+	@grep -q "pair%i =           1" $(LOG_DIR)/e22-derived_types_sequence.out && echo "PASS: e22-derived_types_sequence" || (echo "FAIL: e22-derived_types_sequence"; exit 1)
+
 
 test-e23-derived_types_bind_c:
 	@echo "SKIP: e23-derived_types_bind_c (interop example, no runtime executable)"
