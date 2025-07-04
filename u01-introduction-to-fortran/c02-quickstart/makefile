@@ -1,16 +1,16 @@
-# Makefile for the Hello, World! Fortran example with structured build/dist directories
+# Makefile for Fortran tutorial projects with structured build/dist directories
 
-F90     = gfortran
-SRC     = e01-hello.f90
-BUILD   = build
-DIST    = dist
-OBJ     = $(BUILD)/hello.o
-EXE     = $(BUILD)/hello
-DIST_EXE= $(DIST)/hello
+F90       = gfortran
+SRC_DIR   = .
+BUILD_DIR = build
+DIST_DIR  = dist
+LOG_DIR   = test_logs
 
-.PHONY: all check compile run clean help dirs
+PROGRAMS = e01-hello e02-variables e03-read_value e04-arithmetic e05-float
 
-all: check dirs compile dist run
+.PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
+
+all: check dirs $(PROGRAMS:%=dist/%)
 
 check:
 	@command -v $(F90) >/dev/null 2>&1 || \
@@ -18,34 +18,67 @@ check:
 	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
 
 dirs:
-	@mkdir -p $(BUILD) $(DIST)
+	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-compile: $(SRC) | dirs
-	@echo "Compiling $(SRC) to $(EXE)..."
-	$(F90) -c $(SRC) -o $(OBJ)
-	$(F90) $(OBJ) -o $(EXE)
-	@echo "Compilation complete."
+# Build rules
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
+	@echo "Compiling $< -> $@"
+	$(F90) -c $< -o $@
 
-dist: $(EXE) | dirs
-	@cp $(EXE) $(DIST_EXE)
-	@echo "Copied binary to $(DIST_EXE)"
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o
+	@echo "Linking $@"
+	$(F90) $< -o $@
 
-run: $(DIST_EXE)
-	@echo "Running $(DIST_EXE):"
-	@./$(DIST_EXE)
+dist/%: $(BUILD_DIR)/%
+	@cp $< $@
+	@echo "Copied $< -> $@"
+
+# Run a specific program
+run-%: dist/%
+	@echo "Running $<:"
+	@./$<
+
+# Test runners
+test: check dirs $(PROGRAMS:%=test-%)
+
+test-e01-hello: dist/e01-hello
+	@echo "Testing $<..."
+	@./$< > $(LOG_DIR)/e01-hello.out
+	@grep -q "Hello, World!" $(LOG_DIR)/e01-hello.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
+
+test-e02-variables: dist/e02-variables
+	@echo "Testing $<..."
+	@./$< > $(LOG_DIR)/e02-variables.out
+	@grep -q "amount" $(LOG_DIR)/e02-variables.out && echo "PASS: e02-variables" || (echo "FAIL: e02-variables"; exit 1)
+
+test-e03-read_value:
+	@echo "SKIP: e03-read_value (interactive input not supported in test)"
+
+test-e04-arithmetic:
+	@echo "SKIP: e04-arithmetic (interactive input not supported in test)"
+
+test-e05-float: dist/e05-float
+	@echo "Testing $<..."
+	@./$< > $(LOG_DIR)/e05-float.out
+	@echo "PASS: e05-float (no crash)"
 
 clean:
-	@echo "Cleaning up build and dist directories..."
-	@rm -rf $(BUILD) $(DIST)
+	@echo "Cleaning build, dist, and test logs..."
+	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
 help:
 	@echo "Usage: make [target]"
 	@echo ""
-	@echo "Targets:"
-	@echo "  all      Check compiler, compile and move binary to dist/"
-	@echo "  check    Check if gfortran is installed"
-	@echo "  dirs     Create build/ and dist/ directories"
-	@echo "  compile  Compile the hello.f90 Fortran program"
-	@echo "  dist     Copy the binary to the dist/ directory"
-	@echo "  run      Run the distributed binary"
-	@echo "  clean    Remove build/ and dist/ directories"
+	@echo "Main targets:"
+	@echo "  all         Compile and distribute all tutorial programs"
+	@echo "  test        Run available tests (non-interactive only)"
+	@echo "  clean       Remove build/, dist/, and test_logs/"
+	@echo ""
+	@echo "Program targets:"
+	@echo "  $(PROGRAMS:%=dist/%)"
+	@echo ""
+	@echo "Run targets:"
+	@echo "  $(PROGRAMS:%=run-%)"
+	@echo ""
+	@echo "Test targets:"
+	@echo "  $(PROGRAMS:%=test-%)"

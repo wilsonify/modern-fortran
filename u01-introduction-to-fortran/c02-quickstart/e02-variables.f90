@@ -1,0 +1,13 @@
+program variables
+    implicit none
+    integer :: amount
+    real :: pi, e ! two `real` variables declared
+    complex :: frequency
+    character :: initial
+    logical :: isOkay
+    print *, 'The value of amount (integer) is: ', amount
+    print *, 'The value of pi (real) is: ', pi
+    print *, 'The value of frequency (complex) is: ', frequency
+    print *, 'The value of initial (character) is: ', initial
+    print *, 'The value of isOkay (logical) is: ', isOkay
+end program variables
