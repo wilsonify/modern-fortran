@@ -90,6 +90,15 @@ $(BUILD_DIR)/e05_dynamic_link: $(BUILD_DIR)/e05_dynamic_link.o $(BUILD_DIR)/libm
 	@echo "Linking $@ with shared library"
 	$(F90) $< -L$(BUILD_DIR) -lmymath -o $@
 
+# Compile modules with explicit rules
+$(BUILD_DIR)/user_functions.o: $(SRC_DIR)/user_functions.f90 | dirs
+	@echo "Compiling $< -> $@"
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+
+$(BUILD_DIR)/mymath.o: $(SRC_DIR)/mymath.f90 | dirs
+	@echo "Compiling $< -> $@"
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+
 # Copy to dist directory
 dist/%: $(BUILD_DIR)/%
 	@cp $< $@
