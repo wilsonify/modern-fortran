@@ -26,7 +26,13 @@ PROGRAMS = \
   e17-do_concurrent \
   e18-call_sub \
   e19-run_fcn \
-  e20-use_mod
+  e20-use_mod \
+  e21-derived_types_basic \
+  e22-derived_types_sequence \
+  e23-derived_types_bind_c \
+  e24-derived_types_parameterized \
+  e25-derived_types_inheritance \
+  e26-derived_types_typebound_procedures
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
@@ -138,6 +144,29 @@ test-e19-run_fcn: dist/e19-run_fcn
 test-e20-use_mod: dist/e20-use_mod
 	@echo "Testing e20-use_mod..."
 	@./dist/e20-use_mod
+
+test-e21-derived_types_basic: dist/e21-derived_types_basic
+	@./$< > $(LOG_DIR)/e21-derived_types_basic.out
+	@grep -q "pair%i" $(LOG_DIR)/e21-derived_types_basic.out && echo "PASS: e21-derived_types_basic" || (echo "FAIL: e21-derived_types_basic"; exit 1)
+
+test-e22-derived_types_sequence: dist/e22-derived_types_sequence
+	@./$< > $(LOG_DIR)/e22-derived_types_sequence.out
+	@grep -q "pair%i = 1" $(LOG_DIR)/e22-derived_types_sequence.out && echo "PASS: e22-derived_types_sequence" || (echo "FAIL: e22-derived_types_sequence"; exit 1)
+
+test-e23-derived_types_bind_c:
+	@echo "SKIP: e23-derived_types_bind_c (interop example, no runtime executable)"
+
+test-e24-derived_types_parameterized: dist/e24-derived_types_parameterized
+	@./$< > $(LOG_DIR)/e24-derived_types_parameterized.out
+	@grep -q "Matrix size" $(LOG_DIR)/e24-derived_types_parameterized.out && echo "PASS: e24-derived_types_parameterized" || (echo "FAIL: e24-derived_types_parameterized"; exit 1)
+
+test-e25-derived_types_inheritance: dist/e25-derived_types_inheritance
+	@./$< > $(LOG_DIR)/e25-derived_types_inheritance.out
+	@grep -q "John" $(LOG_DIR)/e25-derived_types_inheritance.out && echo "PASS: e25-derived_types_inheritance" || (echo "FAIL: e25-derived_types_inheritance"; exit 1)
+
+test-e26-derived_types_typebound_procedures: dist/e26-derived_types_typebound_procedures
+	@./$< > $(LOG_DIR)/e26-derived_types_typebound_procedures.out
+	@grep -q "Area" $(LOG_DIR)/e26-derived_types_typebound_procedures.out && echo "PASS: e26-derived_types_typebound_procedures" || (echo "FAIL: e26-derived_types_typebound_procedures"; exit 1)
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
