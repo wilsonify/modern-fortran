@@ -39,15 +39,15 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
 
 # Compile program objects
 # Programs that depend on modules must depend on their module .o to get .mod files
-$(BUILD_DIR)/hello.o: $(SRC_DIR)/hello.f90 | dirs
+$(BUILD_DIR)/hello.o: $(SRC_DIR)/e01-hello.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/tabulate.o: $(SRC_DIR)/tabulate.f90 $(BUILD_DIR)/user_functions.o | dirs
+$(BUILD_DIR)/e02-tabulate.o: $(SRC_DIR)/e02-tabulate.f90 $(BUILD_DIR)/user_functions.o | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/runtime_libs.o: $(SRC_DIR)/runtime_libs.f90 | dirs
+$(BUILD_DIR)/e03-runtime_libs.o: $(SRC_DIR)/e03-runtime_libs.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
@@ -60,15 +60,15 @@ $(BUILD_DIR)/e05_dynamic_link.o: $(SRC_DIR)/e05_dynamic_link.f90 $(BUILD_DIR)/my
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
 # Link programs with needed module objects
-$(BUILD_DIR)/hello: $(BUILD_DIR)/hello.o
+$(BUILD_DIR)/e01-hello: $(BUILD_DIR)/e01-hello.o
 	@echo "Linking $@"
 	$(F90) $< -o $@
 
-$(BUILD_DIR)/tabulate: $(BUILD_DIR)/tabulate.o $(BUILD_DIR)/user_functions.o
+$(BUILD_DIR)/e02-tabulate: $(BUILD_DIR)/e02-tabulate.o $(BUILD_DIR)/user_functions.o
 	@echo "Linking $@"
 	$(F90) $^ -o $@
 
-$(BUILD_DIR)/runtime_libs: $(BUILD_DIR)/runtime_libs.o
+$(BUILD_DIR)/e03-runtime_libs: $(BUILD_DIR)/e03-runtime_libs.o
 	@echo "Linking $@"
 	$(F90) $< -o $@
 
