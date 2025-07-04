@@ -6,7 +6,18 @@ BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
 
-PROGRAMS = e01-hello e02-variables e03-read_value e04-arithmetic e05-float
+PROGRAMS = \
+  e01-hello \
+  e02-variables \
+  e03-read_value \
+  e04-arithmetic \
+  e05-float \
+  e06-arrays \
+  e07-array_slice \
+  e08-allocatable \
+  e09-string \
+  e10-allocatable_string \
+  e11-string_array
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
@@ -42,12 +53,10 @@ run-%: dist/%
 test: check dirs $(PROGRAMS:%=test-%)
 
 test-e01-hello: dist/e01-hello
-	@echo "Testing $<..."
 	@./$< > $(LOG_DIR)/e01-hello.out
 	@grep -q "Hello, World!" $(LOG_DIR)/e01-hello.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
 
 test-e02-variables: dist/e02-variables
-	@echo "Testing $<..."
 	@./$< > $(LOG_DIR)/e02-variables.out
 	@grep -q "amount" $(LOG_DIR)/e02-variables.out && echo "PASS: e02-variables" || (echo "FAIL: e02-variables"; exit 1)
 
@@ -58,9 +67,32 @@ test-e04-arithmetic:
 	@echo "SKIP: e04-arithmetic (interactive input not supported in test)"
 
 test-e05-float: dist/e05-float
-	@echo "Testing $<..."
 	@./$< > $(LOG_DIR)/e05-float.out
 	@echo "PASS: e05-float (no crash)"
+
+test-e06-arrays: dist/e06-arrays
+	@./$< > $(LOG_DIR)/e06-arrays.out
+	@echo "PASS: e06-arrays (no crash)"
+
+test-e07-array_slice: dist/e07-array_slice
+	@./$< > $(LOG_DIR)/e07-array_slice.out
+	@grep -qE "0.*0.*0" $(LOG_DIR)/e07-array_slice.out && echo "PASS: e07-array_slice" || (echo "FAIL: e07-array_slice"; exit 1)
+
+test-e08-allocatable: dist/e08-allocatable
+	@./$< > $(LOG_DIR)/e08-allocatable.out
+	@echo "PASS: e08-allocatable (no crash)"
+
+test-e09-string: dist/e09-string
+	@./$< > $(LOG_DIR)/e09-string.out
+	@grep -q "John Smith" $(LOG_DIR)/e09-string.out && echo "PASS: e09-string" || (echo "FAIL: e09-string"; exit 1)
+
+test-e10-allocatable_string: dist/e10-allocatable_string
+	@./$< > $(LOG_DIR)/e10-allocatable_string.out
+	@grep -q "John Smith" $(LOG_DIR)/e10-allocatable_string.out && echo "PASS: e10-allocatable_string" || (echo "FAIL: e10-allocatable_string"; exit 1)
+
+test-e11-string_array: dist/e11-string_array
+	@./$< > $(LOG_DIR)/e11-string_array.out
+	@grep -q "user" $(LOG_DIR)/e11-string_array.out && echo "PASS: e11-string_array" || (echo "FAIL: e11-string_array"; exit 1)
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
