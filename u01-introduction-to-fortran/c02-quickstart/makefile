@@ -43,7 +43,7 @@ dirs:
 # Build rules
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
 	@echo "Compiling $< -> $@"
-	$(F90) -c $< -o $@
+	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o
 	@echo "Linking $@"
