@@ -1,91 +1,124 @@
+# Modern Fortran
+
+**Modern Fortran** is a practical, 
+
+example-driven book and codebase for learning modern Fortran
+
+emphasizing **parallel programming**,
+**data structures**, and **real-world scientific computing**.
+
+It is designed for scientists, engineers, and researchers 
+who want to solve challenging computational problems using a clean, modular, and high-performance Fortran style.
+
+---
+
+## ✨ What You'll Learn
+
+- The essentials of modern Fortran syntax and organization  
+- Functional programming and code reuse with modules  
+- Numerical computing with arrays and formatted data  
+- Interfacing with HDF5, JSON, and external environments  
+- Shared and distributed parallelism (OpenMP, coarrays, collectives)  
+- Realistic simulations and scientific workflows in Fortran
+
+---
+
+## 📚 Chapter Overview
+
+Each chapter introduces one major concept with **hands-on code examples**:
+
+| Chapter | Title |
+|--------|-------|
+| c01_introducing | Introducing |
+| c02_minimal_working_app | Minimal Working App |
+| c03_reusing | Reusing |
+| c04_organizing | Organizing |
+| c05_analyzing_arrays | Analyzing Arrays |
+| c06_formatting_data | Formatting Data |
+| c07_parallelizing | Parallelizing |
+| c08_abstracting | Abstracting |
+| c09_generalizing | Generalizing |
+| c10_defining_operators | Defining Operators |
+| c11_Interoperating | Interoperating |
+| c12_parallelism_teams | Parallelism and Teams |
+
+---
+
+## 🧱 Codebase Map
+
+The repository also includes modular, deployable projects mapped to chapters and themes:
+
+| Code Unit                                     | Focus |
+|-----------------------------------------------|-------|
+| `u00-base-fortran-image`                      | Docker base image – **c11** |
+| `u01-introduction-to-fortran`                 | Fortran basics – **c01–c02** |
+| `u02-functional-fortran`                      | Modularity, reuse – **c03, c08** |
+| `u03-developing-statistical-software-fortran` | Structure and testing – **c03–c05** |
+| `u04-datetime-fortran`                        | Types and formatting – **c05, c06** |
+| `u05-json-fortran`                            | JSON I/O – **c06** |
+| `u06-h5fortran`                               | HDF5 I/O – **c06** |
+| `u07-tsunami`                                 | Simulation and parallelism – **c05, c07, c12** |
+| `u08-weather-buoys`                           | I/O and modeling – **c05–c07** |
+| `u09-modern_fortran`                          | Core book examples – **c03–c09** |
+| `u10-neural-fortran`                          | ML and HPC parallelism – **c07–c12** |
+| `u11-OpenCoarrays`                            | Coarray programming – **c12** |
+| `u12-aws-lambda-example`                      | Interop and deployment – **c11** |
 
 
-Modern Fortran
-=====
+---
 
-"Modern Fortran" is a book that aims to teach modern Fortran through practical, hands-on examples, 
-with a focus on parallel programming and the latest developments in the language. 
+## 🤖 Spotlight: Neural-Fortran
 
-The book is aimed at scientists and engineers who want to use Fortran to solve challenging computational problems.
+[Neural-Fortran](https://github.com/modern-fortran/neural-fortran) is a standalone library for building **neural networks in Fortran**, targeting scientific and engineering applications. It showcases modern Fortran techniques like:
 
-The book covers the most essential features of Fortran that are likely to be used in scientific and engineering work, 
-and provides examples ranging from simple note-taking apps to more complex simulations, 
-including parallel tsunami simulations. 
+- Matrix-based feedforward networks
+- OpenMP and coarray parallelism
+- Minimal external dependencies
 
-The book also gives extra attention to parallel programming in Fortran, 
-including using coarrays, teams, events, and collectives.
+---
 
-Overall, "Modern Fortran" is intended to be a practical and 
-useful reference text for scientists and engineers who want to use Fortran to solve real-world problems.
+## 🚀 Getting Started
 
-# Features
-The book is organized into several chapters, 
+To start exploring:
 
-* [c01 - introducing](src%2Fmodern_fortran%2Fc01_introducing)
-* [c02 - minimal working app](src%2Fmodern_fortran%2Fc02_minimal_working_app)
-* [c03 - reusing](src%2Fmodern_fortran%2Fc03_reusing)
-* [c04 - organizing](src%2Fmodern_fortran%2Fc04_organizing)
-* [c05 - analyzing arrays](src%2Fmodern_fortran%2Fc05_analyzing_arrays)
-* [c06 - formatting data](src%2Fmodern_fortran%2Fc06_formatting_data)
-* [c07 - parallelizing](src%2Fmodern_fortran%2Fc07_parallelizing)
-* [c08 - abstracting](src%2Fmodern_fortran%2Fc08_abstracting)
-* [c09 - generalizing](src%2Fmodern_fortran%2Fc09_generalizing)
-* [c10 - defining operators](src%2Fmodern_fortran%2Fc10_defining_operators)
-* [c11 - Interoperating](src%2Fmodern_fortran%2Fc11_Interoperating)
-* [c12 - parallelism and teams](src%2Fmodern_fortran%2Fc12_parallelism_teams)
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/modern-fortran/modern-fortran.git
+    ```
 
-Each chapter includes practical examples and exercises 
-that are designed to help readers learn and apply the concepts covered in the chapter.
+2. Install a Fortran compiler
 
-In addition to covering the basics of Fortran programming, 
-the book also includes chapters on more advanced topics, 
-such as scientific computing, 
-data analysis, and simulation. 
+    gfortran (GCC)
 
-These chapters include more complex examples and exercises 
-that are designed to challenge readers and help them develop their skills.
+    Intel Fortran (ifx)
 
-One of the unique features of "Modern Fortran" is its focus on parallel programming in Fortran. 
+    LFortran (experimental)
 
-The book includes several chapters that cover parallel programming concepts and techniques, 
-including using coarrays, teams, events, and collectives. 
+3. Read the chapters in src/modern_fortran/
 
-These chapters are designed to help readers take advantage of Fortran's built-in support for parallel programming, 
-without relying on external libraries such as MPI.
+4. Run the examples with make, cmake, or a simple Fortran build command.
 
-Overall, "Modern Fortran" is a comprehensive and practical guide to Fortran programming, 
-with a focus on real-world applications and parallel programming. 
+# Contributing
 
-It is a useful resource for scientists, engineers, 
-and anyone else who wants to learn Fortran or improve their Fortran skills.
+We welcome contributions from the scientific computing community!
 
-# Neural-Fortran
+    Fork the repository and create a branch.
 
-Neural-Fortran is a specific project that aims to provide a neural network library for Fortran,
+    Make your changes with clear commits.
 
-Neural-Fortran specifically aims to provide a library for implementing neural networks in Fortran,
-
-which can be used to solve machine learning problems in scientific and engineering domains.
+    Submit a pull request with a brief explanation.
 
 
-# Getting Started
-To get started with Modern Fortran, you can:
+# Refernces
 
-1. Clone the repository: git clone https://github.com/modern-fortran/modern-fortran.git
-2. Install a Fortran compiler, such as GCC or Intel Fortran.
-3. Read the book.
-4. Explore the examples in the examples directory 
+https://github.com/sustrik/libdill.git
 
+https://github.com/jacobwilliams/json-fortran.git
 
-# Contribute
+https://github.com/geospace-code/h5fortran.git
 
-Modern Fortran is an open-source project, and contributions are welcome.
+https://github.com/HDFGroup/hdf5.git
 
-1. Fork the repository and create a new branch for your changes.
-2. Make your changes and commit them to your branch.
-3. Submit a pull request to the main repository.
+https://github.com/wavebitscientific/functional-fortran.git
 
-# License
-
-Modern Fortran is licensed under the MIT License. 
-See the LICENSE file for details.
+https://github.com/sourceryinstitute/OpenCoarrays
