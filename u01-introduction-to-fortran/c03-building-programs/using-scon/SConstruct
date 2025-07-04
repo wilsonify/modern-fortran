@@ -1,1 +1,28 @@
-Program('my_proj', Glob('*.f90'))
+# SConstruct
+
+import os
+
+# Ensure build and dist directories exist
+for d in ['build', 'dist']:
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+env = Environment(FC='gfortran')
+env['FORTRANMODDIR'] = 'build'  # Place .mod files here
+
+# Get all source files
+src_files = Glob('src/*.f90')
+
+# Define main programs
+programs = [
+    'e01-hello',
+    'e02-tabulate',
+    'e03-runtime_libs',
+    'e04-static-link',
+    'e05-dynamic-link',
+]
+
+for prog in programs:
+    main_src = f'src/{prog}.f90'
+    target = f'dist/{prog}'
+    env.Program(target=target, source=[main_src] + src_files)
