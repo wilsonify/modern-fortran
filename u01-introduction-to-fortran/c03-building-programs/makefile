@@ -4,7 +4,6 @@ BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
 
-# Programs to build
 PROGRAMS = \
   e01-hello \
   e02-tabulate \
@@ -12,14 +11,11 @@ PROGRAMS = \
   e04-static-link \
   e05-dynamic-link
 
-# Modules and their sources
 MODULES = user_functions mymath
 
-# Object files for modules
 MODULE_OBJS = $(patsubst %, $(BUILD_DIR)/%.o, $(MODULES))
-
-# Program objects
 PROGRAM_OBJS = $(patsubst %, $(BUILD_DIR)/%.o, $(PROGRAMS))
+PROGRAM_BINS = $(patsubst %, $(BUILD_DIR)/%, $(PROGRAMS))
 
 .PHONY: all check dirs clean help test $(PROGRAMS:%=run-%)
 
@@ -32,88 +28,48 @@ check:
 dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Compile modules first
+# Default object file rule for .f90 files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
-	@echo "Compiling module $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-# Compile program objects
-# Programs that depend on modules must depend on their module .o to get .mod files
-$(BUILD_DIR)/hello.o: $(SRC_DIR)/e01-hello.f90 | dirs
 	@echo "Compiling $< -> $@"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-$(BUILD_DIR)/e02-tabulate.o: $(SRC_DIR)/e02-tabulate.f90 $(BUILD_DIR)/user_functions.o | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+# Explicit .mod dependency rule
+$(BUILD_DIR)/%.mod: $(BUILD_DIR)/%.o
+	@echo "Ensuring module $@ exists"
+	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
 
-$(BUILD_DIR)/e03-runtime_libs.o: $(SRC_DIR)/e03-runtime_libs.f90 | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+# Special object dependencies
+PRG_DEPS_e02-tabulate = $(BUILD_DIR)/user_functions.o
+PRG_DEPS_e04-static-link = $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
+PRG_DEPS_e05-dynamic-link = $(BUILD_DIR)/libmymath.so
 
-$(BUILD_DIR)/e04-static-link.o: $(SRC_DIR)/e04-static-link.f90 $(BUILD_DIR)/mymath.mod | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-$(BUILD_DIR)/e05-dynamic-link.o: $(SRC_DIR)/e05-dynamic-link.f90 $(BUILD_DIR)/mymath.o | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-# Link programs with needed module objects
-$(BUILD_DIR)/e01-hello: $(BUILD_DIR)/e01-hello.o
-	@echo "Linking $@"
-	$(F90) $< -o $@
-
-$(BUILD_DIR)/e02-tabulate: $(BUILD_DIR)/e02-tabulate.o $(BUILD_DIR)/user_functions.o
+# Link rule for most programs
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(PRG_DEPS_%) | dirs
 	@echo "Linking $@"
 	$(F90) $^ -o $@
 
-$(BUILD_DIR)/e03-runtime_libs: $(BUILD_DIR)/e03-runtime_libs.o
-	@echo "Linking $@"
-	$(F90) $< -o $@
-
-$(BUILD_DIR)/e04-static-link: $(BUILD_DIR)/e04-static-link.o $(BUILD_DIR)/mymath.o $(BUILD_DIR)/mymath.mod
-	@echo "Linking $@"
-	$(F90) $^ -o $@
-
-# For dynamic linking, compile mymath.o with -fpic and link shared lib
+# Shared library build
 $(BUILD_DIR)/mymath_pic.o: $(SRC_DIR)/mymath.f90 | dirs
-	@echo "Compiling $< for shared library -> $@"
+	@echo "Compiling $< with -fpic for shared lib"
 	$(F90) -fpic -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
 $(BUILD_DIR)/libmymath.so: $(BUILD_DIR)/mymath_pic.o
 	@echo "Linking shared library $@"
 	$(F90) -shared -o $@ $^
 
-# Link e05-dynamic-link with shared library
-$(BUILD_DIR)/e05-dynamic-link: $(BUILD_DIR)/e05-dynamic-link.o $(BUILD_DIR)/libmymath.so
-	@echo "Linking $@ with shared library"
-	$(F90) $< -L$(BUILD_DIR) -lmymath -o $@
+# Dynamic link explicitly needs -L + -l flags
+$(BUILD_DIR)/e05-dynamic-link: LDFLAGS = -L$(BUILD_DIR) -lmymath
 
-# Compile modules with explicit rules
-$(BUILD_DIR)/user_functions.o: $(SRC_DIR)/user_functions.f90 | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-$(BUILD_DIR)/mymath.o: $(SRC_DIR)/mymath.f90 | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
-
-$(BUILD_DIR)/mymath.mod: $(BUILD_DIR)/mymath.o
-	@echo "Ensuring module $@ exists"
-	@test -f $@ || (echo "Error: $@ not found after compiling $<"; exit 1)
-
-# Copy to dist directory
+# Distribute binaries
 dist/%: $(BUILD_DIR)/%
 	@cp $< $@
 	@echo "Copied $< -> $@"
 
-# Run targets
+# Run wrapper
 run-%: dist/%
 	@echo "Running $<"
 	@LD_LIBRARY_PATH=$(BUILD_DIR):$$LD_LIBRARY_PATH ./$<
 
-# Test (placeholder)
 test:
 	@echo "No tests implemented"
 
