@@ -8,8 +8,9 @@ LOG_DIR   = test_logs
 
 PROGRAMS = \
   e01-hello \
-  e02-tabulate \
-  e03-function
+  e02-function \
+  e03-tabulate \
+  e04-runtime_libs.f90
 
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
@@ -44,6 +45,8 @@ run-%: dist/%
 # Test runners
 test: check dirs $(PROGRAMS:%=test-%)
 
+test-e04-runtime_libs:
+	@ldd dist/e04-runtime_libs | tee $(LOG_DIR)/e04-runtime_libs.ldd
 
 clean:
 	@echo "Cleaning build, dist, and test logs..."
