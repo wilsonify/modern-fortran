@@ -34,6 +34,9 @@ PROGRAMS = \
   e25-derived_types_inheritance \
   e26-derived_types_typebound_procedures
 
+TESTS = \
+  test-e01-hello
+
 .PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
 
 all: check dirs $(PROGRAMS:%=dist/%) test
