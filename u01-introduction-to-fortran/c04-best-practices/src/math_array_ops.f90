@@ -1,6 +1,5 @@
-!> Basic array operations for demonstration.
 module math_array_ops
-  use, intrinsic :: iso_fortran_env, only: dp
+  use kind_parameter, only: dp
   implicit none
   private
 
