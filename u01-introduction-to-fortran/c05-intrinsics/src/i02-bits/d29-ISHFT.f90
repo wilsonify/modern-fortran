@@ -1,47 +1,40 @@
----
-layout: book
-title: ishft
-permalink: /learn/intrinsics/ISHFT
----
+program demo_ishft
+  implicit none
+  integer :: i, result, shift
+  integer, parameter :: bits = bit_size(0)
+  character(len=bits) :: bin_i, bin_res
 
-## __Name__
+  interface
+    function binstr(x) result(s)
+      integer, intent(in) :: x
+      character(len=bits) :: s
+    end function binstr
+  end interface
 
-__ishft__(3) - \[BIT:SHIFT\] Shift bits
+  i = Z'F0F0F0F0'  ! example: 11110000111100001111000011110000 (hexadecimal)
 
-## __Syntax__
+  print '(A)', 'i (decimal)   shift    i (bin)                   ishft result (dec)   result (bin)'
+  do shift = -20, 20, 5
+    result = ishft(i, shift)
+    bin_i = binstr(i)
+    bin_res = binstr(result)
+    print '(I12, 7X, I5, 5X, A, 5X, I18, 5X, A)', i, shift, bin_i, result, bin_res
+  end do
 
-```fortran
-result = ishft(i, shift)
-```
+contains
 
-## __Description__
+  function binstr(x) result(s)
+    integer, intent(in) :: x
+    character(len=bits) :: s
+    integer :: k
+    s = ''
+    do k = bits - 1, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
+        s(bits - k : bits - k) = '1'
+      else
+        s(bits - k : bits - k) = '0'
+      end if
+    end do
+  end function binstr
 
-__ishft__(3) returns a value corresponding to __i__ with all of the bits shifted
-__shift__ places. A value of __shift__ greater than zero corresponds to a left
-shift, a value of zero corresponds to no shift, and a value less than
-zero corresponds to a right shift. If the absolute value of __shift__ is
-greater than __bit\_size(i)__, the value is undefined. Bits shifted out
-from the left end or right end are lost; zeros are shifted in from the
-opposite end.
-
-## __Arguments__
-
-- __i__
-  : The type shall be _integer_.
-
-- __shift__
-  : The type shall be _integer_.
-
-## __Returns__
-
-The return value is of type _integer_ and of the same kind as __i__.
-
-## __Standard__
-
-Fortran 95 and later
-
-## __See Also__
-
-[__ishftc__(3)](ISHFTC)
-
-###### fortran-lang intrinsic descriptions
+end program demo_ishft

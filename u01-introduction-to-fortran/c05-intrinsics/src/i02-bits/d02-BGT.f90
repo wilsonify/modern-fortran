@@ -1,46 +1,39 @@
----
-layout: book
-title: bgt
-permalink: /learn/intrinsics/BGT
----
+program demo_bgt
+  implicit none
 
-## __Name__
+  integer :: a, b
+  logical :: result
 
-__bgt__(3) - \[BIT:COMPARE\] Bitwise greater than
+  ! Test 1: 5 > 3 in binary
+  a = int(B'0101')    ! 5
+  b = int(B'0011')    ! 3
+  result = bgt(a, b)
+  print *, "bgt(5, 3)  =>", result, "   ! B'0101' > B'0011'"
 
-## __Syntax__
+  ! Test 2: 5 > 5 => false
+  a = int(B'0101')
+  b = int(B'0101')
+  result = bgt(a, b)
+  print *, "bgt(5, 5)  =>", result, "   ! Equal bit patterns"
 
-```fortran
-    result = bgt(i, j)
-```
+  ! Test 3: 2 > 4 => false
+  a = int(B'0010')
+  b = int(B'0100')
+  result = bgt(a, b)
+  print *, "bgt(2, 4)  =>", result
 
-## __Description__
+  ! Test 4: -1 (all 1s) vs INT_MAX
+  a = -1
+  b = int(Z'7FFFFFFF')  ! 32-bit signed max
+  result = bgt(a, b)
+  print *, "bgt(-1, INT_MAX) =>", result
 
-Determines whether an integer is bitwise greater than another.
+  ! Display binary representation using transfer (debug)
+  print *, "Binary -1       =", transfer(a, 'XXXXXXXXXXXXXXXX')
+  print *, "Binary INT_MAX  =", transfer(b, 'XXXXXXXXXXXXXXXX')
 
-## __Arguments__
+  ! Test 5: Mixing BOZ literal with integer
+  result = bgt(B'1111', 5)
+  print *, "bgt(B'1111', 5) =>", result
 
-- __i__
-  : Shall be of _integer_ type or a BOZ literal constant.
-
-- __j__
-  : Shall be of _integer_ type, and of the same kind as __i__; or a BOZ
-  literal constant.
-
-## __Returns__
-
-The return value is of type _logical_ and of the default kind. The result
-is true if the sequence of bits represented by _i_ is greater than the
-sequence of bits represented by _j_, otherwise the result is false.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__bge__(3),](BGE),
-[__ble__(3),](BLE),
-[__blt__(3)](BLT)
-
-###### fortran-lang intrinsic descriptions
+end program demo_bgt

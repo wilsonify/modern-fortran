@@ -1,51 +1,44 @@
----
-layout: book
-title: ishftc
-permalink: /learn/intrinsics/ISHFTC
----
+program demo_ishftc
+  implicit none
+  integer :: i, result, shift, size
+  integer, parameter :: bits = bit_size(0)
+  character(len=bits) :: bin_i, bin_res
 
-## __Name__
+  interface
+    function binstr(x) result(s)
+      integer, intent(in) :: x
+      character(len=bits) :: s
+    end function binstr
+  end interface
 
-__ishftc__(3) - \[BIT:SHIFT\] Shift bits circularly
+  i = Z'F0F0F0F0'  ! Example pattern: 11110000111100001111000011110000 (hexadecimal)
+  size = 16         ! Circular shift on 16 bits (rightmost 16 bits)
 
-## __Syntax__
+  print '(A)', 'i (decimal)   shift   size    i (bin)               ishftc result (dec)   result (bin)'
+  do shift = -17, 17, 5
+    ! Perform circular shift only if abs(shift) < size (otherwise skip)
+    if (abs(shift) < size) then
+      result = ishftc(i, shift, size)
+      bin_i = binstr(i)
+      bin_res = binstr(result)
+      print '(I12, 5X, I5, 5X, I5, 5X, A, 5X, I18, 5X, A)', i, shift, size, bin_i, result, bin_res
+    end if
+  end do
 
-```fortran
-result = ishftc(i, shift, size)
-```
+contains
 
-## __Description__
+  function binstr(x) result(s)
+    integer, intent(in) :: x
+    character(len=bits) :: s
+    integer :: k
+    s = ''
+    do k = bits - 1, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
+        s(bits - k : bits - k) = '1'
+      else
+        s(bits - k : bits - k) = '0'
+      end if
+    end do
+  end function binstr
 
-__ishftc__(3) returns a value corresponding to __i__ with the rightmost __size__ bits
-shifted circularly __shift__ places; that is, bits shifted out one end are
-shifted into the opposite end. A value of __shift__ greater than zero
-corresponds to a left shift, a value of zero corresponds to no shift,
-and a value less than zero corresponds to a right shift. The absolute
-value of __shift__ must be less than __size__. If the __size__ argument is omitted,
-it is taken to be equivalent to __bit\_size(i)__.
-
-## __Arguments__
-
-- __i__
-  : The type shall be _integer_.
-
-- __shift__
-  : The type shall be _integer_.
-
-- __size__
-  : (Optional) The type shall be _integer_; the value must be greater than
-  zero and less than or equal to __bit\_size__(i).
-
-## __Returns__
-
-The return value is of type _integer_ and of the same kind as __i__.
-
-## __Standard__
-
-Fortran 95 and later
-
-## __See Also__
-
-[__ishft__(3)](ISHFT)
-
-###### fortran-lang intrinsic descriptions
+end program demo_ishftc

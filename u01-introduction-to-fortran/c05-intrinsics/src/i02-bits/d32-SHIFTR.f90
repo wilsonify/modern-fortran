@@ -1,45 +1,42 @@
----
-layout: book
-title: shiftr
-permalink: /learn/intrinsics/SHIFTR
----
+program demo_shiftr
+  implicit none
+  integer :: i, result, shift
+  integer, parameter :: bits = bit_size(0)
+  character(len=bits) :: bin_i, bin_res
 
-## __Name__
+  interface
+    function binstr(x) result(s)
+      integer, intent(in) :: x
+      character(len=bits) :: s
+    end function binstr
+  end interface
 
-__shiftr__(3) - \[BIT:SHIFT\] shift bits right
+  integer, dimension(2) :: test_values = [ 123456789, -123456789 ]
 
-## __Syntax__
+  print '(A)', 'i (decimal)    shift    i (bin)                     shiftr result (dec)    result (bin)'
+  do i = 1, 2
+    do shift = 0, bits - 1, bits / 4
+      bin_i = binstr(test_values(i))
+      result = shiftr(test_values(i), shift)
+      bin_res = binstr(result)
+      print '(I13, 8X, I5, 5X, A, 8X, I20, 5X, A)', test_values(i), shift, bin_i, result, bin_res
+    end do
+  end do
 
-```fortran
-result = shiftr(i, shift)
-```
+contains
 
-## __Description__
+  function binstr(x) result(s)
+    integer, intent(in) :: x
+    character(len=bits) :: s
+    integer :: k
+    s = ''
+    do k = bits - 1, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
+        s(bits - k : bits - k) = '1'
+      else
+        s(bits - k : bits - k) = '0'
+      end if
+    end do
+  end function binstr
 
-Returns a value corresponding to __i__ with all of the bits shifted right by
-__shift__ places. If the absolute value of __shift__ is greater than
-__bit\_size(i)__, the value is undefined. Bits shifted out from the
-right end are lost, and bits shifted in from the left end are set to 0.
-
-## __Arguments__
-
-- __i__
-  : The type shall be _integer_.
-
-- __shift__
-  : The type shall be _integer_.
-
-## __Returns__
-
-The return value is of type _integer_ and of the same kind as __i__.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__shifta__(3)](SHIFTA),
-[__shiftl__(3)](SHIFTL)
-
-###### fortran-lang intrinsic descriptions
+end program demo_shiftr

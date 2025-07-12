@@ -1,57 +1,57 @@
----
-layout: book
-title: ibits
-permalink: /learn/intrinsics/IBITS
----
+program demo_ibits
+  implicit none
 
-## __Name__
+  integer :: x, result
+  integer :: pos, len
 
-__ibits__(3) - \[BIT:COPY\] Bit extraction
+  interface
+    function binstr(x) result(s)
+      integer, intent(in) :: x
+      character(len=32) :: s
+    end function binstr
+  end interface
 
-## __Syntax__
+  ! Set value with known bit pattern
+  x = int(B'11110000111100001111000011110000')  ! 32-bit pattern
 
-```fortran
-result = ibits(i, pos, len)
-```
+  print *, "Original:"
+  print *, "x      =", binstr(x)
 
-## __Description__
+  ! Example 1: Extract 8 bits from position 0 (LSB)
+  pos = 0
+  len = 8
+  result = ibits(x, pos, len)
+  print *, "Extract 8 bits from pos 0:"
+  print *, "result =", binstr(result)
 
-__ibits__ extracts a field of length __len__ from __i__, starting from
-bit position __pos__ and extending left for __len__ bits. The result is
-right-justified and the remaining bits are zeroed. The value of pos+len
-must be less than or equal to the value __bit\_size(i)__.
+  ! Example 2: Extract 8 bits from position 8
+  pos = 8
+  len = 8
+  result = ibits(x, pos, len)
+  print *, "Extract 8 bits from pos 8:"
+  print *, "result =", binstr(result)
 
-## __Arguments__
+  ! Example 3: Extract 4 bits from position 28 (MSBs)
+  pos = 28
+  len = 4
+  result = ibits(x, pos, len)
+  print *, "Extract 4 bits from pos 28:"
+  print *, "result =", binstr(result)
 
-- __i__
-  : The type shall be _integer_.
+contains
 
-- __pos__
-  : The type shall be _integer_. A value of zero refers to the least
-  significant bit.
+  function binstr(x) result(s)
+    integer, intent(in) :: x
+    character(len=32) :: s
+    integer :: k
+    s = ''
+    do k = 31, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
+        s(32 - k:32 - k) = '1'
+      else
+        s(32 - k:32 - k) = '0'
+      end if
+    end do
+  end function binstr
 
-- __len__
-  : The type shall be _integer_.
-
-## __Returns__
-
-The return value is of type _integer_ and of the same kind as __i__.
-
-## __Standard__
-
-Fortran 95 and later
-
-## __See Also__
-
-[__ieor__(3)](IEOR),
-[__ibclr__(3)](IBCLR),
-[__not__(3)](NOT),
-[__btest__(3)](BTEST),
-[__ibclr__(3)](IBCLR),
-[__ibset__(3)](IBSET),
-[__iand__(3)](IAND),
-[__ior__(3)](IOR),
-[__ieor__(3)](IEOR),
-[__mvbits__(3)](MVBITS)
-
-###### fortran-lang intrinsic descriptions
+end program demo_ibits

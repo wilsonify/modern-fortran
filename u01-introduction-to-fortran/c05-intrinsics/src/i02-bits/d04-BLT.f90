@@ -1,43 +1,39 @@
----
-layout: book
-title: blt
-permalink: /learn/intrinsics/BLT
----
+program demo_blt
+  implicit none
 
-## __Name__
+  integer :: a, b
+  logical :: result
 
-__blt__(3) - \[BIT:COMPARE\] Bitwise less than
+  ! Case 1: 1 < 2 (bitwise: B'0001' < B'0010')
+  a = int(B'0001')  ! 1
+  b = int(B'0010')  ! 2
+  result = blt(a, b)
+  print *, "blt(1, 2) =>", result, "   ! Expect TRUE"
 
-## __Syntax__
+  ! Case 2: 4 < 4 => FALSE
+  a = int(B'0100')
+  b = int(B'0100')
+  result = blt(a, b)
+  print *, "blt(4, 4) =>", result, "   ! Expect FALSE"
 
-```fortran
-    result = blt(i, j)
-```
+  ! Case 3: 7 < 5 => FALSE (bitwise: B'0111' > B'0101')
+  a = int(B'0111')  ! 7
+  b = int(B'0101')  ! 5
+  result = blt(a, b)
+  print *, "blt(7, 5) =>", result, "   ! Expect FALSE"
 
-## __Description__
+  ! Case 4: -1 < INT_MAX?
+  a = -1
+  b = int(Z'7FFFFFFF')  ! INT_MAX (signed 32-bit)
+  result = blt(a, b)
+  print *, "blt(-1, INT_MAX) =>", result
 
-Determines whether an integer is bitwise less than another.
+  ! Optional debug: print raw bit patterns
+  print *, "Bits of -1      =", transfer(a, 'XXXXXXXXXXXXXXXX')
+  print *, "Bits of INT_MAX =", transfer(b, 'XXXXXXXXXXXXXXXX')
 
-## __Arguments__
+  ! Case 5: BOZ literal vs integer
+  result = blt(B'0001', 2)  ! B'0001' = 1, 2 = B'0010'
+  print *, "blt(B'0001', 2) =>", result
 
-- __i__
-  : Shall be of _integer_ type.
-
-- __j__
-  : Shall be of _integer_ type, and of the same kind as __i__.
-
-## __Returns__
-
-The return value is of type _logical_ and of the default kind.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__bge__(3)](BGE),
-[__bgt__(3)](BGT),
-[__ble__(3)](BLE)
-
-###### fortran-lang intrinsic descriptions
+end program demo_blt

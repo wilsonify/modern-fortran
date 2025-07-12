@@ -1,44 +1,35 @@
----
-layout: book
-title: bge
-permalink: /learn/intrinsics/BGE
----
+program demo_bge
+  use, intrinsic :: ieee_arithmetic, only: ieee_support_standard
+  implicit none
 
-## __Name__
+  integer :: a, b
+  logical :: result
 
-__bge__(3) - \[BIT:COMPARE\] Bitwise greater than or equal to
+  ! Examples
+  a = int(B'0101')    ! 5 in binary
+  b = int(B'0011')    ! 3 in binary
 
-## __Syntax__
+  result = bge(a, b)
+  print *, "bge(5, 3)  =>", result, "   ! B'0101' >= B'0011'"
 
-```fortran
-    result = bge(i, j)
-```
+  a = int(B'0101')    ! 5
+  b = int(B'0101')    ! 5
+  result = bge(a, b)
+  print *, "bge(5, 5)  =>", result, "   ! Equal values"
 
-## __Description__
+  a = int(B'0010')    ! 2
+  b = int(B'0100')    ! 4
+  result = bge(a, b)
+  print *, "bge(2, 4)  =>", result, "   ! B'0010' < B'0100' => .false."
 
-Determines whether an integer is bitwise greater than or equal to
-another.
+  ! Sign bits matter too
+  a = -1
+  b = int(B'01111111111111111111111111111111')  ! largest 32-bit signed int
+  result = bge(a, b)
+  print *, "bge(-1, INT_MAX) =>", result
 
-## __Arguments__
+  ! Visual check: interpret bits as unsigned for context
+  print *, "Binary of -1       =", transfer(a, 'XXXXXXXXXXXXXXXX')
+  print *, "Binary of INT_MAX  =", transfer(b, 'XXXXXXXXXXXXXXXX')
 
-- __i__
-  : Shall be of _integer_ type.
-
-- __j__
-  : Shall be of _integer_ type, and of the same kind as __i__.
-
-## __Returns__
-
-The return value is of type _logical_ and of the default kind.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__bgt__(3)](BGT),
-[__ble__(3)](BLE),
-[__blt__(3)](BIT)
-
-###### fortran-lang intrinsic descriptions
+end program demo_bge

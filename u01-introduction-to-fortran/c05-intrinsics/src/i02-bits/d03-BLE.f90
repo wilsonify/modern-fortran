@@ -1,43 +1,39 @@
----
-layout: book
-title: ble
-permalink: /learn/intrinsics/BLE
----
+program demo_ble
+  implicit none
 
-## __Name__
+  integer :: a, b
+  logical :: result
 
-__ble__(3) - \[BIT:COMPARE\] Bitwise less than or equal to
+  ! Case 1: 2 ≤ 3 (bitwise: B'0010' ≤ B'0011')
+  a = int(B'0010')  ! 2
+  b = int(B'0011')  ! 3
+  result = ble(a, b)
+  print *, "ble(2, 3) =>", result, "   ! Expect TRUE"
 
-## __Syntax__
+  ! Case 2: 4 ≤ 4
+  a = int(B'0100')
+  b = int(B'0100')
+  result = ble(a, b)
+  print *, "ble(4, 4) =>", result, "   ! Expect TRUE"
 
-```fortran
-    result = ble(i, j)
-```
+  ! Case 3: 5 ≤ 2 => FALSE
+  a = int(B'0101')  ! 5
+  b = int(B'0010')  ! 2
+  result = ble(a, b)
+  print *, "ble(5, 2) =>", result, "   ! Expect FALSE"
 
-## __Description__
+  ! Case 4: Compare -1 with INT_MAX (bitwise ordering)
+  a = -1
+  b = int(Z'7FFFFFFF')  ! largest signed 32-bit int
+  result = ble(a, b)
+  print *, "ble(-1, INT_MAX) =>", result, "   ! Bitwise comparison"
 
-Determines whether an integer is bitwise less than or equal to another.
+  ! Debug: show their binary layout
+  print *, "Binary -1       =", transfer(a, 'XXXXXXXXXXXXXXXX')
+  print *, "Binary INT_MAX  =", transfer(b, 'XXXXXXXXXXXXXXXX')
 
-## __Arguments__
+  ! Case 5: BOZ literal vs integer
+  result = ble(B'0011', 5)
+  print *, "ble(B'0011', 5) =>", result, "   ! B'0011' = 3, 5 = B'0101'"
 
-- __i__
-  : Shall be of _integer_ type.
-
-- __j__
-  : Shall be of _integer_ type, and of the same kind as __i__.
-
-## __Returns__
-
-The return value is of type _logical_ and of the default kind.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__bge__(3),](BGE),
-[__bgt__(3),](BGT),
-[__blt__(3)](BLT)
-
-###### fortran-lang intrinsic descriptions
+end program demo_ble

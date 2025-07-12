@@ -1,46 +1,55 @@
----
-layout: book
-title: dshiftl
-permalink: /learn/intrinsics/DSHIFTL
----
+program demo_dshiftl
+  implicit none
 
-## __Name__
+  integer :: i, j, shift, result
+  character(len=32) :: fmt_i, fmt_j, fmt_result
 
-__dshiftl__(3) - \[BIT:COPY\] combines bits of arguments __i__ and __j__
+  ! Helper to print binary representation
+  interface
+    function binstr(x) result(s)
+      integer, intent(in) :: x
+      character(len=32) :: s
+    end function binstr
+  end interface
 
-## __Syntax__
+  ! Example 1
+  i = int(B'10101010101010101010101010101010')
+  j = int(B'11110000111100001111000011110000')
+  shift = 4
+  result = dshiftl(i, j, shift)
 
-```fortran
-result = dshiftl(i, j, shift)
-```
+  print *, "DSHIFTL DEMO:"
+  print *, "i      =", binstr(i)
+  print *, "j      =", binstr(j)
+  print *, "shift  =", shift
+  print *, "result =", binstr(result)
+  print *
 
-## __Description__
+  ! Example 2: edge case shift = 0
+  shift = 0
+  result = dshiftl(i, j, shift)
+  print *, "Shift = 0 => result =", binstr(result)
 
-__dshiftl(i, j, shift)__ combines bits of __i__ and __j__. The rightmost __shift__
-bits of the result are the leftmost __shift__ bits of __j__, and the remaining
-bits are the rightmost bits of __i__.
+  ! Example 3: shift = 32 (for 32-bit int)
+  shift = 32
+  result = dshiftl(i, j, shift)
+  print *, "Shift = 32 => result =", binstr(result)
 
-## __Arguments__
+contains
 
-- __i__
-  : Shall be of type _integer_.
+  function binstr(x) result(s)
+    integer, intent(in) :: x
+    character(len=32) :: s
+    integer :: k
 
-- __j__
-  : Shall be of type _integer_, and of the same kind as __i__.
+    s = ''
+    do k = 31, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
+        s(32 - k:32 - k) = '1'
+      else
+        s(32 - k:32 - k) = '0'
+      end if
+    end do
+  end function binstr
 
-- __shift__
-  : Shall be of type _integer_.
-
-## __Returns__
-
-The return value has same type and kind as __i__.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__dshiftr__(3)](DSHIFTR)
-
-###### fortran-lang intrinsic descriptions
+end program demo_dshiftl
