@@ -1,56 +1,3 @@
----
-layout: book
-title: spread
-permalink: /learn/intrinsics/SPREAD
----
-
-## __Name__
-
-__spread__(3) - \[ARRAY CONSTRUCTION\] Add a dimension to an array
-
-## __Syntax__
-
-```fortran
-result = spread(source, dim, ncopies)
-
-  TYPE(kind=KIND) function spread(source, dim, ncopies)
-
-   TYPE(kind=KIND)    :: source(..)
-   integer,intent(in) :: dim
-   integer,intent(in) :: ncopies
-```
-
-## __Description__
-
-Replicates a __source__ array __ncopies__ times along a specified
-dimension __dim__.
-
-If SOURCE is scalar, the shape of the result is (MAX (NCOPIES, 0)).
-and each element of the result has a value equal to SOURCE.
-
-## __Arguments__
-
-- __source__
-  : Shall be a scalar or an array of any type and a rank less than
-  fifteen.
-
-- __dim__
-  : Shall be a scalar of type _integer_ with a value in the range from
-  __1__ to __n+1__, where __n__ equals the rank of __source__.
-
-- __ncopies__
-  : Shall be a scalar of type _integer_.
-
-## __Returns__
-
-The result is an array of the same type as __source__ and has rank __n+1__
-where __n__ equals the rank of __source__.
-
-## __Examples__
-
-Sample program:
-
-```fortran
 program demo_spread
 implicit none
 integer :: a = 1, b(2) = [ 1, 2 ]
@@ -115,18 +62,3 @@ integer ( kind = 4 ) v(4)
        write ( *, '(4i6)' ) a2(i,1:4)
      end do
 end program example_spread
-```
-
-## __Standard__
-
-Fortran 95 and later
-
-## __See Also__
-
-[__pack__(3)](PACK),
-[__unpack__(3)](UNPACK),
-[__merge__(3)](MERGE),
-[__pack__(3)](PACK),
-[__unpack__(3)](UNPACK)
-
-###### fortran-lang intrinsic descriptions
