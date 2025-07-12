@@ -31,7 +31,8 @@ PROGRAMS := \
   e08-demo_elementwise_root \
   e09-allocatable_array_demo \
   e10_file_io_demo \
-  e11_callbacks_demo
+  e11_callbacks_demo \
+  e12-type_casting
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
@@ -150,6 +151,9 @@ test-e11_callbacks_demo: dist/e11_callbacks_demo
 	@./$< > $(LOG_DIR)/e11_callbacks_demo.out
 	@grep -q "" $(LOG_DIR)/e11_callbacks_demo.out && echo "PASS e11_callbacks_demo" || (echo "FAIL: e11_callbacks_demo"; exit 1)
 
+test-e12-type_casting: dist/e12-type_casting
+	@./$< > $(LOG_DIR)/e12-type_casting.out
+	@grep -q "" $(LOG_DIR)/e12-type_casting.out && echo "PASS e12-type_casting" || (echo "FAIL: e12-type_casting"; exit 1)
 
 
 help:
