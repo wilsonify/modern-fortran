@@ -34,12 +34,6 @@ program demo_lbound
 
   integer :: arr(-10:10)
 
-  interface
-    subroutine esub(arr)
-      integer, intent(in) :: arr(:)
-    end subroutine esub
-  end interface
-
   print *, "MAIN: LOWER =", lbound(arr), &
            "UPPER =", ubound(arr), &
            "SIZE  =", size(arr)
@@ -58,3 +52,4 @@ contains
   end subroutine csub
 
 end program demo_lbound
+

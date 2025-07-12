@@ -1,13 +1,8 @@
 program demo_spread
-implicit none
-integer :: a = 1, b(2) = [ 1, 2 ]
 
-   write(*,*) spread(a, 1, 2)            ! "1 1"
-   write(*,*) spread(b, 1, 2)            ! "1 1 2 2"
 
-end program demo_spread
 
-program example_spread
+
 !  Author:
 !    John Burkardt, 03 July 2006
 implicit none
@@ -61,4 +56,4 @@ integer ( kind = 4 ) v(4)
      do i = 1, 3
        write ( *, '(4i6)' ) a2(i,1:4)
      end do
-end program example_spread
+end program demo_spread
