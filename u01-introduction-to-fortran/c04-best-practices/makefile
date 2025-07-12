@@ -16,93 +16,80 @@ else
 endif
 
 # Modules and submodules
-MODULES := kind_parameter mod_math
-SUBMODULES := mod_math_square
+MODULES    := kind_parameter mod_math math_stats
+SUBMODULES := mod_math_square math_stats_variance
 
-# Programs to build
-PROGRAMS = \
+# Programs
+PROGRAMS := \
   e01-tabulate \
   e02-floating-point \
   e03-integer-division \
-  e04-demo_sum_of_squares
+  e04-demo_sum_of_squares \
+  e05-demo_variance
 
-# Source and object files
-MODULE_SRCS     := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(MODULES)))
+# Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
-
-SUBMODULE_SRCS  := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(SUBMODULES)))
 SUBMODULE_OBJS  := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(SUBMODULES)))
-
-PROGRAM_SRCS    := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(PROGRAMS)))
 PROGRAM_OBJS    := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(PROGRAMS)))
 PROGRAM_BINS    := $(addprefix $(BUILD_DIR)/, $(PROGRAMS))
 PROGRAM_DISTS   := $(addprefix dist/, $(PROGRAMS))
 
 .PHONY: all check dirs clean help test run $(PROGRAMS:%=test-%)
 
-## ---- Top-Level Targets ----
+## --------------------
+## Top-Level Targets
+## --------------------
 
 all: check dirs $(PROGRAM_DISTS) test
 
 check:
-	@command -v $(F90) >/dev/null 2>&1 || \
-	{ echo >&2 "Error: '$(F90)' is not installed or not in your PATH."; exit 1; }
+	@command -v $(F90) >/dev/null 2>&1 || { echo >&2 "Error: '$(F90)' is not installed."; exit 1; }
 	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
 
 dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-## ---- Compilation Rules ----
+## --------------------
+## Compilation Rules
+## --------------------
 
+# General object compilation
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
 	$(HIDE)echo "Compiling $< -> $@"
 	$(HIDE)$(F90) $(FFLAGS) -c $< -o $@
 
-dist/%: $(BUILD_DIR)/%
-	$(HIDE)cp $< $@
-	$(HIDE)echo "Copied $< -> $@"
-
-## ---- Explicit Dependency Rules ----
-
-# Submodule depends on its module
+# Submodule depends on module
 $(BUILD_DIR)/mod_math_square.o: $(BUILD_DIR)/mod_math.o
+$(BUILD_DIR)/math_stats_variance.o: $(BUILD_DIR)/math_stats.o
 
-# Programs with module dependencies
+# Program dependencies
 $(BUILD_DIR)/e01-tabulate.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e02-floating-point.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e03-integer-division.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e04-demo_sum_of_squares.o: $(BUILD_DIR)/mod_math.o $(BUILD_DIR)/mod_math_square.o
+$(BUILD_DIR)/e05-demo_variance.o: $(BUILD_DIR)/math_stats.o $(BUILD_DIR)/math_stats_variance.o
 
-## ---- Per-Program Module Link Dependencies ----
+# Link objects into executables
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o
+	$(HIDE)echo "Linking $@"
+	$(HIDE)$(F90) $^ $(MODULE_OBJS) $(SUBMODULE_OBJS) -o $@
 
-# Declare which modules each program uses
-PROGRAM_MODULES_e04-demo_sum_of_squares = mod_math mod_math_square
-PROGRAM_MODULES_e01-tabulate = kind_parameter
-PROGRAM_MODULES_e02-floating-point = kind_parameter
-PROGRAM_MODULES_e03-integer-division = kind_parameter
+# Copy executable to dist/
+dist/%: $(BUILD_DIR)/%
+	$(HIDE)cp $< $@
+	$(HIDE)echo "Copied $< -> $@"
 
-# Convert module names to object files
-define prog_mod_objs
-PROGRAM_MODULE_OBJS_$1 := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $($(1)))
-endef
-
-# Link rule per program (generated dynamically)
-define link_rule
-$(BUILD_DIR)/$1: $(BUILD_DIR)/$1.o $$(addprefix $(BUILD_DIR)/, $$(addsuffix .o, $$(PROGRAM_MODULES_$1)))
-	$(HIDE)echo "Linking $$@"
-	$(HIDE)$(F90) $$^ -o $$@
-endef
-
-# Expand link rules
-$(foreach prog,$(PROGRAMS),$(eval $(call link_rule,$(prog))))
-
-## ---- Run Targets ----
+## --------------------
+## Run Targets
+## --------------------
 
 run-%: dist/%
 	@echo "Running $<:"
 	@./$<
 
-## ---- Test Targets ----
+## --------------------
+## Test Targets
+## --------------------
 
 test: check dirs $(PROGRAMS:%=test-%)
 
@@ -122,7 +109,13 @@ test-e04-demo_sum_of_squares:
 	@./dist/e04-demo_sum_of_squares > $(LOG_DIR)/e04-demo_sum_of_squares.out
 	@grep -q "" $(LOG_DIR)/e04-demo_sum_of_squares.out && echo "PASS: e04-demo_sum_of_squares" || (echo "FAIL: e04-demo_sum_of_squares"; exit 1)
 
-## ---- Utility Targets ----
+test-e05-demo_variance:
+	@./dist/e05-demo_variance > $(LOG_DIR)/e05-demo_variance.out
+	@grep -q "" $(LOG_DIR)/e05-demo_variance.out && echo "PASS: e05-demo_variance" || (echo "FAIL: e05-demo_variance"; exit 1)
+
+## --------------------
+## Utility Targets
+## --------------------
 
 clean:
 	@echo "Cleaning build/, dist/, and test_logs/..."
@@ -136,8 +129,6 @@ help:
 	@echo "  test        Run all tests"
 	@echo "  clean       Remove build/, dist/, and test_logs/"
 	@echo ""
-	@echo "Program targets:"
-	@echo "  $(PROGRAMS:%=dist/%)"
 	@echo "Run targets:"
 	@echo "  $(PROGRAMS:%=run-%)"
 	@echo "Test targets:"
