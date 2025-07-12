@@ -70,3 +70,27 @@ to reshape an array |
     - Assumed-rank objects 
 
 ###### fortran-lang intrinsic descriptions
+
+git mv MERGE.md i01*
+git mv PACK.md i01*
+git mv SPREAD.md i01*
+git mv UNPACK.md i01*
+git mv ALLOCATED.md i01*
+git mv IS_CONTIGUOUS.md i01*
+git mv LBOUND.md i01*
+git mv RANK.md i01*
+git mv SHAPE.md i01*
+git mv SIZE.md i01*
+git mv UBOUND.md i01*
+git mv MAXLOC.md i01*
+git mv MINLOC.md i01*
+git mv FINDLOC.md i01*
+git mv TRANSPOSE.md i01*
+git mv ALL.md i01*
+git mv ANY.md i01*
+git mv COUNT.md i01*
+git mv MAXVAL.md i01*
+git mv MINVAL.md i01*
+git mv PRODUCT.md i01*
+git mv SUM.md i01*
+git mv RESHAPE.md i01*
