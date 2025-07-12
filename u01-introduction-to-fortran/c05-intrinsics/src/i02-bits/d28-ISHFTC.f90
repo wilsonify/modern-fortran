@@ -4,19 +4,14 @@ program demo_ishftc
   integer, parameter :: bits = bit_size(0)
   character(len=bits) :: bin_i, bin_res
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
+  ! Convert BOZ hex literal explicitly to integer parameter
+  integer, parameter :: i_const = int(Z'F0F0F0F0', kind=kind(0))
 
-  i = Z'F0F0F0F0'  ! Example pattern: 11110000111100001111000011110000 (hexadecimal)
+  i = i_const
   size = 16         ! Circular shift on 16 bits (rightmost 16 bits)
 
   print '(A)', 'i (decimal)   shift   size    i (bin)               ishftc result (dec)   result (bin)'
   do shift = -17, 17, 5
-    ! Perform circular shift only if abs(shift) < size (otherwise skip)
     if (abs(shift) < size) then
       result = ishftc(i, shift, size)
       bin_i = binstr(i)

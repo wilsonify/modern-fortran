@@ -1,14 +1,7 @@
 program demo_ieor
   implicit none
-  integer :: i, j, result
+  integer :: i, result
   integer, parameter :: bits = bit_size(0)
-
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
 
   ! Sample pairs to demonstrate bitwise XOR
   integer, dimension(5) :: a = [0, 15, 170, -1, 123456]
@@ -27,8 +20,8 @@ contains
     character(len=bits) :: s
     integer :: k
     s = ''
-    do k = bits-1, 0, -1
-      if (iand(x, ishft(1,k)) /= 0) then
+    do k = bits - 1, 0, -1
+      if (iand(x, ishft(1, k)) /= 0) then
         s(bits - k: bits - k) = '1'
       else
         s(bits - k: bits - k) = '0'

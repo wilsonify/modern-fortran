@@ -4,15 +4,10 @@ program demo_ibclr
   integer :: x, cleared
   integer :: pos
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=32) :: s
-    end function binstr
-  end interface
+  ! No interface block here!
 
   ! Set initial bit pattern
-  x = int(B'11110000111100001111000011110000')  ! 32-bit pattern
+  x = int(B'11110000111100001111000011110000')
 
   print *, "Original value:"
   print *, "x      =", binstr(x)

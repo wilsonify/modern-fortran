@@ -4,14 +4,8 @@ program demo_ishft
   integer, parameter :: bits = bit_size(0)
   character(len=bits) :: bin_i, bin_res
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
-
-  i = Z'F0F0F0F0'  ! example: 11110000111100001111000011110000 (hexadecimal)
+  integer, parameter :: i_const = int(Z'F0F0F0F0', kind=kind(0))
+  i = i_const
 
   print '(A)', 'i (decimal)   shift    i (bin)                   ishft result (dec)   result (bin)'
   do shift = -20, 20, 5

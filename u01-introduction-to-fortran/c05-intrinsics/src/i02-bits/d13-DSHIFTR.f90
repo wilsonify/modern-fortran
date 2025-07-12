@@ -3,12 +3,7 @@ program demo_dshiftr
 
   integer :: i, j, shift, result
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=32) :: s
-    end function binstr
-  end interface
+  ! Remove the interface block entirely!
 
   ! Example 1: shift = 4
   i = int(B'10101010101010101010101010101010')  ! Alternating bits

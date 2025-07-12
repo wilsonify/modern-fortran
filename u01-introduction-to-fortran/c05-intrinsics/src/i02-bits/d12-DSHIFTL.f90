@@ -4,14 +4,6 @@ program demo_dshiftl
   integer :: i, j, shift, result
   character(len=32) :: fmt_i, fmt_j, fmt_result
 
-  ! Helper to print binary representation
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=32) :: s
-    end function binstr
-  end interface
-
   ! Example 1
   i = int(B'10101010101010101010101010101010')
   j = int(B'11110000111100001111000011110000')

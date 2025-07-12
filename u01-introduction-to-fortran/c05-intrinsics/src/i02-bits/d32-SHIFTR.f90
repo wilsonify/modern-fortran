@@ -1,15 +1,8 @@
 program demo_shiftr
   implicit none
-  integer :: i, result, shift
   integer, parameter :: bits = bit_size(0)
+  integer :: i, result, shift
   character(len=bits) :: bin_i, bin_res
-
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
 
   integer, dimension(2) :: test_values = [ 123456789, -123456789 ]
 

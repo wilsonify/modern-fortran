@@ -4,12 +4,7 @@ program demo_ibset
   integer :: x, setval
   integer :: pos
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=32) :: s
-    end function binstr
-  end interface
+  ! No interface block here!
 
   ! Start with zero
   x = 0
@@ -41,6 +36,7 @@ contains
     integer, intent(in) :: x
     character(len=32) :: s
     integer :: k
+
     s = ''
     do k = 31, 0, -1
       if (iand(x, ishft(1, k)) /= 0) then

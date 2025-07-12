@@ -1,15 +1,8 @@
 program demo_shiftl
   implicit none
-  integer :: i, result, shift
   integer, parameter :: bits = bit_size(0)
+  integer :: i, result, shift
   character(len=bits) :: bin_i, bin_res
-
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
 
   ! Test values (positive and negative for contrast)
   integer, dimension(2) :: test_values = [ 123456789, -123456789 ]
@@ -30,6 +23,7 @@ contains
     integer, intent(in) :: x
     character(len=bits) :: s
     integer :: k
+
     s = ''
     do k = bits - 1, 0, -1
       if (iand(x, ishft(1, k)) /= 0) then

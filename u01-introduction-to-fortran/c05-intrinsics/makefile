@@ -29,7 +29,39 @@ PROGRAMS = \
     i01-arrays/d20-MINVAL \
     i01-arrays/d21-PRODUCT \
     i01-arrays/d22-SUM \
-    i01-arrays/d23-RESHAPE
+    i01-arrays/d23-RESHAPE \
+    i02-bits/d01-BGE \
+    i02-bits/d02-BGT \
+    i02-bits/d03-BLE \
+    i02-bits/d04-BLT \
+    i02-bits/d05-BIT_SIZE \
+    i02-bits/d06-BTEST \
+    i02-bits/d07-STORAGE_SIZE \
+    i02-bits/d08-LEADZ \
+    i02-bits/d09-POPCNT \
+    i02-bits/d10-POPPAR \
+    i02-bits/d11-TRAILZ \
+    i02-bits/d12-DSHIFTL \
+    i02-bits/d13-DSHIFTR \
+    i02-bits/d14-MERGE_BITS \
+    i02-bits/d15-MVBITS \
+    i02-bits/d16-IBITS \
+    i02-bits/d17-IBCLR \
+    i02-bits/d18-IBSET \
+    i02-bits/d19-MASKL \
+    i02-bits/d20-MASKR \
+    i02-bits/d21-IPARITY \
+    i02-bits/d22-IALL \
+    i02-bits/d23-IAND \
+    i02-bits/d24-IANY \
+    i02-bits/d25-IEOR \
+    i02-bits/d26-IOR \
+    i02-bits/d27-NOT \
+    i02-bits/d28-ISHFTC \
+    i02-bits/d29-ISHFT \
+    i02-bits/d30-SHIFTA \
+    i02-bits/d31-SHIFTL \
+    i02-bits/d32-SHIFTR
 
 # Phony targets
 .PHONY: all clean dirs check help

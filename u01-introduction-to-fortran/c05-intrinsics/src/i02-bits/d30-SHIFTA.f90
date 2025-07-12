@@ -1,17 +1,11 @@
 program demo_shifta
   implicit none
+
+  integer, parameter :: bits = bit_size(0)  ! compile-time constant
   integer :: i, result, shift
-  integer, parameter :: bits = bit_size(0)
   character(len=bits) :: bin_i, bin_res
 
-  interface
-    function binstr(x) result(s)
-      integer, intent(in) :: x
-      character(len=bits) :: s
-    end function binstr
-  end interface
-
-  ! Test value: negative and positive examples
+  ! Test values: negative and positive examples
   integer, dimension(2) :: test_values = [ -123456789, 123456789 ]
 
   print '(A)', 'i (decimal)    shift    i (bin)                     shifta result (dec)    result (bin)'
@@ -30,7 +24,8 @@ contains
     integer, intent(in) :: x
     character(len=bits) :: s
     integer :: k
-    s = ''
+
+    s = ''  ! Initialize string
     do k = bits - 1, 0, -1
       if (iand(x, ishft(1, k)) /= 0) then
         s(bits - k : bits - k) = '1'
