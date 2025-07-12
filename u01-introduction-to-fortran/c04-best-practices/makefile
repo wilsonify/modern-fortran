@@ -28,7 +28,8 @@ PROGRAMS := \
   e05-demo_variance \
   e06-demo_array_usage \
   e07-demo_multidim_arrays \
-  e08-demo_elementwise_root
+  e08-demo_elementwise_root \
+  e09-allocatable_array_demo.f90
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
