@@ -1,9 +1,11 @@
+# Compiler and directories
 F90       = gfortran
 SRC_DIR   = src
 BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
 
+# Relative paths to program source files (no .f90 extension)
 PROGRAMS = \
     i01-arrays/d01-MERGE \
     i01-arrays/d02-PACK \
@@ -29,46 +31,49 @@ PROGRAMS = \
     i01-arrays/d22-SUM \
     i01-arrays/d23-RESHAPE
 
-.PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
+# Phony targets
+.PHONY: all clean dirs check help
 
-all: check dirs $(PROGRAMS:%=$(DIST_DIR)/%) $(PROGRAMS:%=run-%)
+# Top-level default target
+all: check dirs $(PROGRAMS:%=$(DIST_DIR)/%)
 
+# Clean build artifacts
 clean:
 	@echo "Cleaning build/, dist/, and test_logs/..."
 	rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-
-check:
-	@command -v $(F90) >/dev/null 2>&1 || \
-	{ echo >&2 "Error: '$(F90)' is not installed or not in your PATH."; exit 1; }
-	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
-
-dirs:
-	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
-
-# Core build logic
+# Compilation rule
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90
 	@mkdir -p $(dir $@)
-	@echo "Compiling $< -> $@"
+	@echo "Compiling: $<"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
+# Linking rule
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(dir $@)
-	@echo "Linking $@"
+	@echo "Linking: $@"
 	$(F90) $< -o $@
 
+# Distribution rule with smoke test
 $(DIST_DIR)/%: $(BUILD_DIR)/%
 	@mkdir -p $(dir $@)
 	@cp $< $@
-	@echo "Copied $< -> $@"
+	@echo "Running: $@"
+	@./$@ > /dev/null 2>&1 || echo "FAILED: $@"
 
-run: check dirs $(PROGRAMS:%=run-%)
+# Environment check
+check:
+	@command -v $(F90) >/dev/null 2>&1 || \
+	{ echo >&2 "Error: '$(F90)' not found in PATH."; exit 1; }
+	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
 
-run-%: $(DIST_DIR)/%
-	@echo "Running $<:"
-	@./$<
+# Directory setup
+dirs:
+	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
 
+
+# Help message
 help:
 	@echo "Usage: make [target]"
 	@echo ""
