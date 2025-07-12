@@ -15,11 +15,11 @@ else
   FFLAGS = -J$(BUILD_DIR) -I$(BUILD_DIR)
 endif
 
-# Modules and submodules
-MODULES    := kind_parameter mod_math math_stats math_array_ops multidim_array_ops.f90
+# Modules and submodules (no .f90 extensions here)
+MODULES    := kind_parameter mod_math math_stats math_array_ops multidim_array_ops elementwise_root
 SUBMODULES := mod_math_square math_stats_variance
 
-# Programs
+# Programs (no .f90 extensions)
 PROGRAMS := \
   e01-tabulate \
   e02-floating-point \
@@ -27,14 +27,15 @@ PROGRAMS := \
   e04-demo_sum_of_squares \
   e05-demo_variance \
   e06-demo_array_usage \
-  e07-demo_multidim_arrays.f90
+  e07-demo_multidim_arrays \
+  e08-demo_elementwise_root
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
 SUBMODULE_OBJS  := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(SUBMODULES)))
 PROGRAM_OBJS    := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(PROGRAMS)))
 PROGRAM_BINS    := $(addprefix $(BUILD_DIR)/, $(PROGRAMS))
-PROGRAM_DISTS   := $(addprefix dist/, $(PROGRAMS))
+PROGRAM_DISTS   := $(addprefix $(DIST_DIR)/, $(PROGRAMS))
 
 .PHONY: all check dirs clean help test run $(PROGRAMS:%=test-%)
 
@@ -55,29 +56,33 @@ dirs:
 ## Compilation Rules
 ## --------------------
 
-# General object compilation
+# Compile modules, submodules, and programs from src/
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
 	$(HIDE)echo "Compiling $< -> $@"
 	$(HIDE)$(F90) $(FFLAGS) -c $< -o $@
 
-# Submodule depends on module
+# Explicit submodule dependencies
 $(BUILD_DIR)/mod_math_square.o: $(BUILD_DIR)/mod_math.o
 $(BUILD_DIR)/math_stats_variance.o: $(BUILD_DIR)/math_stats.o
 
-# Program dependencies
+# Explicit program module dependencies
 $(BUILD_DIR)/e01-tabulate.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e02-floating-point.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e03-integer-division.o: $(BUILD_DIR)/kind_parameter.o
 $(BUILD_DIR)/e04-demo_sum_of_squares.o: $(BUILD_DIR)/mod_math.o $(BUILD_DIR)/mod_math_square.o
 $(BUILD_DIR)/e05-demo_variance.o: $(BUILD_DIR)/math_stats.o $(BUILD_DIR)/math_stats_variance.o
 
-# Link objects into executables
-$(BUILD_DIR)/%: $(BUILD_DIR)/%.o
-	$(HIDE)echo "Linking $@"
-	$(HIDE)$(F90) $^ $(MODULE_OBJS) $(SUBMODULE_OBJS) -o $@
+## --------------------
+## Linking Programs
+## --------------------
 
-# Copy executable to dist/
-dist/%: $(BUILD_DIR)/%
+# Link each program with its own object plus all module and submodule objects
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(MODULE_OBJS) $(SUBMODULE_OBJS)
+	$(HIDE)echo "Linking $@"
+	$(HIDE)$(F90) $^ -o $@
+
+# Copy executables to dist/
+$(DIST_DIR)/%: $(BUILD_DIR)/%
 	$(HIDE)cp $< $@
 	$(HIDE)echo "Copied $< -> $@"
 
@@ -85,7 +90,7 @@ dist/%: $(BUILD_DIR)/%
 ## Run Targets
 ## --------------------
 
-run-%: dist/%
+run-%: $(DIST_DIR)/%
 	@echo "Running $<:"
 	@./$<
 
@@ -95,25 +100,10 @@ run-%: dist/%
 
 test: check dirs $(PROGRAMS:%=test-%)
 
-test-e01-tabulate:
-	@./dist/e01-tabulate > $(LOG_DIR)/e01-tabulate.out
-	@grep -q "" $(LOG_DIR)/e01-tabulate.out && echo "PASS: e01-tabulate" || (echo "FAIL: e01-tabulate"; exit 1)
-
-test-e02-floating-point:
-	@./dist/e02-floating-point > $(LOG_DIR)/e02-floating-point.out
-	@grep -q "" $(LOG_DIR)/e02-floating-point.out && echo "PASS: e02-floating-point" || (echo "FAIL: e02-floating-point"; exit 1)
-
-test-e03-integer-division:
-	@./dist/e03-integer-division > $(LOG_DIR)/e03-integer-division.out
-	@grep -q "" $(LOG_DIR)/e03-integer-division.out && echo "PASS: e03-integer-division" || (echo "FAIL: e03-integer-division"; exit 1)
-
-test-e04-demo_sum_of_squares:
-	@./dist/e04-demo_sum_of_squares > $(LOG_DIR)/e04-demo_sum_of_squares.out
-	@grep -q "" $(LOG_DIR)/e04-demo_sum_of_squares.out && echo "PASS: e04-demo_sum_of_squares" || (echo "FAIL: e04-demo_sum_of_squares"; exit 1)
-
-test-e05-demo_variance:
-	@./dist/e05-demo_variance > $(LOG_DIR)/e05-demo_variance.out
-	@grep -q "" $(LOG_DIR)/e05-demo_variance.out && echo "PASS: e05-demo_variance" || (echo "FAIL: e05-demo_variance"; exit 1)
+# Pattern rule for tests to reduce repetition
+test-%:
+	@./$(DIST_DIR)/$* > $(LOG_DIR)/$*.out
+	@grep -q "" $(LOG_DIR)/$*.out && echo "PASS: $*" || (echo "FAIL: $*"; exit 1)
 
 ## --------------------
 ## Utility Targets
