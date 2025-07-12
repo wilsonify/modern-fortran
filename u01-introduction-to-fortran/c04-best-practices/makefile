@@ -16,7 +16,7 @@ else
 endif
 
 # Modules and submodules
-MODULES    := kind_parameter mod_math math_stats
+MODULES    := kind_parameter mod_math math_stats math_array_ops multidim_array_ops.f90
 SUBMODULES := mod_math_square math_stats_variance
 
 # Programs
@@ -25,7 +25,9 @@ PROGRAMS := \
   e02-floating-point \
   e03-integer-division \
   e04-demo_sum_of_squares \
-  e05-demo_variance
+  e05-demo_variance \
+  e06-demo_array_usage \
+  e07-demo_multidim_arrays.f90
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
