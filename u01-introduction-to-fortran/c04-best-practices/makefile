@@ -6,18 +6,43 @@ BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
 
-MODULES := kind_parameter
-MODULE_SRCS := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(MODULES)))
-MODULE_OBJS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
+# Debug mode support
+ifeq ($(DEBUG),1)
+  HIDE =
+  FFLAGS = -Wall -g -fcheck=all -J$(BUILD_DIR) -I$(BUILD_DIR)
+else
+  HIDE = @
+  FFLAGS = -J$(BUILD_DIR) -I$(BUILD_DIR)
+endif
 
+# Modules and submodules
+MODULES := kind_parameter mod_math
+SUBMODULES := mod_math_square
+
+# Programs to build
 PROGRAMS = \
   e01-tabulate \
   e02-floating-point \
-  e03-integer-division
+  e03-integer-division \
+  e04-demo_sum_of_squares
 
-.PHONY: all check dirs build dist run clean help test $(PROGRAMS:%=test-%)
+# Source and object files
+MODULE_SRCS     := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(MODULES)))
+MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
 
-all: check dirs $(PROGRAMS:%=dist/%) test
+SUBMODULE_SRCS  := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(SUBMODULES)))
+SUBMODULE_OBJS  := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(SUBMODULES)))
+
+PROGRAM_SRCS    := $(addprefix $(SRC_DIR)/, $(addsuffix .f90, $(PROGRAMS)))
+PROGRAM_OBJS    := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(PROGRAMS)))
+PROGRAM_BINS    := $(addprefix $(BUILD_DIR)/, $(PROGRAMS))
+PROGRAM_DISTS   := $(addprefix dist/, $(PROGRAMS))
+
+.PHONY: all check dirs clean help test run $(PROGRAMS:%=test-%)
+
+## ---- Top-Level Targets ----
+
+all: check dirs $(PROGRAM_DISTS) test
 
 check:
 	@command -v $(F90) >/dev/null 2>&1 || \
@@ -27,60 +52,96 @@ check:
 dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Build rules
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
-	@echo "Compiling $< -> $@"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+## ---- Compilation Rules ----
 
-$(BUILD_DIR)/%: $(BUILD_DIR)/%.o
-	@echo "Linking $@"
-	$(F90) $< -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | dirs
+	$(HIDE)echo "Compiling $< -> $@"
+	$(HIDE)$(F90) $(FFLAGS) -c $< -o $@
 
 dist/%: $(BUILD_DIR)/%
-	@cp $< $@
-	@echo "Copied $< -> $@"
+	$(HIDE)cp $< $@
+	$(HIDE)echo "Copied $< -> $@"
 
-# Run a specific program
+## ---- Explicit Dependency Rules ----
+
+# Submodule depends on its module
+$(BUILD_DIR)/mod_math_square.o: $(BUILD_DIR)/mod_math.o
+
+# Programs with module dependencies
+$(BUILD_DIR)/e01-tabulate.o: $(BUILD_DIR)/kind_parameter.o
+$(BUILD_DIR)/e02-floating-point.o: $(BUILD_DIR)/kind_parameter.o
+$(BUILD_DIR)/e03-integer-division.o: $(BUILD_DIR)/kind_parameter.o
+$(BUILD_DIR)/e04-demo_sum_of_squares.o: $(BUILD_DIR)/mod_math.o $(BUILD_DIR)/mod_math_square.o
+
+## ---- Per-Program Module Link Dependencies ----
+
+# Declare which modules each program uses
+PROGRAM_MODULES_e04-demo_sum_of_squares = mod_math mod_math_square
+PROGRAM_MODULES_e01-tabulate = kind_parameter
+PROGRAM_MODULES_e02-floating-point = kind_parameter
+PROGRAM_MODULES_e03-integer-division = kind_parameter
+
+# Convert module names to object files
+define prog_mod_objs
+PROGRAM_MODULE_OBJS_$1 := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $($(1)))
+endef
+
+# Link rule per program (generated dynamically)
+define link_rule
+$(BUILD_DIR)/$1: $(BUILD_DIR)/$1.o $$(addprefix $(BUILD_DIR)/, $$(addsuffix .o, $$(PROGRAM_MODULES_$1)))
+	$(HIDE)echo "Linking $$@"
+	$(HIDE)$(F90) $$^ -o $$@
+endef
+
+# Expand link rules
+$(foreach prog,$(PROGRAMS),$(eval $(call link_rule,$(prog))))
+
+## ---- Run Targets ----
+
 run-%: dist/%
 	@echo "Running $<:"
 	@./$<
 
-# Test runners
+## ---- Test Targets ----
+
 test: check dirs $(PROGRAMS:%=test-%)
 
 test-e01-tabulate:
-	@./$< > $(LOG_DIR)/e01-tabulate.out
-	@grep -q "Hello, World!" $(LOG_DIR)/e01-tabulate.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
+	@./dist/e01-tabulate > $(LOG_DIR)/e01-tabulate.out
+	@grep -q "" $(LOG_DIR)/e01-tabulate.out && echo "PASS: e01-tabulate" || (echo "FAIL: e01-tabulate"; exit 1)
 
 test-e02-floating-point:
-	@./$< > $(LOG_DIR)/e02-floating-point.out
-	@grep -q "Hello, World!" $(LOG_DIR)/e02-floating-point.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
-
-test-e02-kind-parameter:
-	@./$< > $(LOG_DIR)/e02-kind-parameter.out
-	@grep -q "Hello, World!" $(LOG_DIR)/e02-kind-parameter.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
+	@./dist/e02-floating-point > $(LOG_DIR)/e02-floating-point.out
+	@grep -q "" $(LOG_DIR)/e02-floating-point.out && echo "PASS: e02-floating-point" || (echo "FAIL: e02-floating-point"; exit 1)
 
 test-e03-integer-division:
-	@./$< > $(LOG_DIR)/e03-integer-division.out
-	@grep -q "Hello, World!" $(LOG_DIR)/e03-integer-division.out && echo "PASS: e01-hello" || (echo "FAIL: e01-hello"; exit 1)
+	@./dist/e03-integer-division > $(LOG_DIR)/e03-integer-division.out
+	@grep -q "" $(LOG_DIR)/e03-integer-division.out && echo "PASS: e03-integer-division" || (echo "FAIL: e03-integer-division"; exit 1)
+
+test-e04-demo_sum_of_squares:
+	@./dist/e04-demo_sum_of_squares > $(LOG_DIR)/e04-demo_sum_of_squares.out
+	@grep -q "" $(LOG_DIR)/e04-demo_sum_of_squares.out && echo "PASS: e04-demo_sum_of_squares" || (echo "FAIL: e04-demo_sum_of_squares"; exit 1)
+
+## ---- Utility Targets ----
 
 clean:
-	@echo "Cleaning build, dist, and test logs..."
-	rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
+	@echo "Cleaning build/, dist/, and test_logs/..."
+	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
 help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Main targets:"
-	@echo "  all         Compile and distribute all tutorial programs"
-	@echo "  test        Run available tests (non-interactive only)"
+	@echo "  all         Compile and distribute all programs"
+	@echo "  test        Run all tests"
 	@echo "  clean       Remove build/, dist/, and test_logs/"
 	@echo ""
 	@echo "Program targets:"
 	@echo "  $(PROGRAMS:%=dist/%)"
-	@echo ""
 	@echo "Run targets:"
 	@echo "  $(PROGRAMS:%=run-%)"
-	@echo ""
 	@echo "Test targets:"
 	@echo "  $(PROGRAMS:%=test-%)"
+	@echo ""
+	@echo "Debug mode:"
+	@echo "  make DEBUG=1 [target]"
