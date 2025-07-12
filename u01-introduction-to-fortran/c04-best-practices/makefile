@@ -29,7 +29,8 @@ PROGRAMS := \
   e06-demo_array_usage \
   e07-demo_multidim_arrays \
   e08-demo_elementwise_root \
-  e09-allocatable_array_demo
+  e09-allocatable_array_demo \
+  e10_file_io_demo
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
@@ -45,6 +46,10 @@ PROGRAM_DISTS   := $(addprefix $(DIST_DIR)/, $(PROGRAMS))
 ## --------------------
 
 all: check dirs $(PROGRAM_DISTS) test
+
+clean:
+	@echo "Cleaning build/, dist/, and test_logs/..."
+	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
 check:
 	@command -v $(F90) >/dev/null 2>&1 || { echo >&2 "Error: '$(F90)' is not installed."; exit 1; }
@@ -103,38 +108,45 @@ test: check dirs $(PROGRAMS:%=test-%)
 test-e01-tabulate: dist/e01-tabulate
 	@./$< > $(LOG_DIR)/e01-tabulate.out
 	@grep -q "" $(LOG_DIR)/e01-tabulate.out && echo "PASS e01-tabulate" || (echo "FAIL: e01-tabulate"; exit 1)
+
 test-e02-floating-point: dist/e02-floating-point
 	@./$< > $(LOG_DIR)/e02-floating-point.out
 	@grep -q "" $(LOG_DIR)/e02-floating-point.out && echo "PASS e02-floating-point" || (echo "FAIL: e02-floating-point"; exit 1)
+
 test-e03-integer-division: dist/e03-integer-division
 	@./$< > $(LOG_DIR)/e03-integer-division.out
 	@grep -q "" $(LOG_DIR)/e03-integer-division.out && echo "PASS e03-integer-division" || (echo "FAIL: e03-integer-division"; exit 1)
+
 test-e04-demo_sum_of_squares: dist/e04-demo_sum_of_squares
 	@./$< > $(LOG_DIR)/e04-demo_sum_of_squares.out
 	@grep -q "" $(LOG_DIR)/e04-demo_sum_of_squares.out && echo "PASS e04-demo_sum_of_squares" || (echo "FAIL: e04-demo_sum_of_squares"; exit 1)
+
 test-e05-demo_variance: dist/e05-demo_variance
 	@./$< > $(LOG_DIR)/e05-demo_variance.out
 	@grep -q "" $(LOG_DIR)/e05-demo_variance.out && echo "PASS e05-demo_variance" || (echo "FAIL: e05-demo_variance"; exit 1)
+
 test-e06-demo_array_usage: dist/e06-demo_array_usage
 	@./$< > $(LOG_DIR)/e06-demo_array_usage.out
 	@grep -q "" $(LOG_DIR)/e06-demo_array_usage.out && echo "PASS e06-demo_array_usage" || (echo "FAIL: e06-demo_array_usage"; exit 1)
+
 test-e07-demo_multidim_arrays: dist/e07-demo_multidim_arrays
 	@./$< > $(LOG_DIR)/e07-demo_multidim_arrays.out
 	@grep -q "" $(LOG_DIR)/e07-demo_multidim_arrays.out && echo "PASS e07-demo_multidim_arrays" || (echo "FAIL: e07-demo_multidim_arrays"; exit 1)
+
 test-e08-demo_elementwise_root: dist/e08-demo_elementwise_root
 	@./$< > $(LOG_DIR)/e08-demo_elementwise_root.out
 	@grep -q "" $(LOG_DIR)/e08-demo_elementwise_root.out && echo "PASS e08-demo_elementwise_root" || (echo "FAIL: e08-demo_elementwise_root"; exit 1)
+
 test-e09-allocatable_array_demo: dist/e09-allocatable_array_demo
 	@./$< > $(LOG_DIR)/e09-allocatable_array_demo.out
 	@grep -q "" $(LOG_DIR)/e09-allocatable_array_demo.out && echo "PASS e09-allocatable_array_demo" || (echo "FAIL: e09-allocatable_array_demo"; exit 1)
 
-## --------------------
-## Utility Targets
-## --------------------
+test-e10_file_io_demo: dist/e10_file_io_demo
+	@./$< > $(LOG_DIR)/e10_file_io_demo.out
+	@grep -q "" $(LOG_DIR)/e10_file_io_demo.out && echo "PASS e10_file_io_demo" || (echo "FAIL: e10_file_io_demo"; exit 1)
 
-clean:
-	@echo "Cleaning build/, dist/, and test_logs/..."
-	@rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
+
+
 
 help:
 	@echo "Usage: make [target]"

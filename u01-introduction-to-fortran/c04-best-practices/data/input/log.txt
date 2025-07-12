@@ -1,0 +1,49 @@
+Found Fortran compiler: GNU Fortran (Debian 12.2.0-14+deb12u1) 12.2.0
+Compiling src/kind_parameter.f90 -> build/kind_parameter.o
+Compiling src/e01-tabulate.f90 -> build/e01-tabulate.o
+Compiling src/mod_math.f90 -> build/mod_math.o
+Compiling src/math_stats.f90 -> build/math_stats.o
+Compiling src/mod_math_square.f90 -> build/mod_math_square.o
+Compiling src/math_stats_variance.f90 -> build/math_stats_variance.o
+Compiling src/math_array_ops.f90 -> build/math_array_ops.o
+Compiling src/multidim_array_ops.f90 -> build/multidim_array_ops.o
+Compiling src/elementwise_root.f90 -> build/elementwise_root.o
+Linking build/e01-tabulate
+Copied build/e01-tabulate -> dist/e01-tabulate
+Compiling src/e02-floating-point.f90 -> build/e02-floating-point.o
+Linking build/e02-floating-point
+Copied build/e02-floating-point -> dist/e02-floating-point
+Compiling src/e03-integer-division.f90 -> build/e03-integer-division.o
+Linking build/e03-integer-division
+Copied build/e03-integer-division -> dist/e03-integer-division
+Compiling src/e04-demo_sum_of_squares.f90 -> build/e04-demo_sum_of_squares.o
+Linking build/e04-demo_sum_of_squares
+Copied build/e04-demo_sum_of_squares -> dist/e04-demo_sum_of_squares
+Compiling src/e05-demo_variance.f90 -> build/e05-demo_variance.o
+Linking build/e05-demo_variance
+Copied build/e05-demo_variance -> dist/e05-demo_variance
+Compiling src/e06-demo_array_usage.f90 -> build/e06-demo_array_usage.o
+Linking build/e06-demo_array_usage
+Copied build/e06-demo_array_usage -> dist/e06-demo_array_usage
+Compiling src/e07-demo_multidim_arrays.f90 -> build/e07-demo_multidim_arrays.o
+Linking build/e07-demo_multidim_arrays
+Copied build/e07-demo_multidim_arrays -> dist/e07-demo_multidim_arrays
+Compiling src/e08-demo_elementwise_root.f90 -> build/e08-demo_elementwise_root.o
+Linking build/e08-demo_elementwise_root
+Copied build/e08-demo_elementwise_root -> dist/e08-demo_elementwise_root
+Compiling src/e09-allocatable_array_demo.f90 -> build/e09-allocatable_array_demo.o
+Linking build/e09-allocatable_array_demo
+Copied build/e09-allocatable_array_demo -> dist/e09-allocatable_array_demo
+Compiling src/e10_file_io_demo.f90 -> build/e10_file_io_demo.o
+Linking build/e10_file_io_demo
+Copied build/e10_file_io_demo -> dist/e10_file_io_demo
+PASS e01-tabulate
+PASS e02-floating-point
+PASS e03-integer-division
+PASS e04-demo_sum_of_squares
+PASS e05-demo_variance
+PASS e06-demo_array_usage
+PASS e07-demo_multidim_arrays
+PASS e08-demo_elementwise_root
+PASS e09-allocatable_array_demo
+rm build/elementwise_root.o build/e02-floating-point build/e06-demo_array_usage build/multidim_array_ops.o build/e04-demo_sum_of_squares build/e07-demo_multidim_arrays.o build/e07-demo_multidim_arrays build/e10_file_io_demo build/e08-demo_elementwise_root.o build/e06-demo_array_usage.o build/math_array_ops.o build/e01-tabulate build/e03-integer-division build/e08-demo_elementwise_root build/e09-allocatable_array_demo build/e05-demo_variance build/e09-allocatable_array_demo.o build/e10_file_io_demo.o
