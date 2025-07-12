@@ -30,7 +30,8 @@ PROGRAMS := \
   e07-demo_multidim_arrays \
   e08-demo_elementwise_root \
   e09-allocatable_array_demo \
-  e10_file_io_demo
+  e10_file_io_demo \
+  e11_callbacks_demo
 
 # Derived filenames
 MODULE_OBJS     := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(MODULES)))
@@ -145,6 +146,9 @@ test-e10_file_io_demo: dist/e10_file_io_demo
 	@./$< > $(LOG_DIR)/e10_file_io_demo.out
 	@grep -q "" $(LOG_DIR)/e10_file_io_demo.out && echo "PASS e10_file_io_demo" || (echo "FAIL: e10_file_io_demo"; exit 1)
 
+test-e11_callbacks_demo: dist/e11_callbacks_demo
+	@./$< > $(LOG_DIR)/e11_callbacks_demo.out
+	@grep -q "" $(LOG_DIR)/e11_callbacks_demo.out && echo "PASS e11_callbacks_demo" || (echo "FAIL: e11_callbacks_demo"; exit 1)
 
 
 
@@ -157,9 +161,10 @@ help:
 	@echo "  clean       Remove build/, dist/, and test_logs/"
 	@echo ""
 	@echo "Run targets:"
-	@echo "  $(PROGRAMS:%=run-%)"
+	@echo "  $(PROGRAMS:%=\nrun-%)"
+	@echo ""
 	@echo "Test targets:"
-	@echo "  $(PROGRAMS:%=test-%)"
+	@echo "  $(PROGRAMS:%=\ntest-%)"
 	@echo ""
 	@echo "Debug mode:"
 	@echo "  make DEBUG=1 [target]"

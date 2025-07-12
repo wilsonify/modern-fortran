@@ -1,0 +1,15 @@
+ Integer division:
+ n           =           3
+ n / 2       =           1
+ n*(n + 1)/2 =           6
+ n/2*(n + 1) =           4
+
+ Negative integer division:
+ n           =          -3
+ n / 2       =          -1
+
+ Floating point conversion:
+ real(n) / 2           =   1.5000000000000000     
+ n * 1.0_dp / 2        =   1.5000000000000000     
+ real(n) / 2 (neg)     =  -1.5000000000000000     
+ n * 1.0_dp / 2 (neg)  =  -1.5000000000000000     
