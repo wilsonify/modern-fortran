@@ -11,7 +11,7 @@
 ! The print_matrix helper subroutine prints 2D arrays in a readable format.
 
 program e07_demo_multidim_arrays
-  use, intrinsic :: iso_fortran_env, only: dp
+  use kind_parameter, only: dp
   use multidim_array_ops
   implicit none
 
@@ -38,7 +38,7 @@ program e07_demo_multidim_arrays
   do i = 1, p
     amat(:, :, i) = real(i, dp)  ! Just fill slices with scalar i for demo
   end do
-  bvec = [(real(j, dp), j = 1, p)]
+  bvec = real([(i, i = 1, p)], dp)
 
   ! Contract third dimension using explicit loops
   cmat_loop = 0.0_dp

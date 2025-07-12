@@ -1,7 +1,7 @@
 !> Demonstrates passing and returning arrays using modern Fortran practices.
 program e06_demo_array_usage
   use math_array_ops
-  use, intrinsic :: iso_fortran_env, only: dp
+  use kind_parameter, only: dp
   implicit none
 
   real(dp) :: x(5)

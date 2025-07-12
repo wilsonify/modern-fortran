@@ -1,5 +1,5 @@
 module elementwise_root_mod
-  use, intrinsic :: iso_fortran_env, only: dp
+  use kind_parameter, only: dp
   implicit none
   private
 
