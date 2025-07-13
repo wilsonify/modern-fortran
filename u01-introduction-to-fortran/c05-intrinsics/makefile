@@ -1,5 +1,6 @@
 # Compiler and directories
 F90       = gfortran
+CC        = gcc
 SRC_DIR   = src
 BUILD_DIR = build
 DIST_DIR  = dist
@@ -61,7 +62,33 @@ PROGRAMS = \
     i02-bits/d29-ISHFT \
     i02-bits/d30-SHIFTA \
     i02-bits/d31-SHIFTL \
-    i02-bits/d32-SHIFTR
+    i02-bits/d32-SHIFTR \
+    i03-characters/d01-LEN \
+    i03-characters/d02-NEW_LINE \
+    i03-characters/d03-REPEAT \
+    i03-characters/d04-ACHAR \
+    i03-characters/d05-CHAR \
+    i03-characters/d06-IACHAR \
+    i03-characters/d07-ICHAR \
+    i03-characters/d08-INDEX \
+    i03-characters/d09-SCAN \
+    i03-characters/d10-VERIFY \
+    i03-characters/d11-LGE \
+    i03-characters/d12-LGT \
+    i03-characters/d13-LLE \
+    i03-characters/d14-LLT \
+    i03-characters/d15-ADJUSTL \
+    i03-characters/d16-ADJUSTR \
+    i03-characters/d17-LEN_TRIM \
+    i03-characters/d18-TRIM \
+    i04-compilers/d01-COMPILER_OPTIONS \
+    i04-compilers/d02-COMPILER_VERSION \
+    i05-interfaces/d01-C_ASSOCIATED \
+    i05-interfaces/d02-C_F_POINTER \
+    i05-interfaces/d03-C_F_PROCPOINTER \
+    i05-interfaces/d04-C_FUNLOC \
+    i05-interfaces/d05-C_LOC \
+    i05-interfaces/d06-C_SIZEOF
 
 # Phony targets
 .PHONY: all clean dirs check help
@@ -74,13 +101,27 @@ clean:
 	@echo "Cleaning build/, dist/, and test_logs/..."
 	rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Compilation rule
+# Compilation rule for Fortran
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90
 	@mkdir -p $(dir $@)
-	@echo "Compiling: $<"
+	@echo "Compiling Fortran: $<"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-# Linking rule
+# Compilation rule for C
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@echo "Compiling C: $<"
+	$(CC) -c $< -o $@
+
+# Specific rule to handle Fortran + C for d02-C_F_POINTER
+$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER: \
+	$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER.o \
+	$(BUILD_DIR)/i05-interfaces/myC_func.o
+	@mkdir -p $(dir $@)
+	@echo "Linking (Fortran + C): $@"
+	$(F90) $^ -o $@
+
+# Default linking rule (Fortran-only targets)
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(dir $@)
 	@echo "Linking: $@"
@@ -102,8 +143,6 @@ check:
 # Directory setup
 dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
-
-
 
 # Help message
 help:
