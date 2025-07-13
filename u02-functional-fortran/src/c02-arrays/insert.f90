@@ -1,78 +1,130 @@
-program test_insert
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure function insert_i1(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `insert`.
+  integer(i1), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i1), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function insert_i2(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `insert`.
+  integer(i2), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i2), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_i2
 
-n = 1
-ntests = 13
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(insert(2_int8, 2, [1_int8, 3_int8]) == [1, 2, 3]), &
-                  'insert,  int8')
-n = n + 1
+pure function insert_i4(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `insert`.
+  integer(i4), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_i4
 
-tests(n) = assert(all(insert(2_int16, 2, [1_int16, 3_int16]) == [1, 2, 3]), &
-                  'insert,  int16')
-n = n + 1
 
-tests(n) = assert(all(insert(2_int32, 2, [1_int32, 3_int32]) == [1, 2, 3]), &
-                  'insert,  int32')
-n = n + 1
+pure function insert_i8(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `insert`.
+  integer(i8), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i8), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_i8
 
-tests(n) = assert(all(insert(2_int64, 2, [1_int64, 3_int64]) == [1, 2, 3]), &
-                  'insert,  int64')
-n = n + 1
 
-tests(n) = assert(all(insert(2._real32, 2, [1._real32, 3._real32]) == [1, 2, 3]), &
-                  'insert,  real32')
-n = n + 1
+pure function insert_r4(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `insert`.
+  real(r4), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  real(r4), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_r4
 
-tests(n) = assert(all(insert(2._real64, 2, [1._real64, 3._real64]) == [1, 2, 3]), &
-                  'insert,  real64')
-n = n + 1
 
-tests(n) = assert(all(insert(2._real128, 2, [1._real128, 3._real128]) == [1, 2, 3]), &
-                  'insert,  real128')
-n = n + 1
+pure function insert_r8(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `insert`.
+  real(r8), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  real(r8), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_r8
 
-tests(n) = assert(all(insert(cmplx(2._real32, 0._real32), 2, &
-                             [cmplx(1._real32, 0._real32), cmplx(3._real32, 0._real32)])&
-                       == arange(cmplx(1._real32, 0._real32), cmplx(3._real32, 0._real32))), &
-                  'insert,  real32')
-n = n + 1
 
-tests(n) = assert(all(insert(cmplx(2._real64, 0._real64), 2, &
-                             [cmplx(1._real64, 0._real64), cmplx(3._real64, 0._real64)])&
-                       == arange(cmplx(1._real64, 0._real64), cmplx(3._real64, 0._real64))), &
-                  'insert,  real64')
-n = n + 1
+pure function insert_r16(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `insert`.
+  real(r16), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  real(r16), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_r16
 
-tests(n) = assert(all(insert(cmplx(2._real128, 0._real128), 2, &
-                             [cmplx(1._real128, 0._real128), cmplx(3._real128, 0._real128)])&
-                       == arange(cmplx(1._real128, 0._real128), cmplx(3._real128, 0._real128))), &
-                  'insert,  real128')
-n = n + 1
 
-tests(n) = assert(insert('ell', 2, 'Ho') == 'Hello', &
-                  'insert character string')
-n = n + 1
+pure function insert_c4(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `insert`.
+  complex(r4), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  complex(r4), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_c4
 
-tests(n) = assert(all(insert(1, 1, arange(1, 0)) == [1]), &
-                  'insert into empty array')
-n = n + 1
 
-tests(n) = assert(all(insert(2, 2, [1]) == [1, 2]), &
-                  'insert out of bounds')
-n = n + 1
+pure function insert_c8(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `insert`.
+  complex(r8), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  complex(r8), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_c8
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
 
-end program test_insert
+pure function insert_c16(elem, ind, x) result(insert)
+  !! Inserts `elem` into index `ind` of array `x`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `insert`.
+  complex(r16), intent(in) :: elem !! Element to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  complex(r16), dimension(size(x)+1) :: insert
+  insert = [x(:limit(ind, 1, size(x)+1)-1), elem, x(limit(ind, 1, size(x)+1):)]
+end function insert_c16
+
+
+pure function insert_char(elem, ind, x) result(insert)
+  !! Inserts character string `elem` into
+  !! index `ind` of character string `x`.
+  !! Overloaded by generic procedure `insert`.
+  character(len=*), intent(in) :: elem !! Character string to insert
+  integer(i4), intent(in) :: ind !! Index to insert element at
+  character(len=*), intent(in) :: x !! Input array
+  character(len=len(elem)+len(x)) :: insert
+  insert = x(:ind-1) // elem // x(ind:)
+end function insert_char

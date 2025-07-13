@@ -1,27 +1,10 @@
-program test_arrstr
-use testing, only:assert, initialize_tests, report_tests
-use functional, only:arrstr, empty
-
-implicit none
-
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
-
-n = 1
-ntests = 2
-call initialize_tests(tests, ntests)
-
-tests(n) = assert(arrstr(['h', 'e', 'l', 'l', 'o']) == 'hello', &
-                  'arrstr converts to string')
-n = n + 1
-
-tests(n) = assert(arrstr(empty(' ')) == '', &
-                  'arrstr converts empty array to ""')
-n = n + 1
-
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
-
-end program test_arrstr
+pure function arrstr(array) result(string)
+  !! Returns a string given an array of len=1 characters.
+  character(len=1), dimension(:), intent(in) :: array !! Input array
+  character(len=:), allocatable :: string
+  integer :: n
+  allocate(character(len=size(array)) :: string)
+  do concurrent(n = 1:size(array))
+    string(n:n) = array(n)
+  enddo
+end function arrstr
