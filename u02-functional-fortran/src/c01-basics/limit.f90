@@ -1,66 +1,124 @@
-program test_limit
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional, only:limit, arange
+pure elemental integer(i1) function limit_i1(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `limit`.
+  integer(i1), intent(in) :: x !! Input scalar
+  integer(i1), intent(in) :: a !! First limit
+  integer(i1), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure elemental integer(i2) function limit_i2(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `limit`.
+  integer(i2), intent(in) :: x !! Input scalar
+  integer(i2), intent(in) :: a !! First limit
+  integer(i2), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_i2
 
-n = 1
-ntests = 11
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(limit(2_int8, 1_int8, 3_int8) == 2_int8, &
-                  'limit,  int8')
-n = n + 1
+pure elemental integer(i4) function limit_i4(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `limit`.
+  integer(i4), intent(in) :: x !! Input scalar
+  integer(i4), intent(in) :: a !! First limit
+  integer(i4), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_i4
 
-tests(n) = assert(limit(2_int16, 1_int16, 3_int16) == 2_int16, &
-                  'limit,  int16')
-n = n + 1
 
-tests(n) = assert(limit(2_int32, 1_int32, 3_int32) == 2_int32, &
-                  'limit,  int32')
-n = n + 1
+pure elemental integer(i8) function limit_i8(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `limit`.
+  integer(i8), intent(in) :: x !! Input scalar
+  integer(i8), intent(in) :: a !! First limit
+  integer(i8), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_i8
 
-tests(n) = assert(limit(2_int64, 1_int64, 3_int64) == 2_int64, &
-                  'limit,  int64')
-n = n + 1
 
-tests(n) = assert(limit(2._real32, 1._real32, 3._real32) == 2._real32, &
-                  'limit,  real32')
-n = n + 1
+pure elemental real(r4) function limit_r4(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `limit`.
+  real(r4), intent(in) :: x !! Input scalar
+  real(r4), intent(in) :: a !! First limit
+  real(r4), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_r4
 
-tests(n) = assert(limit(2._real64, 1._real64, 3._real64) == 2._real64, &
-                  'limit,  real32')
-n = n + 1
 
-tests(n) = assert(limit(2._real128, 1._real128, 3._real128) == 2._real128, &
-                  'limit,  real128')
-n = n + 1
+pure elemental real(r8) function limit_r8(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `limit`.
+  real(r8), intent(in) :: x !! Input scalar
+  real(r8), intent(in) :: a !! First limit
+  real(r8), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_r8
 
-tests(n) = assert(limit(cmplx(-0.5, 1.5), cmplx(0, 0), cmplx(1, 1)) == cmplx(0, 1), &
-                  'limit,  complex real32')
-n = n + 1
 
-tests(n) = assert(limit(cmplx(-0.5_real64, 1.5_real64), cmplx(0._real64, 0._real64), &
-                        cmplx(1._real64, 1._real64)) == cmplx(0._real64, 1._real64), &
-                  'limit,  complex real64')
-n = n + 1
+pure elemental real(r16) function limit_r16(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `limit`.
+  real(r16), intent(in) :: x !! Input scalar
+  real(r16), intent(in) :: a !! First limit
+  real(r16), intent(in) :: b !! Second limit
+  limit = min(max(x, min(a, b)), max(a, b))
+end function limit_r16
 
-tests(n) = assert(limit(cmplx(-0.5_real128, 1.5_real128), cmplx(0._real128, 0._real128), &
-                        cmplx(1._real128, 1._real128)) == cmplx(0._real128, 1._real128), &
-                  'limit,  complex real128')
-n = n + 1
 
-tests(n) = assert(all(limit(arange(1, 3), 2, 2) == [2, 2, 2]), &
-                  'limit works on arrays')
-n = n + 1
+pure elemental complex(r4) function limit_c4(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
+  !! for Re and Im components each.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `limit`.
+  complex(r4), intent(in) :: x !! Input scalar
+  complex(r4), intent(in) :: a !! First limit
+  complex(r4), intent(in) :: b !! Second limit
+  limit = cmplx(min(max(real(x), min(real(a), real(b))), max(real(a), real(b))), &
+    min(max(aimag(x), min(aimag(a), aimag(b))), max(aimag(a), aimag(b))))
+end function limit_c4
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
 
-end program test_limit
+pure elemental complex(r8) function limit_c8(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
+  !! for Re and Im components each.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `limit`.
+  complex(r8), intent(in) :: x !! Input scalar
+  complex(r8), intent(in) :: a !! First limit
+  complex(r8), intent(in) :: b !! Second limit
+  limit = cmplx(min(max(real(x), min(real(a), real(b))), max(real(a), real(b))), &
+    min(max(aimag(x), min(aimag(a), aimag(b))), max(aimag(a), aimag(b))))
+end function limit_c8
+
+
+pure elemental complex(r16) function limit_c16(x, a, b) result(limit)
+  !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
+  !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
+  !! for Re and Im components each.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `limit`.
+  complex(r16), intent(in) :: x !! Input scalar
+  complex(r16), intent(in) :: a !! First limit
+  complex(r16), intent(in) :: b !! Second limit
+  limit = cmplx(min(max(real(x), min(real(a), real(b))), max(real(a), real(b))), &
+    min(max(aimag(x), min(aimag(a), aimag(b))), max(aimag(a), aimag(b))))
+end function limit_c16

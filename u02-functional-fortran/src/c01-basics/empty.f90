@@ -1,50 +1,119 @@
-program test_empty
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional, only:empty
+pure function empty_i1(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `empty`.
+  integer(i1), intent(in) :: a !! Input scalar
+  integer(i1), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function empty_i2(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `empty`.
+  integer(i2), intent(in) :: a !! Input scalar
+  integer(i2), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_i2
 
-n = 1
-ntests = 10
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(size(empty(1_int8)) == 0, 'empty,  int8')
-n = n + 1
+pure function empty_i4(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `empty`.
+  integer(i4), intent(in) :: a !! Input scalar
+  integer(i4), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_i4
 
-tests(n) = assert(size(empty(1_int16)) == 0, 'empty,  int16')
-n = n + 1
 
-tests(n) = assert(size(empty(1_int32)) == 0, 'empty,  int32')
-n = n + 1
+pure function empty_i8(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `empty`.
+  integer(i8), intent(in) :: a !! Input scalar
+  integer(i8), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_i8
 
-tests(n) = assert(size(empty(1_int64)) == 0, 'empty,  int64')
-n = n + 1
 
-tests(n) = assert(size(empty(1._real32)) == 0, 'empty,  real32')
-n = n + 1
+pure function empty_r4(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `empty`.
+  real(r4), intent(in) :: a !! Input scalar
+  real(r4), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_r4
 
-tests(n) = assert(size(empty(1._real64)) == 0, 'empty,  real64')
-n = n + 1
 
-tests(n) = assert(size(empty(1._real128)) == 0, 'empty,  real128')
-n = n + 1
+pure function empty_r8(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `empty`.
+  real(r8), intent(in) :: a !! Input scalar
+  real(r8), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_r8
 
-tests(n) = assert(size(empty(cmplx(1._real32, 0._real32))) == 0, 'empty,  complex32')
-n = n + 1
 
-tests(n) = assert(size(empty(cmplx(1._real64, 0._real64))) == 0, 'empty,  complex64')
-n = n + 1
+pure function empty_r16(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `empty`.
+  real(r16), intent(in) :: a !! Input scalar
+  real(r16), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_r16
 
-tests(n) = assert(size(empty(cmplx(1._real128, 0._real128))) == 0, 'empty,  complex128')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
+pure function empty_c4(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `empty`.
+  complex(r4), intent(in) :: a !! Input scalar
+  complex(r4), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_c4
 
-end program test_empty
+
+pure function empty_c8(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `empty`.
+  complex(r8), intent(in) :: a !! Input scalar
+  complex(r8), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_c8
+
+
+pure function empty_c16(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `empty`.
+  complex(r16), intent(in) :: a !! Input scalar
+  complex(r16), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_c16
+
+
+pure function empty_char(a) result(empty)
+  !! Returns an allocated array of length `0`,
+  !! and type and kind same as that of scalar `a`.
+  !! This specific procedure is for len=1 character.
+  !! Overloaded by generic procedure `empty`.
+  character(len=1), intent(in) :: a !! Input scalar
+  character(len=1), dimension(:), allocatable :: empty
+  allocate(empty(0))
+end function empty_char

@@ -1,64 +1,97 @@
-program test_head
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure integer(i1) function head_i1(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `head`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure integer(i2) function head_i2(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `head`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_i2
 
-complex(real32), dimension(:), allocatable :: c_r4
-complex(real64), dimension(:), allocatable :: c_r8
-complex(real128), dimension(:), allocatable :: c_r16
 
-c_r4 = [(1, 2), (2, 4)]
-c_r8 = c_r4
-c_r16 = c_r4
+pure integer(i4) function head_i4(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `head`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_i4
 
-n = 1
-ntests = 12
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(head([1_int8, 2_int8]) == 1_int8, 'head, int8')
-n = n + 1
+pure integer(i8) function head_i8(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `head`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_i8
 
-tests(n) = assert(head([1_int16, 2_int16]) == 1_int16, 'head, int16')
-n = n + 1
 
-tests(n) = assert(head([1_int32, 2_int32]) == 1_int32, 'head, int32')
-n = n + 1
+pure real(r4) function head_r4(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `head`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_r4
 
-tests(n) = assert(head([1_int64, 2_int64]) == 1_int64, 'head, int64')
-n = n + 1
 
-tests(n) = assert(head([1._real32, 2._real32]) == 1._real32, 'head, real32')
-n = n + 1
+pure real(r8) function head_r8(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `head`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_r8
 
-tests(n) = assert(head([1._real64, 2._real64]) == 1._real64, 'head, real64')
-n = n + 1
 
-tests(n) = assert(head([1._real128, 2._real128]) == 1._real128, 'head, real128')
-n = n + 1
+pure real(r16) function head_r16(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `head`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_r16
 
-tests(n) = assert(head(c_r4) == c_r4(1), 'head, complex real32')
-n = n + 1
 
-tests(n) = assert(head(c_r8) == c_r8(1), 'head, complex real64')
-n = n + 1
+pure complex(r4) function head_c4(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `head`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_c4
 
-tests(n) = assert(head(c_r16) == c_r16(1), 'head, complex real128')
-n = n + 1
 
-tests(n) = assert(head('Hello') == 'H', 'head, character string')
-n = n + 1
+pure complex(r8) function head_c8(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `head`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_c8
 
-tests(n) = assert(head([1, 2]) == .head.[1, 2], 'head operator, .head.x')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
+pure complex(r16) function head_c16(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `head`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  head = x(1)
+end function head_c16
 
-end program test_head
+
+pure character(len=1) function head_char(x) result(head)
+  !! Returns the first element of array `x`.
+  !! This specific procedure is for character strings.
+  !! Overloaded by generic procedure `head`.
+  character(len=*), intent(in) :: x !! Input array
+  head = x(1:1)
+end function head_char

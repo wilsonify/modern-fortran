@@ -1,64 +1,97 @@
-program test_last
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure integer(i1) function last_i1(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `last`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure integer(i2) function last_i2(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `last`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_i2
 
-complex(real32), dimension(:), allocatable :: c_r4
-complex(real64), dimension(:), allocatable :: c_r8
-complex(real128), dimension(:), allocatable :: c_r16
 
-c_r4 = [(1, 2), (2, 4)]
-c_r8 = c_r4
-c_r16 = c_r4
+pure integer(i4) function last_i4(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `last`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_i4
 
-n = 1
-ntests = 12
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(last([1_int8, 2_int8]) == 2_int8, 'last, int8')
-n = n + 1
+pure integer(i8) function last_i8(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `last`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_i8
 
-tests(n) = assert(last([1_int16, 2_int16]) == 2_int16, 'last, int16')
-n = n + 1
 
-tests(n) = assert(last([1_int32, 2_int32]) == 2_int32, 'last, int32')
-n = n + 1
+pure real(r4) function last_r4(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `last`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_r4
 
-tests(n) = assert(last([1_int64, 2_int64]) == 2_int64, 'last, int64')
-n = n + 1
 
-tests(n) = assert(last([1._real32, 2._real32]) == 2._real32, 'last, real32')
-n = n + 1
+pure real(r8) function last_r8(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `last`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_r8
 
-tests(n) = assert(last([1._real64, 2._real64]) == 2._real64, 'last, real64')
-n = n + 1
 
-tests(n) = assert(last([1._real128, 2._real128]) == 2._real128, 'last, real128')
-n = n + 1
+pure real(r16) function last_r16(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `last`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_r16
 
-tests(n) = assert(last(c_r4) == c_r4(2), 'last, complex real32')
-n = n + 1
 
-tests(n) = assert(last(c_r8) == c_r8(2), 'last, complex real64')
-n = n + 1
+pure complex(r4) function last_c4(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `last`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_c4
 
-tests(n) = assert(last(c_r16) == c_r16(2), 'last, complex real128')
-n = n + 1
 
-tests(n) = assert(last('Hello') == 'o', 'last, character string')
-n = n + 1
+pure complex(r8) function last_c8(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `last`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_c8
 
-tests(n) = assert(last([1, 2]) == .last.[1, 2], 'last operator, .last.x')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
+pure complex(r16) function last_c16(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `last`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  last = x(size(x))
+end function last_c16
 
-end program test_last
+
+pure character(len=1) function last_char(x) result(last)
+  !! Returns the last element of array `x`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `last`.
+  character(len=*), intent(in) :: x !! Input array
+  last = x(len(x):len(x))
+end function last_char

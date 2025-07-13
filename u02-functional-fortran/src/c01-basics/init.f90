@@ -1,70 +1,108 @@
-program test_init
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure function init_i1(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `init`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i1), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function init_i2(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `init`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i2), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_i2
 
-complex(real32), dimension(:), allocatable :: c_r4
-complex(real64), dimension(:), allocatable :: c_r8
-complex(real128), dimension(:), allocatable :: c_r16
 
-c_r4 = [(1, 2), (2, 4)]
-c_r8 = c_r4
-c_r16 = c_r4
+pure function init_i4(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `init`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_i4
 
-n = 1
-ntests = 14
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(init([1_int8, 2_int8]) == [1_int8]), 'init, int8')
-n = n + 1
+pure function init_i8(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `init`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i8), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_i8
 
-tests(n) = assert(all(init([1_int16, 2_int16]) == [1_int16]), 'init, int16')
-n = n + 1
 
-tests(n) = assert(all(init([1_int32, 2_int32]) == [1_int32]), 'init, int32')
-n = n + 1
+pure function init_r4(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `init`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  real(r4), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_r4
 
-tests(n) = assert(all(init([1_int64, 2_int64]) == [1_int64]), 'init, int64')
-n = n + 1
 
-tests(n) = assert(all(init([1._real32, 2._real32]) == [1._real32]), 'init, real32')
-n = n + 1
+pure function init_r8(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `init`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  real(r8), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_r8
 
-tests(n) = assert(all(init([1._real64, 2._real64]) == [1._real64]), 'init, real64')
-n = n + 1
 
-tests(n) = assert(all(init([1._real128, 2._real128]) == [1._real128]), 'init, real128')
-n = n + 1
+pure function init_r16(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `init`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  real(r16), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_r16
 
-tests(n) = assert(all(init(c_r4) == [c_r4(1)]), 'init, complex real32')
-n = n + 1
 
-tests(n) = assert(all(init(c_r8) == [c_r8(1)]), 'init, complex real64')
-n = n + 1
+pure function init_c4(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `init`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  complex(r4), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_c4
 
-tests(n) = assert(all(init(c_r16) == [c_r16(1)]), 'init, complex real128')
-n = n + 1
 
-tests(n) = assert(init('Hello') == 'Hell', 'init, character string')
-n = n + 1
+pure function init_c8(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `init`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  complex(r8), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_c8
 
-tests(n) = assert(size(init([1])) == 0, 'size(init([1])) == 0')
-n = n + 1
 
-tests(n) = assert(size(init(init([1]))) == 0, 'size(init(init([1]))) == 0')
-n = n + 1
+pure function init_c16(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `init`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  complex(r16), dimension(size(x)-1) :: init
+  init = x(:size(x)-1)
+end function init_c16
 
-tests(n) = assert(all(init([1, 2]) == .init.[1, 2]), 'init operator, .init.x')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
-
-end program test_init
+pure function init_char(x) result(init)
+  !! Returns all elements of `x` but the last.
+  !! This specific procedure is for character string.
+  !! Overloaded by generic procedure `init`.
+  character(len=*), intent(in) :: x !! Input array
+  character(len=len(x)-1) :: init
+  init = x(:len(x)-1)
+end function init_char

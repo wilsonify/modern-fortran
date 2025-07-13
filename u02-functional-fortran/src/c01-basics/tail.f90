@@ -1,70 +1,108 @@
-program test_tail
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure function tail_i1(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `tail`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i1), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function tail_i2(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `tail`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i2), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_i2
 
-complex(real32), dimension(:), allocatable :: c_r4
-complex(real64), dimension(:), allocatable :: c_r8
-complex(real128), dimension(:), allocatable :: c_r16
 
-c_r4 = [(1, 2), (2, 4)]
-c_r8 = c_r4
-c_r16 = c_r4
+pure function tail_i4(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `tail`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_i4
 
-n = 1
-ntests = 14
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(tail([1_int8, 2_int8]) == [2_int8]), 'tail, int8')
-n = n + 1
+pure function tail_i8(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `tail`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i8), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_i8
 
-tests(n) = assert(all(tail([1_int16, 2_int16]) == [2_int16]), 'tail, int16')
-n = n + 1
 
-tests(n) = assert(all(tail([1_int32, 2_int32]) == [2_int32]), 'tail, int32')
-n = n + 1
+pure function tail_r4(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `tail`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  real(r4), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_r4
 
-tests(n) = assert(all(tail([1_int64, 2_int64]) == [2_int64]), 'tail, int64')
-n = n + 1
 
-tests(n) = assert(all(tail([1._real32, 2._real32]) == [2._real32]), 'tail, real32')
-n = n + 1
+pure function tail_r8(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `tail`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  real(r8), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_r8
 
-tests(n) = assert(all(tail([1._real64, 2._real64]) == [2._real64]), 'tail, real64')
-n = n + 1
 
-tests(n) = assert(all(tail([1._real128, 2._real128]) == [2._real128]), 'tail, real128')
-n = n + 1
+pure function tail_r16(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `tail`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  real(r16), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_r16
 
-tests(n) = assert(all(tail(c_r4) == [c_r4(2)]), 'tail, complex real32')
-n = n + 1
 
-tests(n) = assert(all(tail(c_r8) == [c_r8(2)]), 'tail, complex real64')
-n = n + 1
+pure function tail_c4(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `tail`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  complex(r4), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_c4
 
-tests(n) = assert(all(tail(c_r16) == [c_r16(2)]), 'tail, complex real128')
-n = n + 1
 
-tests(n) = assert(tail('Hello') == 'ello', 'tail, character string')
-n = n + 1
+pure function tail_c8(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `tail`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  complex(r8), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_c8
 
-tests(n) = assert(size(tail([1._real32])) == 0, 'size(tail([1])) == 0')
-n = n + 1
 
-tests(n) = assert(size(tail(tail([1._real32]))) == 0, 'size(tail(tail([1]))) == 0')
-n = n + 1
+pure function tail_c16(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `tail`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  complex(r16), dimension(size(x)-1) :: tail
+  tail = x(2:)
+end function tail_c16
 
-tests(n) = assert(all(tail([1, 2]) == .tail.[1, 2]), 'tail operator,  .tail.x')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
-
-end program test_tail
+pure function tail_char(x) result(tail)
+  !! Returns all elements of `x` but the first.
+  !! This specific procedure is for character strings.
+  !! Overloaded by generic procedure `tail`.
+  character(len=*), intent(in) :: x !! Input array
+  character(len=len(x)-1) :: tail
+  tail = x(2:)
+end function tail_char
