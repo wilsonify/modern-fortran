@@ -1,94 +1,198 @@
-program test_split
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional, only:arange, split
+pure function split_i1(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `split`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  integer(i1), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function split_i2(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `split`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  integer(i2), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_i2
 
-n = 1
-ntests = 19
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(split(arange(1_int8, 10_int8), 1) == arange(1, 5)), &
-                  'split(x, 1), int8')
-n = n + 1
+pure function split_i4(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `split`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  integer(i4), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_i4
 
-tests(n) = assert(all(split(arange(1_int8, 10_int8), 2) == arange(6, 10)), &
-                  'split(x, 2), int8')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1_int16, 10_int16), 1) == arange(1, 5)), &
-                  'split(x, 1), int16')
-n = n + 1
+pure function split_i8(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `split`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  integer(i8), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_i8
 
-tests(n) = assert(all(split(arange(1_int16, 10_int16), 2) == arange(6, 10)), &
-                  'split(x, 2), int16')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1_int32, 10_int32), 1) == arange(1, 5)), &
-                  'split(x, 1), int32')
-n = n + 1
+pure function split_r4(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `split`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  real(r4), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_r4
 
-tests(n) = assert(all(split(arange(1_int32, 10_int32), 2) == arange(6, 10)), &
-                  'split(x, 2), int32')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1_int64, 10_int64), 1) == arange(1, 5)), &
-                  'split(x, 1), int64')
-n = n + 1
+pure function split_r8(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `split`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  real(r8), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_r8
 
-tests(n) = assert(all(split(arange(1_int64, 10_int64), 2) == arange(6, 10)), &
-                  'split(x, 2), int64')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1._real32, 10._real32), 1) == arange(1, 5)), &
-                  'split(x, 1), real32')
-n = n + 1
+pure function split_r16(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `split`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  real(r16), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_r16
 
-tests(n) = assert(all(split(arange(1._real32, 10._real32), 2) == arange(6, 10)), &
-                  'split(x, 2), real32')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1._real64, 10._real64), 1) == arange(1, 5)), &
-                  'split(x, 1), real64')
-n = n + 1
+pure function split_c4(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `split`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  complex(r4), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_c4
 
-tests(n) = assert(all(split(arange(1._real64, 10._real64), 2) == arange(6, 10)), &
-                  'split(x, 2), real64')
-n = n + 1
 
-tests(n) = assert(all(split(arange(1._real128, 10._real128), 1) == arange(1, 5)), &
-                  'split(x, 1), real128')
-n = n + 1
+pure function split_c8(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `split`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  complex(r8), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_c8
 
-tests(n) = assert(all(split(arange(1._real128, 10._real128), 2) == arange(6, 10)), &
-                  'split(x, 2), real128')
-n = n + 1
 
-tests(n) = assert(split('Hello world', 1) == 'Hello', &
-                  'split("Hello world", 1)')
-n = n + 1
+pure function split_c16(x, section) result(split)
+  !! Returns the first half of the array `x` if `section == 1`,
+  !! the second half of the array `x` if `section == 2`,
+  !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `split`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  complex(r16), dimension(:), allocatable :: split
+  if(section == 1)then
+    split = x(1:size(x)/2)
+  elseif(section == 2)then
+    split = x(size(x)/2+1:)
+  endif
+end function split_c16
 
-tests(n) = assert(split('Hello world', 2) == ' world', &
-                  'split("Hello world", 2)')
-n = n + 1
 
-tests(n) = assert(split('Hello world', 3) == '', &
-                  'split("Hello world", 3)')
-n = n + 1
+pure function split_char(x, section) result(split)
+  !! Returns the first half of the character string `x`
+  !! if `section == 1`, the second half of  `x` if `section == 2`,
+  !! and an empty string otherwise. If `size(x) == 1`,  `split(x, 1)`
+  !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
+  !! Overloaded by generic procedure `split`.
+  character(len=*), intent(in) :: x !! Input array
+  integer(i4), intent(in) :: section !! Array section to return
+  character(len=:), allocatable :: split
+  if (section == 1) then
+    split = x(1:len(x) / 2)
+  else if (section == 2) then
+    split = x(len(x) / 2 + 1:)
+  else
+    split = ''
+  end if
+end function split_char
 
-tests(n) = assert(all(split([1], 1) == arange(1, 0)), 'split([1], 1) returns an empty array')
-n = n + 1
-
-tests(n) = assert(all(split([1], 2) == [1]), 'split([1], 2) returns [1]')
-n = n + 1
-
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
-
-end program test_split

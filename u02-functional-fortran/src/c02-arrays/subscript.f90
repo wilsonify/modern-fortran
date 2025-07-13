@@ -1,70 +1,170 @@
-program test_subscript
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
 
-implicit none
+pure function subscript_i1(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `subscript`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i1), dimension(:), intent(in) :: ind !! Indices to subscript
+  integer(i1), dimension(:), allocatable :: subscript
+  integer(i1), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_i1
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
 
-n = 1
-ntests = 11
-call initialize_tests(tests, ntests)
+pure function subscript_i2(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `subscript`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i2), dimension(:), intent(in) :: ind !! Indices to subscript
+  integer(i2), dimension(:), allocatable :: subscript
+  integer(i2), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_i2
 
-tests(n) = assert(all(subscript([1_int8, 2_int8, 3_int8], [2_int8]) == [2_int8]), &
-                  'subscript,  int8')
-n = n + 1
 
-tests(n) = assert(all(subscript([1_int16, 2_int16, 3_int16], [2_int16]) == [2_int16]), &
-                  'subscript,  int16')
-n = n + 1
+pure function subscript_i4(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `subscript`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  integer(i4), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_i4
 
-tests(n) = assert(all(subscript([1_int32, 2_int32, 3_int32], [2_int32]) == [2_int32]), &
-                  'subscript,  int32')
-n = n + 1
 
-tests(n) = assert(all(subscript([1_int64, 2_int64, 3_int64], [2_int64]) == [2_int64]), &
-                  'subscript,  int64')
-n = n + 1
+pure function subscript_i8(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `subscript`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i8), dimension(:), intent(in) :: ind !! Indices to subscript
+  integer(i8), dimension(:), allocatable :: subscript
+  integer(i8), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_i8
 
-tests(n) = assert(all(subscript([1._real32, 2._real32, 3._real32], [2]) == [2._real32]), &
-                 'subscript,  real32')
-n = n + 1
 
-tests(n) = assert(all(subscript([1._real64, 2._real64, 3._real64], [2]) == [2._real64]), &
-                  'subscript,  real64')
-n = n + 1
+pure function subscript_r4(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `subscript`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  real(r4), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_r4
 
-tests(n) = assert(all(subscript([1._real128, 2._real128, 3._real128], [2]) == [2._real128]), &
-                  'subscript,  real128')
-n = n + 1
 
-tests(n) = assert(size(subscript([1, 2, 3], [0])) == 0, &
-                  'subscript out of bounds returns empty array')
-n = n + 1
+pure function subscript_r8(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `subscript`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  real(r8), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_r8
 
-tests(n) = assert(all(subscript(arange(cmplx(1._real32, 0._real32), &
-                                       cmplx(3._real32, 0._real32)), [2])&
-                       == [cmplx(2._real32, 0._real32)]), &
-                  'subscript,  complex real32')
-n = n + 1
 
-tests(n) = assert(all(subscript(arange(cmplx(1._real64, 0._real64), &
-                                       cmplx(3._real64, 0._real64)), [2])&
-                       == [cmplx(2._real64, 0._real64)]), &
-                  'subscript,  complex real64')
-n = n + 1
+pure function subscript_r16(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `subscript`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  real(r16), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_r16
 
-tests(n) = assert(all(subscript(arange(cmplx(1._real128, 0._real128), &
-                                       cmplx(3._real128, 0._real128)), [2])&
-                       == [cmplx(2._real128, 0._real128)]), &
-                  'subscript,  complex real128')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
+pure function subscript_c4(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `subscript`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  complex(r4), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_c4
 
-end program test_subscript
+
+pure function subscript_c8(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `subscript`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  complex(r8), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_c8
+
+
+pure function subscript_c16(x, ind) result(subscript)
+  !! Subscripts the array `x` along indices `ind`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `subscript`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), intent(in) :: ind !! Indices to subscript
+  complex(r16), dimension(:), allocatable :: subscript
+  integer(i4), dimension(:), allocatable :: indices
+  integer :: i
+  indices = pack(ind, ind > 0 .and. ind < size(x))
+  allocate(subscript(size(indices)))
+  do concurrent(i = 1:size(indices))
+    subscript(i) = x(indices(i))
+  enddo
+end function subscript_c16
+
