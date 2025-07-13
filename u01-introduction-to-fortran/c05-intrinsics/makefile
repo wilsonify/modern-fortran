@@ -155,8 +155,6 @@ PROGRAMS = \
     i09-collectives/d02-THIS_IMAGE \
     i09-collectives/d03-IMAGE_INDEX \
     i09-collectives/d04-EVENT_QUERY \
-    i09-collectives/d05-CO_LBOUND \
-    i09-collectives/d06-CO_UBOUND \
     i09-collectives/d07-ATOMIC_DEFINE \
     i09-collectives/d08-ATOMIC_REF \
     i09-collectives/d09-ATOMIC_ADD \
@@ -172,7 +170,40 @@ PROGRAMS = \
     i09-collectives/d19-CO_SUM \
     i09-collectives/d20-CO_MAX \
     i09-collectives/d21-CO_MIN \
-    i09-collectives/d22-CO_REDUCE
+    i09-collectives/d22-CO_REDUCE \
+    i10-states/d01-PRESENT \
+    i10-states/d02-ASSOCIATED \
+    i10-states/d03-IS_IOSTAT_END \
+    i10-states/d04-IS_IOSTAT_EOR \
+    i10-states/d05-MOVE_ALLOC \
+    i10-states/d06-SAME_TYPE_AS \
+    i10-states/d07-EXTENDS_TYPE_OF \
+    i11-systems/d01-COMMAND_ARGUMENT_COUNT \
+    i11-systems/d02-GET_COMMAND \
+    i11-systems/d03-GET_COMMAND_ARGUMENT \
+    i11-systems/d04-CPU_TIME \
+    i11-systems/d05-DATE_AND_TIME \
+    i11-systems/d06-SYSTEM_CLOCK \
+    i11-systems/d07-EXECUTE_COMMAND_LINE \
+    i11-systems/d08-GET_ENVIRONMENT_VARIABLE \
+    i12-transformations/d01-CSHIFT \
+    i12-transformations/d02-DOT_PRODUCT \
+    i12-transformations/d03-EOSHIFT \
+    i12-transformations/d04-MATMUL \
+    i12-transformations/d05-PARITY \
+    i12-transformations/d06-NULL \
+    i13-types/d01-INT \
+    i13-types/d02-REAL \
+    i13-types/d03-DBLE \
+    i13-types/d04-NINT \
+    i13-types/d05-CMPLX \
+    i13-types/d06-AIMAG \
+    i13-types/d07-LOGICAL \
+    i13-types/d08-TRANSFER \
+    i13-types/d09-KIND \
+    i13-types/d10-SELECTED_CHAR_KIND \
+    i13-types/d11-SELECTED_INT_KIND \
+    i13-types/d12-SELECTED_REAL_KIND
 
 
 # Phony targets
