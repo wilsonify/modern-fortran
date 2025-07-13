@@ -1,78 +1,146 @@
-program test_set
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure recursive function set_i1(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `set`.
+  integer(i1), dimension(:), intent(in) :: x !! Input array
+  integer(i1), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure recursive function set_i2(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `set`.
+  integer(i2), dimension(:), intent(in) :: x !! Input array
+  integer(i2), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_i2
 
-complex(real32), dimension(:), allocatable :: c4, c4_res
-complex(real64), dimension(:), allocatable :: c8, c8_res
-complex(real128), dimension(:), allocatable :: c16, c16_res
+pure recursive function set_i4(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `set`.
+  integer(i4), dimension(:), intent(in) :: x !! Input array
+  integer(i4), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_i4
 
-n = 1
-ntests = 13
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(set([1_int8, 2_int8, 2_int8, 3_int8]) == [1, 2, 3]), &
-                  'set, int8')
-n = n + 1
+pure recursive function set_i8(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 8-byte integers.
+  !! Overloaded by generic procedure `set`.
+  integer(i8), dimension(:), intent(in) :: x !! Input array
+  integer(i8), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_i8
 
-tests(n) = assert(all(set([1_int16, 2_int16, 2_int16, 3_int16]) == [1, 2, 3]), &
-                  'set, int16')
-n = n + 1
 
-tests(n) = assert(all(set([1_int32, 2_int32, 2_int32, 3_int32]) == [1, 2, 3]), &
-                  'set, int32')
-n = n + 1
+pure recursive function set_r4(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `set`.
+  real(r4), dimension(:), intent(in) :: x !! Input array
+  real(r4), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_r4
 
-tests(n) = assert(all(set([1_int64, 2_int64, 2_int64, 3_int64]) == [1, 2, 3]), &
-                  'set, int64')
-n = n + 1
 
-tests(n) = assert(all(set([1._real32, 2._real32, 2._real32, 3._real32]) == [1, 2, 3]), &
-                  'set, real32')
-n = n + 1
+pure recursive function set_r8(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `set`.
+  real(r8), dimension(:), intent(in) :: x !! Input array
+  real(r8), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_r8
 
-tests(n) = assert(all(set([1._real64, 2._real64, 2._real64, 3._real64]) == [1, 2, 3]), &
-                  'set, real64')
-n = n + 1
 
-tests(n) = assert(all(set([1._real128, 2._real128, 2._real128, 3._real128]) == [1, 2, 3]), &
-                  'set, real128')
-n = n + 1
+pure recursive function set_r16(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `set`.
+  real(r16), dimension(:), intent(in) :: x !! Input array
+  real(r16), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_r16
 
-c4 = [cmplx(1, 0), cmplx(2, 0), cmplx(2, 0), cmplx(3, 0)]
-c4_res = [cmplx(1, 0), cmplx(2, 0), cmplx(3, 0)]
-tests(n) = assert(all(set(c4) == c4_res), 'set, complex real32')
-n = n + 1
 
-c8 = c4
-c8_res = c4_res
-tests(n) = assert(all(set(c8) == c8_res), 'set, complex real64')
-n = n + 1
+pure recursive function set_c4(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `set`.
+  complex(r4), dimension(:), intent(in) :: x !! Input array
+  complex(r4), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_c4
 
-c16 = c4
-c16_res = c4_res
-tests(n) = assert(all(set(c16) == c16_res), 'set, complex real128')
-n = n + 1
 
-tests(n) = assert(set('Hello') == 'Helo', 'set, character string')
-n = n + 1
+pure recursive function set_c8(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `set`.
+  complex(r8), dimension(:), intent(in) :: x !! Input array
+  complex(r8), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_c8
 
-tests(n) = assert(all(set(arange(1, 0)) == arange(1, 0)), &
-                  'set of empty array is an empty array')
-n = n + 1
 
-tests(n) = assert(all(set([1, 2, 2, 3]) == .set.[1, 2, 2, 3]), &
-                  'set operator, .set.x')
-n = n + 1
+pure recursive function set_c16(x) result(res)
+  !! Returns a set given array `x`.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `set`.
+  complex(r16), dimension(:), intent(in) :: x !! Input array
+  complex(r16), dimension(:), allocatable :: res
+  if(size(x) > 1)then
+    res = [x(1), set(pack(x(2:), .not. x(2:) == x(1)))]
+  else
+    res = x
+  endif
+end function set_c16
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
 
-end program test_set
+pure recursive function set_char(x) result(res)
+  !! Returns a set given character string `x`.
+  !! Overloaded by generic procedure `set`.
+  character(len=*), intent(in) :: x !! Input character string
+  character(len=:), allocatable :: res
+  res = arrstr(achar(set(iachar(strarr(x)))))
+end function set_char

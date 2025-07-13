@@ -1,74 +1,196 @@
-program test_complement
-use iso_fortran_env, only:int8, int16, int32, int64, real32, real64, real128
-use testing, only:assert, initialize_tests, report_tests
-use functional
+pure function complement_i1(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 1-byte integers.
+  !! Overloaded by generic procedure `complement`.
+  integer(i1), dimension(:), intent(in) :: x !! First input array
+  integer(i1), dimension(:), intent(in) :: y !! Second input array
+  integer(i1), dimension(:), allocatable :: complement
+  integer(i1), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1_i1, 0_i1)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_i1
 
-implicit none
 
-logical, dimension(:), allocatable :: tests
-logical :: test_failed
-integer :: n, ntests
+pure function complement_i2(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 2-byte integers.
+  !! Overloaded by generic procedure `complement`.
+  integer(i2), dimension(:), intent(in) :: x !! First input array
+  integer(i2), dimension(:), intent(in) :: y !! Second input array
+  integer(i2), dimension(:), allocatable :: complement
+  integer(i2), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1_i2, 0_i2)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_i2
 
-n = 1
-ntests = 12
-call initialize_tests(tests, ntests)
 
-tests(n) = assert(all(complement([1_int8, 2_int8], [2_int8]) == [1]), &
-                  'complement, int8')
-n = n + 1
+pure function complement_i4(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `complement`.
+  integer(i4), dimension(:), intent(in) :: x !! First input array
+  integer(i4), dimension(:), intent(in) :: y !! Second input array
+  integer(i4), dimension(:), allocatable :: complement
+  integer(i4), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1_i4, 0_i4)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_i4
 
-tests(n) = assert(all(complement([1_int16, 2_int16], [2_int16]) == [1]), &
-                  'complement, int16')
-n = n + 1
 
-tests(n) = assert(all(complement([1_int32, 2_int32], [2_int32]) == [1]), &
-                  'complement, int32')
-n = n + 1
+pure function complement_i8(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 4-byte integers.
+  !! Overloaded by generic procedure `complement`.
+  integer(i8), dimension(:), intent(in) :: x !! First input array
+  integer(i8), dimension(:), intent(in) :: y !! Second input array
+  integer(i8), dimension(:), allocatable :: complement
+  integer(i8), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1_i8, 0_i8)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_i8
 
-tests(n) = assert(all(complement([1_int64, 2_int64], [2_int64]) == [1]), &
-                  'complement, int64')
-n = n + 1
 
-tests(n) = assert(all(complement([1._real32, 2._real32], [2._real32]) == [1]), &
-                  'complement, real32')
-n = n + 1
+pure function complement_r4(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 4-byte reals.
+  !! Overloaded by generic procedure `complement`.
+  real(r4), dimension(:), intent(in) :: x !! First input array
+  real(r4), dimension(:), intent(in) :: y !! Second input array
+  real(r4), dimension(:), allocatable :: complement
+  real(r4), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1._r4, 0._r4)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_r4
 
-tests(n) = assert(all(complement([1._real64, 2._real64], [2._real64]) == [1]), &
-                  'complement, real64')
-n = n + 1
 
-tests(n) = assert(all(complement([1._real128, 2._real128], [2._real128]) == [1]), &
-                  'complement, real128')
-n = n + 1
+pure function complement_r8(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 8-byte reals.
+  !! Overloaded by generic procedure `complement`.
+  real(r8), dimension(:), intent(in) :: x !! First input array
+  real(r8), dimension(:), intent(in) :: y !! Second input array
+  real(r8), dimension(:), allocatable :: complement
+  real(r8), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1._r4, 0._r4)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_r8
 
-tests(n) = assert(all(complement([cmplx(1._real32, 0._real32), &
-                                  cmplx(2._real32, 0._real32)], &
-                                 [cmplx(2._real32, 0._real32)])&
-                  == [cmplx(1._real32, 0._real32)]), 'complement, complex real32')
-n = n + 1
 
-tests(n) = assert(all(complement([cmplx(1._real64, 0._real64), &
-                                  cmplx(2._real64, 0._real64)], &
-                                 [cmplx(2._real64, 0._real64)])&
-                  == [cmplx(1._real64, 0._real64)]), 'complement, complex real64')
-n = n + 1
+pure function complement_r16(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 16-byte reals.
+  !! Overloaded by generic procedure `complement`.
+  real(r16), dimension(:), intent(in) :: x !! First input array
+  real(r16), dimension(:), intent(in) :: y !! Second input array
+  real(r16), dimension(:), allocatable :: complement
+  real(r16), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(1._r16, 0._r16)
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_r16
 
-tests(n) = assert(all(complement([cmplx(1._real64, 0._real64), &
-                                  cmplx(2._real64, 0._real64)], &
-                                 [cmplx(2._real64, 0._real64)])&
-                  == [cmplx(1._real64, 0._real64)]), 'complement, complex real64')
-n = n + 1
 
-tests(n) = assert(complement('Hello', 'world') == 'He', &
-                  'complement, character string')
-n = n + 1
+pure function complement_c4(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 4-byte complex reals.
+  !! Overloaded by generic procedure `complement`.
+  complex(r4), dimension(:), intent(in) :: x !! First input array
+  complex(r4), dimension(:), intent(in) :: y !! Second input array
+  complex(r4), dimension(:), allocatable :: complement
+  complex(r4), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(cmplx(1._r4, 0._r4), cmplx(0._r4, 0._r4))
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_c4
 
-tests(n) = assert(all(complement([1, 2], [2]) == ([1, 2].complement.[2])), &
-                  'complement operator, x.complement.y')
-n = n + 1
 
-test_failed = .false.
-call report_tests(tests, test_failed)
-if(test_failed)stop 1
+pure function complement_c8(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 8-byte complex reals.
+  !! Overloaded by generic procedure `complement`.
+  complex(r8), dimension(:), intent(in) :: x !! First input array
+  complex(r8), dimension(:), intent(in) :: y !! Second input array
+  complex(r8), dimension(:), allocatable :: complement
+  complex(r8), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(cmplx(1._r4, 0._r4), cmplx(0._r4, 0._r4))
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_c8
 
-end program test_complement
+
+pure function complement_c16(x, y) result(complement)
+  !! Returns a set complement of two arrays.
+  !! This specific procedure is for 16-byte complex reals.
+  !! Overloaded by generic procedure `complement`.
+  complex(r16), dimension(:), intent(in) :: x !! First input array
+  complex(r16), dimension(:), intent(in) :: y !! Second input array
+  complex(r16), dimension(:), allocatable :: complement
+  complex(r16), dimension(:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = arange(cmplx(1._r16, 0._r16), cmplx(0._r16, 0._r16))
+  do concurrent (n = 1:size(a))
+    if(.not. any(b == a(n)))complement = [complement, a(n)]
+  enddo
+end function complement_c16
+
+
+pure function complement_char(x, y) result(complement)
+  !! Returns a set complement of two character strings.
+  !! Overloaded by generic procedure `complement`.
+  character(len=*), intent(in) :: x !! First input array
+  character(len=*), intent(in) :: y !! Second input array
+  character(len=:), allocatable :: complement
+  character(len=:), allocatable :: a, b
+  integer(i4) :: n
+  a = set(x)
+  b = set(y)
+  complement = ''
+  do concurrent (n = 1:len(a))
+    if (scan(a(n:n), b) == 0) complement = complement // a(n:n)
+  enddo
+end function complement_char
+
