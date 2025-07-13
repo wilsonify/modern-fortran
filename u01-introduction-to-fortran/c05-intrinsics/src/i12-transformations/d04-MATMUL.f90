@@ -1,43 +1,29 @@
----
-layout: book
-title: matmul
-permalink: /learn/intrinsics/MATMUL
----
+program demo_matmul
+    implicit none
+    real :: matrix_a(2,3)
+    real :: matrix_b(3,2)
+    real :: result(2,2)
 
-## __Name__
+    ! Initialize matrix_a (2x3)
+    matrix_a = reshape([1.0, 2.0, 3.0, &
+                        4.0, 5.0, 6.0], shape(matrix_a))
 
-__matmul__(3) - \[TRANSFORMATIONAL\] matrix multiplication
+    ! Initialize matrix_b (3x2)
+    matrix_b = reshape([7.0, 8.0, &
+                        9.0, 10.0, &
+                        11.0, 12.0], shape(matrix_b))
 
-## __Syntax__
+    ! Perform matrix multiplication
+    result = matmul(matrix_a, matrix_b)
 
-```fortran
-result = matmul(matrix_a, matrix_b)
-```
+    ! Print matrices and result
+    print *, "Matrix A (2x3):"
+    print *, matrix_a
 
-## __Description__
+    print *, "Matrix B (3x2):"
+    print *, matrix_b
 
-Performs a matrix multiplication on numeric or logical arguments.
+    print *, "Result of matmul(A, B) (2x2):"
+    print *, result
 
-## __Arguments__
-
-- __matrix\_a__
-  : An array of _integer_, _real_, _complex_, or _logical_ type, with a rank of
-  one or two.
-
-- __matrix\_b__
-  : An array of _integer_, _real_, or _complex_ type if __matrix\_a__ is of a
-  numeric type; otherwise, an array of _logical_ type. The rank shall be
-  one or two, and the first (or only) dimension of __matrix\_b__ shall be
-  equal to the last (or only) dimension of __matrix\_a__.
-
-## __Returns__
-
-The matrix product of __matrix\_a__ and __matrix\_b__. The type and kind of the
-result follow the usual type and kind promotion rules, as for the \* or
-.and. operators.
-
-## __Standard__
-
-Fortran 95 and later
-
-###### fortran-lang intrinsic descriptions
+end program demo_matmul
