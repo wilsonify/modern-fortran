@@ -1,51 +1,32 @@
----
-layout: book
-title: co_lbound
-permalink: /learn/intrinsics/CO_LBOUND
----
+program demo_co_lbound
+    implicit none
+    integer, allocatable :: A[:]          ! 1D coarray
+    integer, allocatable :: B[:,:]        ! 2D coarray
+    integer :: lb1, lb2
+    integer :: lbvec(:)
 
-## __Name__
+    ! Allocate coarrays
+    allocate(A[*])
+    allocate(B[*,*])
 
-__co\_lbound__(3) - \[COLLECTIVE\] Lower codimension bounds of an array
+    ! Only the first image prints the results
+    if (this_image() == 1) then
+        print *, "=== CO_LBOUND Demo ==="
 
-## __Syntax__
+        ! 1D coarray lower cobound
+        lb1 = co_lbound(A)
+        print *, "Lower cobound of A[:]:", lb1
 
-```fortran
-result = co_lbound(coarray, dim, kind)
-```
+        ! 2D coarray lower cobounds (as a vector)
+        lbvec = co_lbound(B)
+        print *, "Lower cobounds of B[:,:]:", lbvec
 
-## __Description__
+        ! Access specific codimension (1 or 2)
+        lb1 = co_lbound(B, dim=1)
+        lb2 = co_lbound(B, dim=2)
+        print *, "Lower cobound of B along codim=1:", lb1
+        print *, "Lower cobound of B along codim=2:", lb2
+    end if
 
-Returns the lower bounds of a coarray, or a single lower cobound along
-the __dim__ codimension.
-
-## __Arguments__
-
-- __array__
-  : Shall be an coarray, of any type.
-
-- __dim__
-  : (Optional) Shall be a scalar _integer_.
-
-- __kind__
-  : (Optional) An _integer_ initialization expression indicating the kind
-  parameter of the result.
-
-## __Returns__
-
-The return value is of type _integer_ and of kind __kind__. If __kind__ is absent,
-the return value is of default integer kind. If __dim__ is absent, the
-result is an array of the lower cobounds of __coarray__. If __dim__ is present,
-the result is a scalar corresponding to the lower cobound of the array
-along that codimension.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__co\_ubound__(3)](CO_UBOUND),
-[__lbound__(3)](LBOUND)
-
-###### fortran-lang intrinsic descriptions
+    sync all  ! Ensure all images finish together
+end program demo_co_lbound

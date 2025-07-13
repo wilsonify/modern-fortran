@@ -1,52 +1,32 @@
----
-layout: book
-title: co_ubound
-permalink: /learn/intrinsics/CO_UBOUND
----
+program demo_co_ubound
+    implicit none
+    integer, allocatable :: A[:]           ! 1D coarray
+    integer, allocatable :: B[:,:]         ! 2D coarray
+    integer :: ub1, ub2
+    integer :: ubvec(:)
 
-## __Name__
+    ! Allocate coarrays
+    allocate(A[*])
+    allocate(B[*,*])
 
-__co\_ubound__(3) - \[COLLECTIVE\] Upper codimension bounds of an array
+    ! Run only on image 1 for clean output
+    if (this_image() == 1) then
+        print *, "=== CO_UBOUND Demo ==="
 
-## __Syntax__
+        ! Upper cobound of 1D coarray
+        ub1 = co_ubound(A)
+        print *, "Upper cobound of A[:]:", ub1
 
-```fortran
-result = co_ubound(coarray, dim, kind)
-```
+        ! Upper cobounds of 2D coarray
+        ubvec = co_ubound(B)
+        print *, "Upper cobounds of B[:,:]:", ubvec
 
-## __Description__
+        ! Individual codimensions
+        ub1 = co_ubound(B, dim=1)
+        ub2 = co_ubound(B, dim=2)
+        print *, "Upper cobound of B along codim=1:", ub1
+        print *, "Upper cobound of B along codim=2:", ub2
+    end if
 
-Returns the upper cobounds of a coarray, or a single upper cobound along
-the __dim__ codimension.
-
-## __Arguments__
-
-- __array__
-  : Shall be an coarray, of any type.
-
-- __dim__
-  : (Optional) Shall be a scalar _integer_.
-
-- __kind__
-  : (Optional) An _integer_ initialization expression indicating the kind
-  parameter of the result.
-
-## __Returns__
-
-The return value is of type _integer_ and of kind __kind__. If __kind__ is absent,
-the return value is of default integer kind. If __dim__ is absent, the
-result is an array of the lower cobounds of __coarray__. If __dim__ is present,
-the result is a scalar corresponding to the lower cobound of the array
-along that codimension.
-
-## __Standard__
-
-Fortran 2008 and later
-
-## __See Also__
-
-[__co\_lbound__(3)](CO_LBOUND),
-[__lbound__(3)](LBOUND),
-[__ubound__(3)](UBOUND)
-
-###### fortran-lang intrinsic descriptions
+    sync all
+end program demo_co_ubound
