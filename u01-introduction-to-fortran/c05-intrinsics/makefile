@@ -6,7 +6,7 @@ BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
 
-# Relative paths to program source files (no .f90 extension)
+# Program source list (relative path, no .f90 extension)
 PROGRAMS = \
     i01-arrays/d01-MERGE \
     i01-arrays/d02-PACK \
@@ -101,60 +101,66 @@ clean:
 	@echo "Cleaning build/, dist/, and test_logs/..."
 	rm -rf $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
 
-# Compilation rule for Fortran
+# Create directories
+dirs:
+	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
+
+# Check environment
+check:
+	@command -v $(F90) >/dev/null 2>&1 || { echo >&2 "Error: '$(F90)' not found."; exit 1; }
+	@command -v $(CC) >/dev/null 2>&1 || { echo >&2 "Error: '$(CC)' not found."; exit 1; }
+	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
+	@echo "Found C compiler:       $$($(CC) --version | head -n 1)"
+
+# Fortran compilation rule
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90
 	@mkdir -p $(dir $@)
 	@echo "Compiling Fortran: $<"
 	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
-# Compilation rule for C
+# C compilation rule
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "Compiling C: $<"
 	$(CC) -c $< -o $@
 
-# Specific rule to handle Fortran + C for d02-C_F_POINTER
-$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER: \
-	$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER.o \
-	$(BUILD_DIR)/i05-interfaces/myC_func.o
-	@mkdir -p $(dir $@)
-	@echo "Linking (Fortran + C): $@"
-	$(F90) $^ -o $@
-
-# Default linking rule (Fortran-only targets)
+# Standard linking rule (Fortran-only)
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(dir $@)
 	@echo "Linking: $@"
 	$(F90) $< -o $@
 
-# Distribution rule with smoke test
+# Custom rule: d02-C_F_POINTER with myC_func.c
+$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER: \
+	$(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER.o \
+	$(BUILD_DIR)/i05-interfaces/myC_func.o
+	@mkdir -p $(dir $@)
+	@echo "Linking Fortran + C (d02): $@"
+	$(F90) $^ -o $@
+
+# Custom rule: d03-C_F_PROCPOINTER with getIterFunc.c
+$(BUILD_DIR)/i05-interfaces/d03-C_F_PROCPOINTER: \
+	$(BUILD_DIR)/i05-interfaces/d03-C_F_PROCPOINTER.o \
+	$(BUILD_DIR)/i05-interfaces/getIterFunc.o
+	@mkdir -p $(dir $@)
+	@echo "Linking Fortran + C (d03): $@"
+	$(F90) $^ -o $@
+
+# Distribute and run smoke test
 $(DIST_DIR)/%: $(BUILD_DIR)/%
 	@mkdir -p $(dir $@)
 	@cp $< $@
 	@echo "Running: $@"
 	@./$@ > /dev/null 2>&1 || echo "FAILED: $@"
 
-# Environment check
-check:
-	@command -v $(F90) >/dev/null 2>&1 || \
-	{ echo >&2 "Error: '$(F90)' not found in PATH."; exit 1; }
-	@echo "Found Fortran compiler: $$($(F90) --version | head -n 1)"
-
-# Directory setup
-dirs:
-	@mkdir -p $(BUILD_DIR) $(DIST_DIR) $(LOG_DIR)
-
-# Help message
+# Help target
 help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Main targets:"
-	@echo "  all         Compile and distribute all tutorial programs"
-	@echo "  run         Run all tutorial programs"
+	@echo "  all         Compile and distribute all programs"
 	@echo "  clean       Remove build/, dist/, and test_logs/"
+	@echo "  help        Show this message"
 	@echo ""
 	@echo "Individual dist targets:"
 	@echo "  $(PROGRAMS:%=$(DIST_DIR)/%)"
-	@echo ""
-	@echo "Individual run targets:"
-	@echo "  $(PROGRAMS:%=run-%)"
