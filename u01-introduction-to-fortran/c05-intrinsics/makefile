@@ -5,6 +5,7 @@ SRC_DIR   = src
 BUILD_DIR = build
 DIST_DIR  = dist
 LOG_DIR   = test_logs
+COARRAY_FLAGS = -fcoarray=single
 
 # Program source list (relative path, no .f90 extension)
 PROGRAMS = \
@@ -88,7 +89,91 @@ PROGRAMS = \
     i05-interfaces/d03-C_F_PROCPOINTER \
     i05-interfaces/d04-C_FUNLOC \
     i05-interfaces/d05-C_LOC \
-    i05-interfaces/d06-C_SIZEOF
+    i05-interfaces/d06-C_SIZEOF \
+    i06-maths/d01-SQRT \
+    i06-maths/d02-EXP \
+    i06-maths/d03-LOG \
+    i06-maths/d04-LOG10 \
+    i06-maths/d05-HYPOT \
+    i06-maths/d06-SIN \
+    i06-maths/d07-COS \
+    i06-maths/d08-TAN \
+    i06-maths/d09-ASIN \
+    i06-maths/d10-ACOS \
+    i06-maths/d11-ATAN \
+    i06-maths/d12-ATAN2 \
+    i06-maths/d13-SINH \
+    i06-maths/d14-COSH \
+    i06-maths/d15-TANH \
+    i06-maths/d16-ASINH \
+    i06-maths/d17-ACOSH \
+    i06-maths/d18-ATANH \
+    i06-maths/d19-RANDOM_SEED \
+    i06-maths/d20-RANDOM_NUMBER \
+    i06-maths/d21-ERF \
+    i06-maths/d22-ERFC \
+    i06-maths/d23-ERFC_SCALED \
+    i06-maths/d24-GAMMA \
+    i06-maths/d25-LOG_GAMMA \
+    i06-maths/d26-BESSEL_J0 \
+    i06-maths/d27-BESSEL_J1 \
+    i06-maths/d28-BESSEL_JN \
+    i06-maths/d29-BESSEL_Y0 \
+    i06-maths/d30-BESSEL_Y1 \
+    i06-maths/d31-BESSEL_YN \
+    i06-maths/d32-NORM2 \
+    i07-numerics/d01-EXPONENT \
+    i07-numerics/d02-FRACTION \
+    i07-numerics/d03-NEAREST \
+    i07-numerics/d04-RRSPACING \
+    i07-numerics/d05-SCALE \
+    i07-numerics/d06-SET_EXPONENT \
+    i07-numerics/d07-SPACING \
+    i07-numerics/d08-DIGITS \
+    i07-numerics/d09-EPSILON \
+    i07-numerics/d10-HUGE \
+    i07-numerics/d11-MAXEXPONENT \
+    i07-numerics/d12-MINEXPONENT \
+    i07-numerics/d13-PRECISION \
+    i07-numerics/d14-RADIX \
+    i07-numerics/d15-RANGE \
+    i07-numerics/d16-TINY \
+    i08-values/d01-ABS \
+    i08-values/d02-AINT \
+    i08-values/d03-ANINT \
+    i08-values/d04-CEILING \
+    i08-values/d05-CONJG \
+    i08-values/d06-DIM \
+    i08-values/d07-DPROD \
+    i08-values/d08-FLOOR \
+    i08-values/d09-MAX \
+    i08-values/d10-MIN \
+    i08-values/d11-MOD \
+    i08-values/d12-MODULO \
+    i08-values/d13-SIGN \
+    i09-collectives/d01-NUM_IMAGES \
+    i09-collectives/d02-THIS_IMAGE \
+    i09-collectives/d03-IMAGE_INDEX \
+    i09-collectives/d04-EVENT_QUERY \
+    i09-collectives/d05-CO_LBOUND \
+    i09-collectives/d06-CO_UBOUND \
+    i09-collectives/d07-ATOMIC_DEFINE \
+    i09-collectives/d08-ATOMIC_REF \
+    i09-collectives/d09-ATOMIC_ADD \
+    i09-collectives/d10-ATOMIC_FETCH_ADD \
+    i09-collectives/d11-ATOMIC_CAS \
+    i09-collectives/d12-ATOMIC_AND \
+    i09-collectives/d13-ATOMIC_OR \
+    i09-collectives/d14-ATOMIC_XOR \
+    i09-collectives/d15-ATOMIC_FETCH_AND \
+    i09-collectives/d16-ATOMIC_FETCH_OR \
+    i09-collectives/d17-ATOMIC_FETCH_XOR \
+    i09-collectives/d18-CO_BROADCAST \
+    i09-collectives/d19-CO_SUM \
+    i09-collectives/d20-CO_MAX \
+    i09-collectives/d21-CO_MIN \
+    i09-collectives/d22-CO_REDUCE
+
 
 # Phony targets
 .PHONY: all clean dirs check help
@@ -116,7 +201,7 @@ check:
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90
 	@mkdir -p $(dir $@)
 	@echo "Compiling Fortran: $<"
-	$(F90) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
+	$(F90) $(COARRAY_FLAGS) -J$(BUILD_DIR) -I$(BUILD_DIR) -c $< -o $@
 
 # C compilation rule
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
@@ -128,7 +213,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(dir $@)
 	@echo "Linking: $@"
-	$(F90) $< -o $@
+	$(F90) $(COARRAY_FLAGS) $< -o $@
 
 # Custom rule: d02-C_F_POINTER with myC_func.c
 $(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER: \
@@ -136,7 +221,7 @@ $(BUILD_DIR)/i05-interfaces/d02-C_F_POINTER: \
 	$(BUILD_DIR)/i05-interfaces/myC_func.o
 	@mkdir -p $(dir $@)
 	@echo "Linking Fortran + C (d02): $@"
-	$(F90) $^ -o $@
+	$(F90) $(COARRAY_FLAGS) $^ -o $@
 
 # Custom rule: d03-C_F_PROCPOINTER with getIterFunc.c
 $(BUILD_DIR)/i05-interfaces/d03-C_F_PROCPOINTER: \
@@ -144,7 +229,7 @@ $(BUILD_DIR)/i05-interfaces/d03-C_F_PROCPOINTER: \
 	$(BUILD_DIR)/i05-interfaces/getIterFunc.o
 	@mkdir -p $(dir $@)
 	@echo "Linking Fortran + C (d03): $@"
-	$(F90) $^ -o $@
+	$(F90) $(COARRAY_FLAGS) $^ -o $@
 
 # Rule to compile Fortran+C for demo_c_funloc
 $(BUILD_DIR)/i05-interfaces/d04-C_FUNLOC: \
@@ -152,7 +237,7 @@ $(BUILD_DIR)/i05-interfaces/d04-C_FUNLOC: \
     $(BUILD_DIR)/i05-interfaces/call_fortran_with_funptr.o
 	@mkdir -p $(dir $@)
 	@echo "Linking Fortran + C (d04): $@"
-	$(F90) $^ -o $@
+	$(F90) $(COARRAY_FLAGS) $^ -o $@
 
 # Distribute and run smoke test
 $(DIST_DIR)/%: $(BUILD_DIR)/%
