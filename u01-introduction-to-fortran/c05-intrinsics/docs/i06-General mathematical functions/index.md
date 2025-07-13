@@ -89,7 +89,6 @@ These require deeper mathematical understanding and are commonly used in physics
 | Category      | Page                                                                     | Description                          |
 |---------------|--------------------------------------------------------------------------|--------------------------------------|
 | MATH:HIGHER   | [__gamma__]({{site.baseurl}}/learn/intrinsics/GAMMA)                      | ● Gamma function                     |
-| MATH:HIGHER   | [__gamma_log__]({{site.baseurl}}/learn/intrinsics/LOG_GAMMA)              | ● Log of Gamma function              |
 | MATH:HIGHER   | [__log_gamma__]({{site.baseurl}}/learn/intrinsics/LOG_GAMMA)              | ● Logarithm of Gamma function        |
 
 ### Bessel Functions
