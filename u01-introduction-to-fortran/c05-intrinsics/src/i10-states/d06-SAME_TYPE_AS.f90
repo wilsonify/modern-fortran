@@ -1,44 +1,30 @@
----
-layout: book
-title: same_type_as
-permalink: /learn/intrinsics/SAME_TYPE_AS
----
+program demo_same_type_as
+  implicit none
 
-## __Name__
+  type :: base
+  end type base
 
-__same\_type\_as__(3) - \[STATE\] Query dynamic types for equality
+  type, extends(base) :: derived
+  end type derived
 
-## __Syntax__
+  class(base), allocatable :: a, b
+  logical :: same_type
 
-```fortran
-result = same_type_as(a, b)
-```
+  ! Allocate 'a' as base, and 'b' as derived
+  allocate(base :: a)
+  allocate(derived :: b)
 
-## __Description__
+  ! Check whether dynamic types match
+  same_type = same_type_as(a, b)
 
-Query dynamic types for equality.
+  print *, "Are 'a' and 'b' of the same dynamic type? ", same_type
 
-## __Arguments__
+  ! Now allocate both as base
+  deallocate(a, b)
+  allocate(base :: a, b)
 
-- __a__
-  : Shall be an object of extensible declared type or unlimited
-  polymorphic.
+  same_type = same_type_as(a, b)
 
-- __b__
-  : Shall be an object of extensible declared type or unlimited
-  polymorphic.
+  print *, "Are 'a' and 'b' of the same dynamic type now? ", same_type
 
-## __Returns__
-
-The return value is a scalar of type default logical. It is true if and
-only if the dynamic type of __a__ is the same as the dynamic type of __b__.
-
-## __Standard__
-
-Fortran 2003 and later
-
-## __See Also__
-
-[__extends\_type\_of__(3)](EXTENDS_TYPE_OF)
-
-###### fortran-lang intrinsic descriptions
+end program demo_same_type_as
