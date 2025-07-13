@@ -146,6 +146,14 @@ $(BUILD_DIR)/i05-interfaces/d03-C_F_PROCPOINTER: \
 	@echo "Linking Fortran + C (d03): $@"
 	$(F90) $^ -o $@
 
+# Rule to compile Fortran+C for demo_c_funloc
+$(BUILD_DIR)/i05-interfaces/d04-C_FUNLOC: \
+    $(BUILD_DIR)/i05-interfaces/d04-C_FUNLOC.o \
+    $(BUILD_DIR)/i05-interfaces/call_fortran_with_funptr.o
+	@mkdir -p $(dir $@)
+	@echo "Linking Fortran + C (d04): $@"
+	$(F90) $^ -o $@
+
 # Distribute and run smoke test
 $(DIST_DIR)/%: $(BUILD_DIR)/%
 	@mkdir -p $(dir $@)
