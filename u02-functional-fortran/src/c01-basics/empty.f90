@@ -1,6 +1,16 @@
 module mod_empty
-    use iso_fortran_env, only : r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : &
+            i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
     implicit none
+
+    interface empty
+        module procedure empty_i1, empty_i2, empty_i4, empty_i8, &
+                empty_r4, empty_r8, empty_r16, &
+                empty_c4, empty_c8, empty_c16, empty_char
+    end interface
+
+    public :: empty
 
 contains
 
