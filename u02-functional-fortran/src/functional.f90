@@ -4,6 +4,7 @@ module functional
         r4 => real32, r8 => real64, r16 => real128
 
     use mod_compare
+    use mod_empty
     use mod_arange
     use mod_arrstr
     use mod_complement
