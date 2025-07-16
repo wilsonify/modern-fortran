@@ -1,11 +1,15 @@
 module mod_arange
-    use iso_fortran_env, only : i4, r8
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+
     implicit none
     private
 
     public :: arange
     interface arange
-        module procedure :: arange_i4, arange_r8
+        module procedure :: arange_i1, arange_i2, arange_i4, arange_i8, &
+                arange_r4, arange_r8, arange_r16, &
+                arange_c4, arange_c8, arange_c16
     end interface
 
 contains
