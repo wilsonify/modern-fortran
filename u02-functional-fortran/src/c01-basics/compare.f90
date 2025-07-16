@@ -2,8 +2,12 @@ module mod_compare
     use iso_fortran_env, only : r4 => real32, r8 => real64, r16 => real128
     implicit none
     private
-    public :: ge_c4, ge_c8, ge_c16
-    public :: lt_c4, lt_c8, lt_c16
+    interface ge
+        module procedure ge_c4, ge_c8, ge_c16
+    end interface ge
+    interface le
+        module procedure lt_c4, lt_c8, lt_c16
+    end interface le
 
 contains
 
