@@ -1,12 +1,14 @@
 module functional
     use iso_fortran_env, only : &
-        i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-        r4 => real32, r8 => real64, r16 => real128
+            i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
 
     use mod_compare
     use mod_empty
     use mod_arange
     use mod_arrstr
+    use mod_strarr
+    use mod_set
     use mod_complement
     use mod_empty
     use mod_filter
@@ -22,10 +24,9 @@ module functional
     use mod_limit
     use mod_map
     use mod_reverse
-    use mod_set
     use mod_sort
     use mod_split
-    use mod_strarr
+
     use mod_subscript
     use mod_tail
     use mod_unfold
@@ -36,8 +37,8 @@ module functional
 
     ! Expose functions for user access
     public :: arange, arrstr, complement, empty, filter, foldl, foldr, foldt, head, &
-              init, insert, intersection, iterfold, last, limit, map, reverse, set, &
-              sort, split, strarr, subscript, tail, unfold, union
+            init, insert, intersection, iterfold, last, limit, map, reverse, set, &
+            sort, split, strarr, subscript, tail, unfold, union
 
     ! Expose functions used in operator interfaces
     public :: complement, head, init, intersection, last, reverse, set, sort, tail, union
