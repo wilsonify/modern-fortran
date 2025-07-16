@@ -1,5 +1,159 @@
 module mod_filter
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    implicit none
 
+    ! Abstract interfaces for all filtering function types
+    abstract interface
+
+        pure function f_i1_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            integer(i1), intent(in) :: x
+            logical :: res
+        end function f_i1_logical
+    end interface
+
+    abstract interface
+        pure function f_i2_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            integer(i2), intent(in) :: x
+            logical :: res
+        end function f_i2_logical
+    end interface
+
+    abstract interface
+        pure function f_i4_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            integer(i4), intent(in) :: x
+            logical :: res
+        end function f_i4_logical
+    end interface
+
+    abstract interface
+        pure function f_i8_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            integer(i8), intent(in) :: x
+            logical :: res
+        end function f_i8_logical
+    end interface
+
+    abstract interface
+        pure function f_r4_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            real(r4), intent(in) :: x
+            logical :: res
+        end function f_r4_logical
+    end interface
+
+    abstract interface
+        pure function f_r8_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            real(r8), intent(in) :: x
+            logical :: res
+        end function f_r8_logical
+    end interface
+
+    abstract interface
+        pure function f_r16_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            real(r16), intent(in) :: x
+            logical :: res
+        end function f_r16_logical
+    end interface
+
+    abstract interface
+        pure function f_c4_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            complex(r4), intent(in) :: x
+            logical :: res
+        end function f_c4_logical
+    end interface
+
+    abstract interface
+        pure function f_c8_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            complex(r8), intent(in) :: x
+            logical :: res
+        end function f_c8_logical
+    end interface
+
+    abstract interface
+        pure function f_c16_logical(x) result(res)
+            integer, parameter :: i1 = selected_int_kind(2)
+            integer, parameter :: i2 = selected_int_kind(4)
+            integer, parameter :: i4 = selected_int_kind(9)
+            integer, parameter :: i8 = selected_int_kind(18)
+            integer, parameter :: r4 = selected_real_kind(6, 37)
+            integer, parameter :: r8 = selected_real_kind(15, 307)
+            integer, parameter :: r16 = selected_real_kind(33, 4931)
+
+            complex(r16), intent(in) :: x
+            logical :: res
+        end function f_c16_logical
+    end interface
 contains
     pure function filter_i1(f, x) result(filter)
         !! Returns a subset of `x` for which `f(x) == .true.`

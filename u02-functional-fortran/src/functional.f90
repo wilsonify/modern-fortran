@@ -11,7 +11,6 @@ module functional
     use mod_set
     use mod_complement
     use mod_empty
-    use mod_filter
     use mod_foldl
     use mod_foldr
     use mod_foldt
@@ -26,11 +25,11 @@ module functional
     use mod_reverse
     use mod_sort
     use mod_split
-
     use mod_subscript
     use mod_tail
     use mod_unfold
     use mod_union
+    use mod_filter
 
     implicit none
     private
