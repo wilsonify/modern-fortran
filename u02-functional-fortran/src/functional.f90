@@ -5,31 +5,31 @@ module functional
 
     use mod_compare
     use mod_empty
+    use mod_head
+    use mod_init
+    use mod_last
+    use mod_limit
+    use mod_logical
+    use mod_tail
     use mod_arange
+    use mod_sort
     use mod_arrstr
+    use mod_insert
+    use mod_reverse
+    use mod_split
     use mod_strarr
     use mod_set
     use mod_complement
-    use mod_empty
+    use mod_filter
+    use mod_intersection
+    use mod_union
     use mod_foldl
     use mod_foldr
     use mod_foldt
-    use mod_head
-    use mod_init
-    use mod_insert
-    use mod_intersection
     use mod_iterfold
-    use mod_last
-    use mod_limit
     use mod_map
-    use mod_reverse
-    use mod_sort
-    use mod_split
     use mod_subscript
-    use mod_tail
     use mod_unfold
-    use mod_union
-    use mod_filter
 
     implicit none
     private
