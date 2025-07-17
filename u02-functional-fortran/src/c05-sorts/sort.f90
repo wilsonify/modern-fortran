@@ -1,4 +1,6 @@
 module mod_sort
+    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+                               r4 => real32, r8 => real64, r16 => real128
 contains
 
     pure recursive function sort_i1(x) result(res)

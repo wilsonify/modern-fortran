@@ -13,7 +13,7 @@ module functional
     use mod_tail
     use mod_arange
     use mod_sort
-    use mod_arrstr
+    use mod_str
     use mod_insert
     use mod_reverse
     use mod_split

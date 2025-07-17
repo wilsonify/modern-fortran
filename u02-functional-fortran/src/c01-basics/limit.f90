@@ -1,4 +1,12 @@
 module mod_limit
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    implicit none
+    interface limit
+        module procedure limit_i1, limit_i2, limit_i4, limit_i8, &
+                limit_r4, limit_r8, limit_r16, limit_c4, limit_c8, limit_c16
+    end interface limit
+
 contains
 
     pure elemental integer(i1) function limit_i1(x, a, b) result(limit)
