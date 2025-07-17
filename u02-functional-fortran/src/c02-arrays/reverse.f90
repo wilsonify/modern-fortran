@@ -1,6 +1,12 @@
 module mod_reverse
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    use mod_str
+    interface reverse
+        module procedure reverse_i1, reverse_i2, reverse_i4, reverse_i8, reverse_r4, &
+                reverse_r8, reverse_r16, reverse_c4, reverse_c8, reverse_c16, reverse_char
+    end interface reverse
+
 contains
 
     pure function reverse_i1(x) result(reverse)
