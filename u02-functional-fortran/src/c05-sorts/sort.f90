@@ -201,6 +201,6 @@ contains
         !! Overloaded by generic procedure `sort`.
         character(len = *), intent(in) :: x !! Input array
         character(len = len(x)) :: res
-        res = arrstr(achar(sort(iachar(strarr(x)))))
+        res = chars_to_string(achar(sort(iachar(string_to_chars(x)))))
     end function sort_char
 end module mod_sort

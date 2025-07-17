@@ -17,7 +17,6 @@ module functional
     use mod_insert
     use mod_reverse
     use mod_split
-    use mod_strarr
     use mod_set
     use mod_complement
     use mod_filter
@@ -35,9 +34,9 @@ module functional
     private
 
     ! Expose functions for user access
-    public :: arange, arrstr, complement, empty, filter, foldl, foldr, foldt, head, &
+    public :: arange, chars_to_string, complement, empty, filter, foldl, foldr, foldt, head, &
             init, insert, intersection, iterfold, last, limit, map, reverse, set, &
-            sort, split, strarr, subscript, tail, unfold, union
+            sort, split, string_to_chars, subscript, tail, unfold, union
 
     ! Expose functions used in operator interfaces
     public :: complement, head, init, intersection, last, reverse, set, sort, tail, union

@@ -2,8 +2,7 @@ module mod_set
     use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
 
-    use mod_strarr
-    use mod_arrstr
+    use mod_str
     implicit none
     private
     public :: set, set_i1, set_i2, set_i4, set_i8, set_r4, set_r8, set_r16, &
@@ -161,7 +160,7 @@ contains
         !! Overloaded by generic procedure `set`.
         character(len = *), intent(in) :: x !! Input character string
         character(len = :), allocatable :: res
-        res = arrstr(achar(set(iachar(strarr(x)))))
+        res = chars_to_string(achar(set(iachar(string_to_chars(x)))))
     end function set_char
 
 

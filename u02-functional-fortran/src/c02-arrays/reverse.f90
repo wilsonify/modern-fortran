@@ -108,7 +108,7 @@ contains
         !! Overloaded by generic procedure `reverse`.
         character(len = *), intent(in) :: x !! Input array
         character(len = len(x)) :: res
-        res = arrstr(achar(reverse(iachar(strarr(x)))))
+        res = chars_to_string(achar(reverse(iachar(string_to_chars(x)))))
     end function reverse_char
 
 end module mod_reverse
