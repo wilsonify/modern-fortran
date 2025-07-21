@@ -8,7 +8,7 @@ module mod_empty
         module procedure empty_i1, empty_i2, empty_i4, empty_i8, &
                 empty_r4, empty_r8, empty_r16, &
                 empty_c4, empty_c8, empty_c16, empty_char
-    end interface
+    end interface empty
 
     public :: empty
 

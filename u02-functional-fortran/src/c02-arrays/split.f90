@@ -1,6 +1,12 @@
 module mod_split
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+
+    interface split
+        module procedure split_i1, split_i2, split_i4, split_i8, split_r4, &
+                split_r8, split_r16, split_c4, split_c8, split_c16, split_char
+    end interface split
+
 contains
 
     pure function split_i1(x, section) result(split)

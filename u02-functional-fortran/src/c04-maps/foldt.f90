@@ -1,6 +1,75 @@
 module mod_foldt
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+
+    use mod_split
+    interface foldt
+        module procedure foldt_i1, foldt_i2, foldt_i4, foldt_i8, foldt_r4, &
+                foldt_r8, foldt_r16, foldt_c4, foldt_c8, foldt_c16
+    end interface
+
+    abstract interface
+        pure function f2_i1(a, b) result(res)
+            import i1
+            integer(i1), intent(in) :: a, b
+            integer(i1) :: res
+        end function f2_i1
+
+        pure function f2_i2(a, b) result(res)
+            import i2
+            integer(i2), intent(in) :: a, b
+            integer(i2) :: res
+        end function f2_i2
+
+        pure function f2_i4(a, b) result(res)
+            import i4
+            integer(i4), intent(in) :: a, b
+            integer(i4) :: res
+        end function f2_i4
+
+        pure function f2_i8(a, b) result(res)
+            import i8
+            integer(i8), intent(in) :: a, b
+            integer(i8) :: res
+        end function f2_i8
+
+        pure function f2_r4(a, b) result(res)
+            import r4
+            real(r4), intent(in) :: a, b
+            real(r4) :: res
+        end function f2_r4
+
+        pure function f2_r8(a, b) result(res)
+            import r8
+            real(r8), intent(in) :: a, b
+            real(r8) :: res
+        end function f2_r8
+
+        pure function f2_r16(a, b) result(res)
+            import r16
+            real(r16), intent(in) :: a, b
+            real(r16) :: res
+        end function f2_r16
+
+        pure function f2_c4(a, b) result(res)
+            import r4
+            complex(r4), intent(in) :: a, b
+            complex(r4) :: res
+        end function f2_c4
+
+        pure function f2_c8(a, b) result(res)
+            import r8
+            complex(r8), intent(in) :: a, b
+            complex(r8) :: res
+        end function f2_c8
+
+        pure function f2_c16(a, b) result(res)
+            import r16
+            complex(r16), intent(in) :: a, b
+            complex(r16) :: res
+        end function f2_c16
+    end interface
+
 contains
 
     pure recursive integer(i1) function foldt_i1(f, start, x) result(res)
