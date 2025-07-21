@@ -197,7 +197,7 @@ contains
         !! result is `start`; else we recurse immediately,  making the new
         !! initial value the result of combining the old initial value
         !! with the first element of `x`.
-        !! This specific procedure is for 8-byte reals.
+        !! This specific procedure is for 16-byte reals.
         !! Overloaded by generic procedure `foldl`.
         procedure(f2_r16) :: f !! Folding function
         real(r16), intent(in) :: start !! Accumulator start value
