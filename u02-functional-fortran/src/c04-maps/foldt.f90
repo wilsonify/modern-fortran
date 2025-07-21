@@ -3,6 +3,7 @@ module mod_foldt
             r4 => real32, r8 => real64, r16 => real128
 
     use mod_split
+    implicit none
     interface foldt
         module procedure foldt_i1, foldt_i2, foldt_i4, foldt_i8, foldt_r4, &
                 foldt_r8, foldt_r16, foldt_c4, foldt_c8, foldt_c16

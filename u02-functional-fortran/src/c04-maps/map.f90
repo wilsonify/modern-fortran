@@ -1,6 +1,69 @@
 module mod_map
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    implicit none
+
+    abstract interface
+        pure function f_i1(x) result(res)
+            import :: i1
+            integer(i1), intent(in) :: x
+            integer(i1) :: res
+        end function f_i1
+
+        pure function f_i2(x) result(res)
+            import :: i2
+            integer(i2), intent(in) :: x
+            integer(i2) :: res
+        end function f_i2
+
+        pure function f_i4(x) result(res)
+            import :: i4
+            integer(i4), intent(in) :: x
+            integer(i4) :: res
+        end function f_i4
+
+        pure function f_i8(x) result(res)
+            import :: i8
+            integer(i8), intent(in) :: x
+            integer(i8) :: res
+        end function f_i8
+
+        pure function f_r4(x) result(res)
+            import :: r4
+            real(r4), intent(in) :: x
+            real(r4) :: res
+        end function f_r4
+
+        pure function f_r8(x) result(res)
+            import :: r8
+            real(r8), intent(in) :: x
+            real(r8) :: res
+        end function f_r8
+
+        pure function f_r16(x) result(res)
+            import :: r16
+            real(r16), intent(in) :: x
+            real(r16) :: res
+        end function f_r16
+
+        pure function f_c4(x) result(res)
+            import :: r4
+            complex(r4), intent(in) :: x
+            complex(r4) :: res
+        end function f_c4
+
+        pure function f_c8(x) result(res)
+            import :: r8
+            complex(r8), intent(in) :: x
+            complex(r8) :: res
+        end function f_c8
+
+        pure function f_c16(x) result(res)
+            import :: r16
+            complex(r16), intent(in) :: x
+            complex(r16) :: res
+        end function f_c16
+    end interface
 contains
 
     pure function map_i1(f, x) result(map)

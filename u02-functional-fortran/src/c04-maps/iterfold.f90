@@ -1,6 +1,69 @@
 module mod_iterfold
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    implicit none
+    abstract interface
+        pure function f2_i1(x, y) result(res)
+            import :: i1
+            integer(i1), intent(in) :: x, y
+            integer(i1) :: res
+        end function f2_i1
+
+        pure function f2_i2(x, y) result(res)
+            import :: i2
+            integer(i2), intent(in) :: x, y
+            integer(i2) :: res
+        end function f2_i2
+
+        pure function f2_i4(x, y) result(res)
+            import :: i4
+            integer(i4), intent(in) :: x, y
+            integer(i4) :: res
+        end function f2_i4
+
+        pure function f2_i8(x, y) result(res)
+            import :: i8
+            integer(i8), intent(in) :: x, y
+            integer(i8) :: res
+        end function f2_i8
+
+        pure function f2_r4(x, y) result(res)
+            import :: r4
+            real(r4), intent(in) :: x, y
+            real(r4) :: res
+        end function f2_r4
+
+        pure function f2_r8(x, y) result(res)
+            import :: r8
+            real(r8), intent(in) :: x, y
+            real(r8) :: res
+        end function f2_r8
+
+        pure function f2_r16(x, y) result(res)
+            import :: r16
+            real(r16), intent(in) :: x, y
+            real(r16) :: res
+        end function f2_r16
+
+        pure function f2_c4(x, y) result(res)
+            import :: r4
+            complex(r4), intent(in) :: x, y
+            complex(r4) :: res
+        end function f2_c4
+
+        pure function f2_c8(x, y) result(res)
+            import :: r8
+            complex(r8), intent(in) :: x, y
+            complex(r8) :: res
+        end function f2_c8
+
+        pure function f2_c16(x, y) result(res)
+            import :: r16
+            complex(r16), intent(in) :: x, y
+            complex(r16) :: res
+        end function f2_c16
+    end interface
+
 contains
 
     pure integer(i1) function iterfold_i1(f, start, x) result(iterfold)
