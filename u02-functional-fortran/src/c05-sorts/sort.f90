@@ -1,6 +1,22 @@
 module mod_sort
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    use mod_compare
+    use mod_str
+    use mod_split
+    use mod_head
+    use mod_tail
+
+    public :: sort
+
+    interface sort
+        module procedure sort_i1, sort_i2, sort_i4, sort_i8, &
+                sort_r4, sort_r8, sort_r16, &
+                sort_c4, sort_c8, sort_c16, &
+                sort_char
+    end interface sort
+
+
 contains
 
     pure recursive function sort_i1(x) result(res)
@@ -149,8 +165,8 @@ contains
         if(size(x) > 1)then
             pivot = head(split(x, 2))
             rest = [split(x, 1), tail(split(x, 2))]
-            res = [sort(pack(rest, rest < pivot)), pivot, &
-                    sort(pack(rest, rest >= pivot))]
+            res = [sort(pack(rest, lex_lt(rest, pivot))), pivot, &
+                    sort(pack(rest, lex_ge(rest, pivot)))]
         else
             res = x
         endif
@@ -168,8 +184,8 @@ contains
         if(size(x) > 1)then
             pivot = head(split(x, 2))
             rest = [split(x, 1), tail(split(x, 2))]
-            res = [sort(pack(rest, rest < pivot)), pivot, &
-                    sort(pack(rest, rest >= pivot))]
+            res = [sort(pack(rest, lex_lt(rest, pivot))), pivot, &
+                    sort(pack(rest, lex_ge(rest, pivot)))]
         else
             res = x
         endif
@@ -187,8 +203,8 @@ contains
         if(size(x) > 1)then
             pivot = head(split(x, 2))
             rest = [split(x, 1), tail(split(x, 2))]
-            res = [sort(pack(rest, rest < pivot)), pivot, &
-                    sort(pack(rest, rest >= pivot))]
+            res = [sort(pack(rest, lex_lt(rest, pivot))), pivot, &
+                    sort(pack(rest, lex_ge(rest, pivot)))]
         else
             res = x
         endif

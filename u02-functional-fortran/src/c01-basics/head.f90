@@ -4,6 +4,7 @@ module mod_head
 
     implicit none
     private
+    public :: head
     interface head
         module procedure head_i1, head_i2, head_i4, head_i8, head_r4, &
                 head_r8, head_r16, head_c4, head_c8, head_c16, head_char
