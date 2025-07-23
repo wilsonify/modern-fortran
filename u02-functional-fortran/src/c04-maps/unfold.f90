@@ -2,6 +2,8 @@ module mod_unfold
     use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
     use mod_last
+    use mod_str
+    use mod_split
     implicit none
 
     abstract interface
@@ -65,6 +67,15 @@ module mod_unfold
             complex(r16) :: res
         end function f_c16
     end interface
+
+    public :: unfold
+
+    interface unfold
+        module procedure unfold_i1, unfold_i2, unfold_i4, unfold_i8, &
+                unfold_r4, unfold_r8, unfold_r16, &
+                unfold_c4, unfold_c8, unfold_c16
+    end interface unfold
+
 contains
 
     pure recursive function unfold_i1(f, x, len) result(res)

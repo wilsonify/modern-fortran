@@ -4,6 +4,7 @@ module mod_last
 
     implicit none
     private
+    public :: last
     interface last
         module procedure last_i1, last_i2, last_i4, last_i8, last_r4, &
                 last_r8, last_r16, last_c4, last_c8, last_c16, last_char
