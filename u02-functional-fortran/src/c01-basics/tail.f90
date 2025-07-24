@@ -1,3 +1,4 @@
+!! Returns all elements of `x` but the first.
 module mod_tail
     use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
@@ -8,6 +9,14 @@ module mod_tail
                 tail_c4, tail_c8, tail_c16, &
                 tail_char
     end interface tail
+
+    interface operator(.tail.)
+        module procedure tail_i1, tail_i2, tail_i4, tail_i8, &
+                tail_r4, tail_r8, tail_r16, &
+                tail_c4, tail_c8, tail_c16, &
+                tail_char
+    end interface
+
 contains
 
     pure function tail_i1(x) result(tail)
