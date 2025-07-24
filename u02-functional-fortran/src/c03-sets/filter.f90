@@ -1,277 +1,176 @@
 module mod_filter
-    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+    use iso_fortran_env, only : &
+            i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
     implicit none
 
-    ! Abstract interfaces for all filtering function types
+    ! Define complex kinds explicitly from real kinds
+    integer, parameter :: c4 = kind((0.0_r4, 0.0_r4))
+    integer, parameter :: c8 = kind((0.0_r8, 0.0_r8))
+    integer, parameter :: c16 = kind((0.0_r16, 0.0_r16))
+
+    private
+    public :: filter
+
+    ! Abstract interfaces for predicate functions (one per type)
     abstract interface
-
-        pure function f_i1_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_i1(x)
+            import :: i1
             integer(i1), intent(in) :: x
-            logical :: res
-        end function f_i1_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_i2_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_i2(x)
+            import :: i2
             integer(i2), intent(in) :: x
-            logical :: res
-        end function f_i2_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_i4_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_i4(x)
+            import :: i4
             integer(i4), intent(in) :: x
-            logical :: res
-        end function f_i4_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_i8_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_i8(x)
+            import :: i8
             integer(i8), intent(in) :: x
-            logical :: res
-        end function f_i8_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_r4_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_r4(x)
+            import :: r4
             real(r4), intent(in) :: x
-            logical :: res
-        end function f_r4_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_r8_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_r8(x)
+            import :: r8
             real(r8), intent(in) :: x
-            logical :: res
-        end function f_r8_logical
-    end interface
+        end function
 
-    abstract interface
-        pure function f_r16_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
+        pure logical function predicate_r16(x)
+            import :: r16
             real(r16), intent(in) :: x
-            logical :: res
-        end function f_r16_logical
+        end function
+
+        pure logical function predicate_c4(x)
+            import :: c4
+            complex(c4), intent(in) :: x
+        end function
+
+        pure logical function predicate_c8(x)
+            import :: c8
+            complex(c8), intent(in) :: x
+        end function
+
+        pure logical function predicate_c16(x)
+            import :: c16
+            complex(c16), intent(in) :: x
+        end function
+
+        pure logical function predicate_char(x)
+            character(*), intent(in) :: x
+        end function
     end interface
 
-    abstract interface
-        pure function f_c4_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
-            complex(r4), intent(in) :: x
-            logical :: res
-        end function f_c4_logical
+    interface filter
+        module procedure filter_i1
+        module procedure filter_i2
+        module procedure filter_i4
+        module procedure filter_i8
+        module procedure filter_r4
+        module procedure filter_r8
+        module procedure filter_r16
+        module procedure filter_c4
+        module procedure filter_c8
+        module procedure filter_c16
+        module procedure filter_char
     end interface
 
-    abstract interface
-        pure function f_c8_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
-            complex(r8), intent(in) :: x
-            logical :: res
-        end function f_c8_logical
-    end interface
-
-    abstract interface
-        pure function f_c16_logical(x) result(res)
-            integer, parameter :: i1 = selected_int_kind(2)
-            integer, parameter :: i2 = selected_int_kind(4)
-            integer, parameter :: i4 = selected_int_kind(9)
-            integer, parameter :: i8 = selected_int_kind(18)
-            integer, parameter :: r4 = selected_real_kind(6, 37)
-            integer, parameter :: r8 = selected_real_kind(15, 307)
-            integer, parameter :: r16 = selected_real_kind(33, 4931)
-
-            complex(r16), intent(in) :: x
-            logical :: res
-        end function f_c16_logical
-    end interface
 contains
-    pure function filter_i1(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 1-byte integers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_i1_logical) :: f !! Filtering function
-        integer(i1), intent(in) :: x(:) !! Input array
-        integer(i1), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+
+    pure function filter_i1(arr, pred) result(filtered)
+        integer(i1), intent(in) :: arr(:)
+        procedure(predicate_i1) :: pred
+        integer(i1), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i1
 
-
-    pure function filter_i2(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 2-byte integers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_i2_logical) :: f !! Filtering function
-        integer(i2), intent(in) :: x(:) !! Input array
-        integer(i2), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_i2(arr, pred) result(filtered)
+        integer(i2), intent(in) :: arr(:)
+        procedure(predicate_i2) :: pred
+        integer(i2), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i2
 
-
-    pure function filter_i4(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 4-byte integers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_i4_logical) :: f !! Filtering function
-        integer(i4), intent(in) :: x(:) !! Input array
-        integer(i4), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_i4(arr, pred) result(filtered)
+        integer(i4), intent(in) :: arr(:)
+        procedure(predicate_i4) :: pred
+        integer(i4), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i4
 
-
-    pure function filter_i8(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 8-byte integers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_i8_logical) :: f !! Filtering function
-        integer(i8), intent(in) :: x(:) !! Input array
-        integer(i8), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_i8(arr, pred) result(filtered)
+        integer(i8), intent(in) :: arr(:)
+        procedure(predicate_i8) :: pred
+        integer(i8), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i8
 
-
-    pure function filter_r4(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 4-byte reals.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_r4_logical) :: f !! Filtering function
-        real(r4), intent(in) :: x(:) !! Input array
-        real(r4), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_r4(arr, pred) result(filtered)
+        real(r4), intent(in) :: arr(:)
+        procedure(predicate_r4) :: pred
+        real(r4), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r4
 
-
-    pure function filter_r8(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 8-byte reals.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_r8_logical) :: f !! Filtering function
-        real(r8), intent(in) :: x(:) !! Input array
-        real(r8), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_r8(arr, pred) result(filtered)
+        real(r8), intent(in) :: arr(:)
+        procedure(predicate_r8) :: pred
+        real(r8), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r8
 
-
-    pure function filter_r16(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 16-byte reals.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_r16_logical) :: f !! Filtering function
-        real(r16), intent(in) :: x(:) !! Input array
-        real(r16), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_r16(arr, pred) result(filtered)
+        real(r16), intent(in) :: arr(:)
+        procedure(predicate_r16) :: pred
+        real(r16), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r16
 
-
-    pure function filter_c4(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 4-byte reals.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_c4_logical) :: f !! Filtering function
-        complex(r4), intent(in) :: x(:) !! Input array
-        complex(r4), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_c4(arr, pred) result(filtered)
+        complex(c4), intent(in) :: arr(:)
+        procedure(predicate_c4) :: pred
+        complex(c4), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c4
 
-
-    pure function filter_c8(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 8-byte complex numbers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_c8_logical) :: f !! Filtering function
-        complex(r8), intent(in) :: x(:) !! Input array
-        complex(r8), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_c8(arr, pred) result(filtered)
+        complex(c8), intent(in) :: arr(:)
+        procedure(predicate_c8) :: pred
+        complex(c8), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c8
 
-
-    pure function filter_c16(f, x) result(filter)
-        !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 16-byte complex numbers.
-        !! Overloaded by generic procedure `filter`.
-        procedure(f_c16_logical) :: f !! Filtering function
-        complex(r16), intent(in) :: x(:) !! Input array
-        complex(r16), allocatable :: filter(:)
-        integer :: i
-        filter = pack(x, [(f(x(i)), i = 1, size(x))])
+    pure function filter_c16(arr, pred) result(filtered)
+        complex(c16), intent(in) :: arr(:)
+        procedure(predicate_c16) :: pred
+        complex(c16), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c16
+
+    pure function filter_char(arr, pred) result(filtered)
+        character(len = *), intent(in) :: arr(:)
+        procedure(predicate_char) :: pred
+        character(len = len(arr)), allocatable :: filtered(:)
+        integer :: i, count
+        filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
+    end function filter_char
 
 end module mod_filter
