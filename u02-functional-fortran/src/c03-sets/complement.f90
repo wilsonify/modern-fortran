@@ -4,7 +4,19 @@ module mod_complement
     use mod_set
     use mod_arange
     implicit none
+    public :: complement
 
+    interface complement
+        module procedure complement_i1, complement_i2, complement_i4, complement_i8, &
+                complement_r4, complement_r8, complement_r16, &
+                complement_c4, complement_c8, complement_c16, complement_char
+    end interface
+
+    interface operator(.complement.)
+        module procedure complement_i1, complement_i2, complement_i4, complement_i8, &
+                complement_r4, complement_r8, complement_r16, &
+                complement_c4, complement_c8, complement_c16, complement_char
+    end interface
 contains
 
     pure function complement_i1(x, y) result(complement)
