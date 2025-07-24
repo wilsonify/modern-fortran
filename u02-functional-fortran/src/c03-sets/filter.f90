@@ -12,6 +12,7 @@ module mod_filter
     private
     public :: filter
 
+
     ! Abstract interfaces for predicate functions (one per type)
     abstract interface
         pure logical function predicate_i1(x)
@@ -83,9 +84,10 @@ module mod_filter
         module procedure filter_char
     end interface
 
+
 contains
 
-    pure function filter_i1(arr, pred) result(filtered)
+    pure function filter_i1(pred, arr) result(filtered)
         integer(i1), intent(in) :: arr(:)
         procedure(predicate_i1) :: pred
         integer(i1), allocatable :: filtered(:)
@@ -93,7 +95,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i1
 
-    pure function filter_i2(arr, pred) result(filtered)
+    pure function filter_i2(pred, arr) result(filtered)
         integer(i2), intent(in) :: arr(:)
         procedure(predicate_i2) :: pred
         integer(i2), allocatable :: filtered(:)
@@ -101,7 +103,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i2
 
-    pure function filter_i4(arr, pred) result(filtered)
+    pure function filter_i4(pred, arr) result(filtered)
         integer(i4), intent(in) :: arr(:)
         procedure(predicate_i4) :: pred
         integer(i4), allocatable :: filtered(:)
@@ -109,7 +111,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i4
 
-    pure function filter_i8(arr, pred) result(filtered)
+    pure function filter_i8(pred, arr) result(filtered)
         integer(i8), intent(in) :: arr(:)
         procedure(predicate_i8) :: pred
         integer(i8), allocatable :: filtered(:)
@@ -117,7 +119,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_i8
 
-    pure function filter_r4(arr, pred) result(filtered)
+    pure function filter_r4(pred, arr) result(filtered)
         real(r4), intent(in) :: arr(:)
         procedure(predicate_r4) :: pred
         real(r4), allocatable :: filtered(:)
@@ -125,7 +127,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r4
 
-    pure function filter_r8(arr, pred) result(filtered)
+    pure function filter_r8(pred, arr) result(filtered)
         real(r8), intent(in) :: arr(:)
         procedure(predicate_r8) :: pred
         real(r8), allocatable :: filtered(:)
@@ -133,7 +135,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r8
 
-    pure function filter_r16(arr, pred) result(filtered)
+    pure function filter_r16(pred, arr) result(filtered)
         real(r16), intent(in) :: arr(:)
         procedure(predicate_r16) :: pred
         real(r16), allocatable :: filtered(:)
@@ -141,7 +143,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_r16
 
-    pure function filter_c4(arr, pred) result(filtered)
+    pure function filter_c4(pred, arr) result(filtered)
         complex(c4), intent(in) :: arr(:)
         procedure(predicate_c4) :: pred
         complex(c4), allocatable :: filtered(:)
@@ -149,7 +151,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c4
 
-    pure function filter_c8(arr, pred) result(filtered)
+    pure function filter_c8(pred, arr) result(filtered)
         complex(c8), intent(in) :: arr(:)
         procedure(predicate_c8) :: pred
         complex(c8), allocatable :: filtered(:)
@@ -157,7 +159,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c8
 
-    pure function filter_c16(arr, pred) result(filtered)
+    pure function filter_c16(pred, arr) result(filtered)
         complex(c16), intent(in) :: arr(:)
         procedure(predicate_c16) :: pred
         complex(c16), allocatable :: filtered(:)
@@ -165,7 +167,7 @@ contains
         filtered = pack(arr, [(pred(arr(i)), i = 1, size(arr))])
     end function filter_c16
 
-    pure function filter_char(arr, pred) result(filtered)
+    pure function filter_char(pred, arr) result(filtered)
         character(len = *), intent(in) :: arr(:)
         procedure(predicate_char) :: pred
         character(len = len(arr)), allocatable :: filtered(:)
