@@ -1,14 +1,23 @@
+!! Returns the last element of array `x`.
 module mod_last
     use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
 
     implicit none
     private
-    public :: last
+    public :: last, operator(.last.)
+
     interface last
-        module procedure last_i1, last_i2, last_i4, last_i8, last_r4, &
-                last_r8, last_r16, last_c4, last_c8, last_c16, last_char
-    end interface last
+        module procedure last_i1, last_i2, last_i4, last_i8, &
+                last_r4, last_r8, last_r16, &
+                last_c4, last_c8, last_c16, last_char
+    end interface
+
+    interface operator(.last.)
+        module procedure last_i1, last_i2, last_i4, last_i8, &
+                last_r4, last_r8, last_r16, &
+                last_c4, last_c8, last_c16, last_char
+    end interface
 
 contains
     pure integer(i1) function last_i1(x) result(last)
