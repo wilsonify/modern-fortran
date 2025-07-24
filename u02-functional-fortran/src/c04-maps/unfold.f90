@@ -200,7 +200,7 @@ contains
     pure recursive function unfold_c4(f, x, len) result(res)
         !! Generates an array of length `len` by unfolding starting
         !! array `x` using input function `f`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `unfold`.
         procedure(f_c4) :: f !! Unfolding function
         complex(r4), dimension(:), intent(in) :: x !! Start value
@@ -217,7 +217,7 @@ contains
     pure recursive function unfold_c8(f, x, len) result(res)
         !! Generates an array of length `len` by unfolding starting
         !! array `x` using input function `f`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `unfold`.
         procedure(f_c8) :: f !! Unfolding function
         complex(r8), dimension(:), intent(in) :: x !! Start value
@@ -234,7 +234,7 @@ contains
     pure recursive function unfold_c16(f, x, len) result(res)
         !! Generates an array of length `len` by unfolding starting
         !! array `x` using input function `f`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `unfold`.
         procedure(f_c16) :: f !! Unfolding function
         complex(r16), dimension(:), intent(in) :: x !! Start value

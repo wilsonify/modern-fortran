@@ -191,12 +191,12 @@ contains
 
 
     pure function arange_c4(start, end, increment) result(arange)
-        !! Returns an array of complex reals given `start`,  `end`,  and
+        !! Returns an array of complex numbers given `start`,  `end`,  and
         !! `increment` values. Increment defaults to (1, 0) if not provided.
         !! Size of the resulting array is determined with real components of
         !! `start`,  `end`,  and  `increment` values if `real(increment) /= 0`,
         !! and imaginary components otherwise.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Oveloaded by generic procedure `arange`.
         complex(r4), intent(in) :: start !! Start value of the array
         complex(r4), intent(in) :: end !! End value of the array
@@ -224,12 +224,12 @@ contains
 
 
     pure function arange_c8(start, end, increment) result(arange)
-        !! Returns an array of complex reals given `start`,  `end`,  and
+        !! Returns an array of complex numbers given `start`,  `end`,  and
         !! `increment` values. Increment defaults to (1, 0) if not provided.
         !! Size of the resulting array is determined with real components of
         !! `start`,  `end`,  and  `increment` values if `real(increment) /= 0`,
         !! and imaginary components otherwise.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Oveloaded by generic procedure `arange`.
         complex(r8), intent(in) :: start !! Start value of the array
         complex(r8), intent(in) :: end !! End value of the array
@@ -257,12 +257,12 @@ contains
 
 
     pure function arange_c16(start, end, increment) result(arange)
-        !! Returns an array of complex reals given `start`,  `end`,  and
+        !! Returns an array of complex numbers given `start`,  `end`,  and
         !! `increment` values. Increment defaults to (1, 0) if not provided.
         !! Size of the resulting array is determined with real components of
         !! `start`,  `end`,  and  `increment` values if `real(increment) /= 0`,
         !! and imaginary components otherwise.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Oveloaded by generic procedure `arange`.
         complex(r16), intent(in) :: start !! Start value of the array
         complex(r16), intent(in) :: end !! End value of the array

@@ -97,7 +97,7 @@ contains
         !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
         !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
         !! for Re and Im components each.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `limit`.
         complex(r4), intent(in) :: x !! Input scalar
         complex(r4), intent(in) :: a !! First limit
@@ -111,7 +111,7 @@ contains
         !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
         !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
         !! for Re and Im components each.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `limit`.
         complex(r8), intent(in) :: x !! Input scalar
         complex(r8), intent(in) :: a !! First limit
@@ -125,7 +125,7 @@ contains
         !! Returns `x` if `min(a, b) <= x .and. x <= max(a, b)`,
         !! `min(a, b) if `x < min(a, b)` and `max(a, b) if `x < max(a, b)`,
         !! for Re and Im components each.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `limit`.
         complex(r16), intent(in) :: x !! Input scalar
         complex(r16), intent(in) :: a !! First limit

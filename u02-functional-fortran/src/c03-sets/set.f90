@@ -115,7 +115,7 @@ contains
 
     pure recursive function set_c4(x) result(res)
         !! Returns a set given array `x`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `set`.
         complex(r4), dimension(:), intent(in) :: x !! Input array
         complex(r4), dimension(:), allocatable :: res
@@ -129,7 +129,7 @@ contains
 
     pure recursive function set_c8(x) result(res)
         !! Returns a set given array `x`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `set`.
         complex(r8), dimension(:), intent(in) :: x !! Input array
         complex(r8), dimension(:), allocatable :: res
@@ -143,7 +143,7 @@ contains
 
     pure recursive function set_c16(x) result(res)
         !! Returns a set given array `x`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `set`.
         complex(r16), dimension(:), intent(in) :: x !! Input array
         complex(r16), dimension(:), allocatable :: res

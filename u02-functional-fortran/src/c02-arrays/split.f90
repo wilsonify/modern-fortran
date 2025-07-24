@@ -140,7 +140,7 @@ contains
         !! the second half of the array `x` if `section == 2`,
         !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
         !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `split`.
         complex(r4), dimension(:), intent(in) :: x !! Input array
         integer(i4), intent(in) :: section !! Array section to return
@@ -158,7 +158,7 @@ contains
         !! the second half of the array `x` if `section == 2`,
         !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
         !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `split`.
         complex(r8), dimension(:), intent(in) :: x !! Input array
         integer(i4), intent(in) :: section !! Array section to return
@@ -176,7 +176,7 @@ contains
         !! the second half of the array `x` if `section == 2`,
         !! and an empty array otherwise. If `size(x) == 1`,  `split(x, 1)`
         !! returns and empty array,  and `split(x, 2)` returns `x(1)`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `split`.
         complex(r16), dimension(:), intent(in) :: x !! Input array
         integer(i4), intent(in) :: section !! Array section to return

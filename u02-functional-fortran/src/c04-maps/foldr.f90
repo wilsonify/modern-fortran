@@ -208,7 +208,7 @@ contains
         !! Equivalent to haskell's right fold. If the list is empty,  the
         !! result is `start`; else apply `f` to the first element and the
         !! result of folding the rest.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `foldr`.
         procedure(f2_c4) :: f !! Folding function
         complex(r4), intent(in) :: start !! Accumulator start value
@@ -226,7 +226,7 @@ contains
         !! Equivalent to haskell's right fold. If the list is empty,  the
         !! result is `start`; else apply `f` to the first element and the
         !! result of folding the rest.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `foldr`.
         procedure(f2_c8) :: f !! Folding function
         complex(r8), intent(in) :: start !! Accumulator start value
@@ -244,7 +244,7 @@ contains
         !! Equivalent to haskell's right fold. If the list is empty,  the
         !! result is `start`; else apply `f` to the first element and the
         !! result of folding the rest.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `foldr`.
         procedure(f2_c16) :: f !! Folding function
         complex(r16), intent(in) :: start !! Accumulator start value

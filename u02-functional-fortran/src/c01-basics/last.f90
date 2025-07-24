@@ -85,7 +85,7 @@ contains
 
     pure complex(r4) function last_c4(x) result(last)
         !! Returns the last element of array `x`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `last`.
         complex(r4), dimension(:), intent(in) :: x !! Input array
         last = x(size(x))
@@ -94,7 +94,7 @@ contains
 
     pure complex(r8) function last_c8(x) result(last)
         !! Returns the last element of array `x`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `last`.
         complex(r8), dimension(:), intent(in) :: x !! Input array
         last = x(size(x))
@@ -103,7 +103,7 @@ contains
 
     pure complex(r16) function last_c16(x) result(last)
         !! Returns the last element of array `x`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `last`.
         complex(r16), dimension(:), intent(in) :: x !! Input array
         last = x(size(x))
@@ -112,7 +112,7 @@ contains
 
     pure character(len = 1) function last_char(x) result(last)
         !! Returns the last element of array `x`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `last`.
         character(len = *), intent(in) :: x !! Input array
         last = x(len(x):len(x))

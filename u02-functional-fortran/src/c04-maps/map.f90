@@ -152,7 +152,7 @@ contains
 
     pure function map_c4(f, x) result(map)
         !! Returns `f(x)` given input function `f` and array `x`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `map`.
         procedure(f_c4) :: f !! Mapping function
         complex(r4), dimension(:), intent(in) :: x !! Input array
@@ -164,7 +164,7 @@ contains
 
     pure function map_c8(f, x) result(map)
         !! Returns `f(x)` given input function `f` and array `x`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `map`.
         procedure(f_c8) :: f !! Mapping function
         complex(r8), dimension(:), intent(in) :: x !! Input array
@@ -176,7 +176,7 @@ contains
 
     pure function map_c16(f, x) result(map)
         !! Returns `f(x)` given input function `f` and array `x`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `map`.
         procedure(f_c16) :: f !! Mapping function
         complex(r16), dimension(:), intent(in) :: x !! Input array

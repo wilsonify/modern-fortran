@@ -216,7 +216,7 @@ contains
         !! result is `start`; else we recurse immediately,  making the new
         !! initial value the result of combining the old initial value
         !! with the first element of `x`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `foldl`.
         procedure(f2_c4) :: f !! Folding function
         complex(r4), intent(in) :: start !! Accumulator start value
@@ -235,7 +235,7 @@ contains
         !! result is `start`; else we recurse immediately,  making the new
         !! initial value the result of combining the old initial value
         !! with the first element of `x`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `foldl`.
         procedure(f2_c8) :: f !! Folding function
         complex(r8), intent(in) :: start !! Accumulator start value
@@ -254,7 +254,7 @@ contains
         !! result is `start`; else we recurse immediately,  making the new
         !! initial value the result of combining the old initial value
         !! with the first element of `x`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `foldl`.
         procedure(f2_c16) :: f !! Folding function
         complex(r16), intent(in) :: start !! Accumulator start value

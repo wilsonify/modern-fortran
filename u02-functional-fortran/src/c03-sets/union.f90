@@ -84,7 +84,7 @@ contains
 
     pure function union_c4(x, y) result(union)
         !! Returns a union of two arrays.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `union`.
         complex(r4), dimension(:), intent(in) :: x !! First input array
         complex(r4), dimension(:), intent(in) :: y !! Second input array
@@ -95,7 +95,7 @@ contains
 
     pure function union_c8(x, y) result(union)
         !! Returns a union of two arrays.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `union`.
         complex(r8), dimension(:), intent(in) :: x !! First input array
         complex(r8), dimension(:), intent(in) :: y !! Second input array
@@ -106,7 +106,7 @@ contains
 
     pure function union_c16(x, y) result(union)
         !! Returns a union of two arrays.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `union`.
         complex(r16), dimension(:), intent(in) :: x !! First input array
         complex(r16), dimension(:), intent(in) :: y !! Second input array
@@ -117,7 +117,7 @@ contains
 
     pure function union_char(x, y) result(union)
         !! Returns a union of two character strings.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `union`.
         character(len = *), intent(in) :: x !! First input array
         character(len = *), intent(in) :: y !! Second input array

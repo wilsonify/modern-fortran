@@ -175,7 +175,7 @@ contains
 
     pure function intersection_c4(x, y) result(res)
         !! Returns a set intersection of two arrays.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `intersection`.
         complex(r4), dimension(:), intent(in) :: x !! First input array
         complex(r4), dimension(:), intent(in) :: y !! Second input array
@@ -199,7 +199,7 @@ contains
 
     pure function intersection_c8(x, y) result(res)
         !! Returns a set intersection of two arrays.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `intersection`.
         complex(r8), dimension(:), intent(in) :: x !! First input array
         complex(r8), dimension(:), intent(in) :: y !! Second input array
@@ -223,7 +223,7 @@ contains
 
     pure function intersection_c16(x, y) result(res)
         !! Returns a set intersection of two arrays.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `intersection`.
         complex(r16), dimension(:), intent(in) :: x !! First input array
         complex(r16), dimension(:), intent(in) :: y !! Second input array

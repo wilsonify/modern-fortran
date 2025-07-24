@@ -156,7 +156,7 @@ contains
 
     pure recursive function sort_c4(x) result(res)
         !! Recursive quicksort using binary tree pivot.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `sort`.
         complex(r4), dimension(:), intent(in) :: x !! Input array
         complex(r4), dimension(size(x)) :: res
@@ -175,7 +175,7 @@ contains
 
     pure recursive function sort_c8(x) result(res)
         !! Recursive quicksort using binary tree pivot.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `sort`.
         complex(r8), dimension(:), intent(in) :: x !! Input array
         complex(r8), dimension(size(x)) :: res
@@ -194,7 +194,7 @@ contains
 
     pure recursive function sort_c16(x) result(res)
         !! Recursive quicksort using binary tree pivot.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `sort`.
         complex(r16), dimension(:), intent(in) :: x !! Input array
         complex(r16), dimension(size(x)) :: res

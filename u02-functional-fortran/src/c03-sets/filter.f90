@@ -253,7 +253,7 @@ contains
 
     pure function filter_c8(f, x) result(filter)
         !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `filter`.
         procedure(f_c8_logical) :: f !! Filtering function
         complex(r8), intent(in) :: x(:) !! Input array
@@ -265,7 +265,7 @@ contains
 
     pure function filter_c16(f, x) result(filter)
         !! Returns a subset of `x` for which `f(x) == .true.`
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `filter`.
         procedure(f_c16_logical) :: f !! Filtering function
         complex(r16), intent(in) :: x(:) !! Input array

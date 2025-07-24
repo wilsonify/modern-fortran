@@ -210,7 +210,7 @@ contains
         !! Applies function `f` recursively along elements of array `x`
         !! using a tree-like fold,  splitting the array into two and repeating
         !! until we deplete the array.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `foldt`.
         procedure(f2_c4) :: f !! Folding function
         complex(r4), intent(in) :: start !! Accumulator start value
@@ -229,7 +229,7 @@ contains
         !! Applies function `f` recursively along elements of array `x`
         !! using a tree-like fold,  splitting the array into two and repeating
         !! until we deplete the array.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `foldt`.
         procedure(f2_c8) :: f !! Folding function
         complex(r8), intent(in) :: start !! Accumulator start value
@@ -248,7 +248,7 @@ contains
         !! Applies function `f` recursively along elements of array `x`
         !! using a tree-like fold,  splitting the array into two and repeating
         !! until we deplete the array.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `foldt`.
         procedure(f2_c16) :: f !! Folding function
         complex(r16), intent(in) :: start !! Accumulator start value

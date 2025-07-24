@@ -94,7 +94,7 @@ contains
     pure function empty_c4(a) result(empty)
         !! Returns an allocated array of length `0`,
         !! and type and kind same as that of scalar `a`.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `empty`.
         complex(r4), intent(in) :: a !! Input scalar
         complex(r4), dimension(:), allocatable :: empty
@@ -105,7 +105,7 @@ contains
     pure function empty_c8(a) result(empty)
         !! Returns an allocated array of length `0`,
         !! and type and kind same as that of scalar `a`.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `empty`.
         complex(r8), intent(in) :: a !! Input scalar
         complex(r8), dimension(:), allocatable :: empty
@@ -116,7 +116,7 @@ contains
     pure function empty_c16(a) result(empty)
         !! Returns an allocated array of length `0`,
         !! and type and kind same as that of scalar `a`.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `empty`.
         complex(r16), intent(in) :: a !! Input scalar
         complex(r16), dimension(:), allocatable :: empty

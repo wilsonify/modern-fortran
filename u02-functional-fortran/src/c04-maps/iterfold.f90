@@ -181,7 +181,7 @@ contains
     pure complex(r4) function iterfold_c4(f, start, x) result(iterfold)
         !! Reduces input array `x` using input function `f(x, y)`.
         !! Initial value is `start`,  if given,  and zero otherwise.
-        !! This specific procedure is for 4-byte complex reals.
+        !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `iterfold`.
         procedure(f2_c4) :: f !! Folding function
         complex(r4), intent(in) :: start !! Accumulator start value
@@ -197,7 +197,7 @@ contains
     pure complex(r8) function iterfold_c8(f, start, x) result(iterfold)
         !! Reduces input array `x` using input function `f(x, y)`.
         !! Initial value is `start`,  if given,  and zero otherwise.
-        !! This specific procedure is for 8-byte complex reals.
+        !! This specific procedure is for 8-byte complex numbers.
         !! Overloaded by generic procedure `iterfold`.
         procedure(f2_c8) :: f !! Folding function
         complex(r8), intent(in) :: start !! Accumulator start value
@@ -213,7 +213,7 @@ contains
     pure complex(r16) function iterfold_c16(f, start, x) result(iterfold)
         !! Reduces input array `x` using input function `f(x, y)`.
         !! Initial value is `start`,  if given,  and zero otherwise.
-        !! This specific procedure is for 16-byte complex reals.
+        !! This specific procedure is for 16-byte complex numbers.
         !! Overloaded by generic procedure `iterfold`.
         procedure(f2_c16) :: f !! Folding function
         complex(r16), intent(in) :: start !! Accumulator start value
