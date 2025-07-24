@@ -1,7 +1,12 @@
 !! Subscripts the array `x` along indices `ind`.
 module mod_subscript
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
+    interface subscript
+        module procedure subscript_i1, subscript_i2, subscript_i4, subscript_i8, &
+                subscript_r4, subscript_r8, subscript_r16, &
+                subscript_c4, subscript_c8, subscript_c16
+    end interface
 contains
 
     pure function subscript_i1(x, ind) result(subscript)
