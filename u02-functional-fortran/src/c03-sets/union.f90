@@ -1,8 +1,23 @@
 module mod_union
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
     use mod_set
+    private
+    public :: union
+    interface union
+        module procedure :: union_i1, union_i2, union_i4, union_i8
+        module procedure :: union_r4, union_r8, union_r16
+        module procedure :: union_c4, union_c8, union_c16
+        module procedure :: union_char
+    end interface union
+    public :: operator(.union.)
 
+    interface operator(.union.)
+        module procedure :: union_i1, union_i2, union_i4, union_i8
+        module procedure :: union_r4, union_r8, union_r16
+        module procedure :: union_c4, union_c8, union_c16
+        module procedure :: union_char
+    end interface
 contains
 
     pure function union_i1(x, y) result(union)

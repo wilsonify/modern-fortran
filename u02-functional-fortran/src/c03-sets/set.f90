@@ -5,6 +5,7 @@ module mod_set
     use mod_str
     implicit none
     private
+
     public :: set, set_i1, set_i2, set_i4, set_i8, set_r4, set_r8, set_r16, &
             set_c4, set_c8, set_c16, set_char
 
@@ -13,6 +14,14 @@ module mod_set
                 set_r4, set_r8, set_r16, &
                 set_c4, set_c8, set_c16, &
                 set_char
+    end interface
+
+    public :: operator(.set.)
+    interface operator(.set.)
+        module procedure :: set_i1, set_i2, set_i4, set_i8
+        module procedure :: set_r4, set_r8, set_r16
+        module procedure :: set_c4, set_c8, set_c16
+        module procedure :: set_char
     end interface
 
 contains

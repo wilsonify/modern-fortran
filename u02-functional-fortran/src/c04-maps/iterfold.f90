@@ -2,6 +2,8 @@ module mod_iterfold
     use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
             r4 => real32, r8 => real64, r16 => real128
     implicit none
+    private
+    public :: iterfold
     abstract interface
         pure function f2_i1(x, y) result(res)
             import :: i1
@@ -64,6 +66,11 @@ module mod_iterfold
         end function f2_c16
     end interface
 
+    interface iterfold
+        module procedure :: iterfold_i1, iterfold_i2, iterfold_i4, iterfold_i8
+        module procedure :: iterfold_r4, iterfold_r8, iterfold_r16
+        module procedure :: iterfold_c4, iterfold_c8, iterfold_c16
+    end interface iterfold
 contains
 
     pure integer(i1) function iterfold_i1(f, start, x) result(iterfold)

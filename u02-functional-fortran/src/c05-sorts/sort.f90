@@ -15,8 +15,14 @@ module mod_sort
                 sort_c4, sort_c8, sort_c16, &
                 sort_char
     end interface sort
+    public :: operator(.sort.)
 
-
+    interface operator(.sort.)
+        module procedure :: sort_i1, sort_i2, sort_i4, sort_i8
+        module procedure :: sort_r4, sort_r8, sort_r16
+        module procedure :: sort_c4, sort_c8, sort_c16
+        module procedure :: sort_char
+    end interface
 contains
 
     pure recursive function sort_i1(x) result(res)

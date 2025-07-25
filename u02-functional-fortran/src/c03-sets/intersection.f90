@@ -1,8 +1,26 @@
 module mod_intersection
-    use iso_fortran_env, only: i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
-                               r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
     use mod_set
     use mod_empty
+    implicit none
+    private
+    public :: intersection
+
+    interface intersection
+        module procedure intersection_i1, intersection_i2, intersection_i4, intersection_i8
+        module procedure intersection_r4, intersection_r8, intersection_r16
+        module procedure intersection_c4, intersection_c8, intersection_c16
+        module procedure intersection_char
+    end interface
+    public :: operator(.intersection.)
+    interface operator(.intersection.)
+        module procedure :: intersection_i1, intersection_i2, intersection_i4, intersection_i8
+        module procedure :: intersection_r4, intersection_r8, intersection_r16
+        module procedure :: intersection_c4, intersection_c8, intersection_c16
+        module procedure :: intersection_char
+    end interface
+
 contains
 
     pure function intersection_i1(x, y) result(res)
