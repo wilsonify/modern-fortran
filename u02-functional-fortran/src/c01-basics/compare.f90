@@ -1,5 +1,7 @@
 module mod_compare
-    use iso_fortran_env, only : r4 => real32, r8 => real64, r16 => real128
+    use iso_fortran_env, only : &
+            i1 => int8, i2 => int16, i4 => int32, i8 => int64, &
+            r4 => real32, r8 => real64, r16 => real128
     implicit none
     private
     public :: ge, le, lex_lt, lex_gt, lex_ge, almost_equal
@@ -120,7 +122,7 @@ contains
                 ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
     end function ge_lex_c16
 
-    ! Generic almost_equal for real32
+    ! Generic almost_equal for r4
     pure logical function almost_equal_r4(x, y, rtol, atol)
         real(r4), intent(in) :: x(:), y(:)
         real(r4), intent(in), optional :: rtol, atol
@@ -141,7 +143,7 @@ contains
         end do
     end function
 
-    ! Generic almost_equal for real64
+    ! Generic almost_equal for r8
     pure logical function almost_equal_r8(x, y, rtol, atol)
         real(r8), intent(in) :: x(:), y(:)
         real(r8), intent(in), optional :: rtol, atol
@@ -162,12 +164,12 @@ contains
         end do
     end function
 
-    ! Generic almost_equal for real128
+    ! Generic almost_equal for r16
     pure logical function almost_equal_r16(x, y, rtol, atol)
         real(r16), intent(in) :: x(:), y(:)
         real(r16), intent(in), optional :: rtol, atol
-        real(r16), parameter :: default_rtol = 1.0e-30_real128
-        real(r16), parameter :: default_atol = 1.0e-32_real128
+        real(r16), parameter :: default_rtol = 1.0e-30_r16
+        real(r16), parameter :: default_atol = 1.0e-32_r16
         real(r16) :: rel_tol, abs_tol
         integer :: i
 
@@ -183,12 +185,12 @@ contains
         end do
     end function
 
-    ! Generic almost_equal for complex(real32)
+    ! Generic almost_equal for complex(r4)
     pure logical function almost_equal_c4(x, y, rtol, atol)
-        complex(real32), intent(in) :: x(:), y(:)
+        complex(r4), intent(in) :: x(:), y(:)
         real(r4), intent(in), optional :: rtol, atol
-        real(r4), parameter :: default_rtol = 1.0e-5_real32
-        real(r4), parameter :: default_atol = 1.0e-6_real32
+        real(r4), parameter :: default_rtol = 1.0e-5_r4
+        real(r4), parameter :: default_atol = 1.0e-6_r4
         real(r4) :: rel_tol, abs_tol
         integer :: i
 
@@ -204,12 +206,12 @@ contains
         end do
     end function
 
-    ! Generic almost_equal for complex(real64)
+    ! Generic almost_equal for complex(r8)
     pure logical function almost_equal_c8(x, y, rtol, atol)
-        complex(real64), intent(in) :: x(:), y(:)
+        complex(r8), intent(in) :: x(:), y(:)
         real(r8), intent(in), optional :: rtol, atol
-        real(r8), parameter :: default_rtol = 1.0e-12_real64
-        real(r8), parameter :: default_atol = 1.0e-14_real64
+        real(r8), parameter :: default_rtol = 1.0e-12_r8
+        real(r8), parameter :: default_atol = 1.0e-14_r8
         real(r8) :: rel_tol, abs_tol
         integer :: i
 
@@ -225,9 +227,9 @@ contains
         end do
     end function
 
-    ! Generic almost_equal for complex(real128)
+    ! Generic almost_equal for complex(r16)
     pure logical function almost_equal_c16(x, y, rtol, atol)
-        complex(real128), intent(in) :: x(:), y(:)
+        complex(r16), intent(in) :: x(:), y(:)
         real(r16), intent(in), optional :: rtol, atol
         real(r16), parameter :: default_rtol = 1.0e-30_r16
         real(r16), parameter :: default_atol = 1.0e-32_r16

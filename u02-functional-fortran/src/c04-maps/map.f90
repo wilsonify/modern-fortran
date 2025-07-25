@@ -161,11 +161,20 @@ contains
         !! Returns `f(x)` given input function `f` and array `x`.
         !! This specific procedure is for 4-byte complex numbers.
         !! Overloaded by generic procedure `map`.
-        procedure(f_c4) :: f !! Mapping function
-        complex(r4), dimension(:), intent(in) :: x !! Input array
-        complex(r4), dimension(size(x)) :: map
-        integer(i4) :: i
-        map = [(f(x(i)), i = 1, size(x))]
+        !! certain compilers like gfortran-10 with -O3 optimization struggle with expression evaluation or temporary reuse for complex(r4)
+        !! in array constructors or elemental expressions.
+        !! Instead of relying on array constructors, we’ll use an explicit, element-wise loop,
+        !! which ensures proper evaluation and memory handling of the complex results.
+        procedure(f_c4) :: f
+        complex(r4), dimension(:), intent(in) :: x
+        complex(r4), allocatable :: map(:)
+        integer :: i
+
+        allocate(map(size(x)))
+        do i = 1, size(x)
+            ! Avoid expression reordering issues
+            map(i) = f(x(i))
+        end do
     end function map_c4
 
 
