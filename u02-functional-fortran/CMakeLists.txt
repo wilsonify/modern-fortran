@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(functional-fortran LANGUAGES Fortran)
 
 # ------------------------------------------------------------------------------
+# Enable position independent code (required for shared libraries)
+# ------------------------------------------------------------------------------
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# ------------------------------------------------------------------------------
 # Output directories
 # ------------------------------------------------------------------------------
-
 set(CMAKE_Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/include)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -13,7 +17,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 # ------------------------------------------------------------------------------
 # Default to Release build if unspecified
 # ------------------------------------------------------------------------------
-
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -21,7 +24,6 @@ endif()
 # ------------------------------------------------------------------------------
 # Compiler flags
 # ------------------------------------------------------------------------------
-
 if(CMAKE_Fortran_COMPILER_ID MATCHES GNU)
   set(CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g -fbacktrace -Wall -Wextra -fcheck=all")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -ffree-line-length-none")
@@ -40,9 +42,8 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES Cray)
 endif()
 
 # ------------------------------------------------------------------------------
-# Source Collection
+# Source files
 # ------------------------------------------------------------------------------
-
 file(GLOB_RECURSE FUNCTIONAL_SOURCES
     "${CMAKE_SOURCE_DIR}/src/*.f90"
 )
@@ -52,15 +53,14 @@ file(GLOB_RECURSE TEST_SOURCES
 )
 
 # ------------------------------------------------------------------------------
-# Libraries
+# Shared library build
 # ------------------------------------------------------------------------------
+add_library(functional SHARED ${FUNCTIONAL_SOURCES})
 
-add_library(functional ${FUNCTIONAL_SOURCES})
+# ------------------------------------------------------------------------------
+# Testing executable and registration
+# ------------------------------------------------------------------------------
 add_library(testing test/testing.f90)
-
-# ------------------------------------------------------------------------------
-# Test Executables and Registration
-# ------------------------------------------------------------------------------
 
 enable_testing()
 
@@ -74,8 +74,12 @@ foreach(TEST_FILE IN LISTS TEST_SOURCES)
 endforeach()
 
 # ------------------------------------------------------------------------------
-# Installation
+# Installation rules: Install to dist/ folder
 # ------------------------------------------------------------------------------
+install(TARGETS functional
+        LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/dist/lib
+        ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/dist/lib
+        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/dist/bin)
 
-install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
-install(DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/
+        DESTINATION ${CMAKE_SOURCE_DIR}/dist/include)
