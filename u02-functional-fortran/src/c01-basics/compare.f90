@@ -2,6 +2,7 @@ module mod_compare
     use iso_fortran_env, only : r4 => real32, r8 => real64, r16 => real128
     implicit none
     private
+    public :: ge, le, lex_lt, lex_gt, lex_ge, almost_equal
 
     ! Interfaces for absolute-value-based comparisons
     interface ge
@@ -25,8 +26,10 @@ module mod_compare
         module procedure ge_lex_c4, ge_lex_c8, ge_lex_c16
     end interface lex_ge
 
-    public :: ge, le, lex_lt, lex_gt, lex_ge
-
+    interface almost_equal
+        module procedure almost_equal_r4, almost_equal_r8, almost_equal_r16
+        module procedure almost_equal_c4, almost_equal_c8, almost_equal_c16
+    end interface
 contains
 
     ! === ABSOLUTE VALUE COMPARISONS ===
@@ -66,55 +69,182 @@ contains
     pure elemental logical function lt_lex_c4(lhs, rhs) result(res)
         complex(r4), intent(in) :: lhs, rhs
         res = (real(lhs) < real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
     end function lt_lex_c4
 
     pure elemental logical function lt_lex_c8(lhs, rhs) result(res)
         complex(r8), intent(in) :: lhs, rhs
         res = (real(lhs) < real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
     end function lt_lex_c8
 
     pure elemental logical function lt_lex_c16(lhs, rhs) result(res)
         complex(r16), intent(in) :: lhs, rhs
         res = (real(lhs) < real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) < aimag(rhs)))
     end function lt_lex_c16
 
     pure elemental logical function gt_lex_c4(lhs, rhs) result(res)
         complex(r4), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
     end function gt_lex_c4
 
     pure elemental logical function gt_lex_c8(lhs, rhs) result(res)
         complex(r8), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
     end function gt_lex_c8
 
     pure elemental logical function gt_lex_c16(lhs, rhs) result(res)
         complex(r16), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) > aimag(rhs)))
     end function gt_lex_c16
 
     pure elemental logical function ge_lex_c4(lhs, rhs) result(res)
         complex(r4), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
     end function ge_lex_c4
 
     pure elemental logical function ge_lex_c8(lhs, rhs) result(res)
         complex(r8), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
     end function ge_lex_c8
 
     pure elemental logical function ge_lex_c16(lhs, rhs) result(res)
         complex(r16), intent(in) :: lhs, rhs
         res = (real(lhs) > real(rhs)) .or. &
-              ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
+                ((real(lhs) == real(rhs)) .and. (aimag(lhs) >= aimag(rhs)))
     end function ge_lex_c16
 
+    ! Generic almost_equal for real32
+    pure logical function almost_equal_r4(x, y, rtol, atol)
+        real(r4), intent(in) :: x(:), y(:)
+        real(r4), intent(in), optional :: rtol, atol
+        real(r4), parameter :: default_rtol = 1.0e-5_r4
+        real(r4), parameter :: default_atol = 1.0e-6_r4
+        real(r4) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_r4 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_r4 = .false.
+                exit
+            end if
+        end do
+    end function
+
+    ! Generic almost_equal for real64
+    pure logical function almost_equal_r8(x, y, rtol, atol)
+        real(r8), intent(in) :: x(:), y(:)
+        real(r8), intent(in), optional :: rtol, atol
+        real(r8), parameter :: default_rtol = 1.0e-12_r8
+        real(r8), parameter :: default_atol = 1.0e-14_r8
+        real(r8) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_r8 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_r8 = .false.
+                exit
+            end if
+        end do
+    end function
+
+    ! Generic almost_equal for real128
+    pure logical function almost_equal_r16(x, y, rtol, atol)
+        real(r16), intent(in) :: x(:), y(:)
+        real(r16), intent(in), optional :: rtol, atol
+        real(r16), parameter :: default_rtol = 1.0e-30_real128
+        real(r16), parameter :: default_atol = 1.0e-32_real128
+        real(r16) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_r16 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_r16 = .false.
+                exit
+            end if
+        end do
+    end function
+
+    ! Generic almost_equal for complex(real32)
+    pure logical function almost_equal_c4(x, y, rtol, atol)
+        complex(real32), intent(in) :: x(:), y(:)
+        real(r4), intent(in), optional :: rtol, atol
+        real(r4), parameter :: default_rtol = 1.0e-5_real32
+        real(r4), parameter :: default_atol = 1.0e-6_real32
+        real(r4) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_c4 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_c4 = .false.
+                exit
+            end if
+        end do
+    end function
+
+    ! Generic almost_equal for complex(real64)
+    pure logical function almost_equal_c8(x, y, rtol, atol)
+        complex(real64), intent(in) :: x(:), y(:)
+        real(r8), intent(in), optional :: rtol, atol
+        real(r8), parameter :: default_rtol = 1.0e-12_real64
+        real(r8), parameter :: default_atol = 1.0e-14_real64
+        real(r8) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_c8 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_c8 = .false.
+                exit
+            end if
+        end do
+    end function
+
+    ! Generic almost_equal for complex(real128)
+    pure logical function almost_equal_c16(x, y, rtol, atol)
+        complex(real128), intent(in) :: x(:), y(:)
+        real(r16), intent(in), optional :: rtol, atol
+        real(r16), parameter :: default_rtol = 1.0e-30_r16
+        real(r16), parameter :: default_atol = 1.0e-32_r16
+        real(r16) :: rel_tol, abs_tol
+        integer :: i
+
+        rel_tol = merge(rtol, default_rtol, present(rtol))
+        abs_tol = merge(atol, default_atol, present(atol))
+
+        almost_equal_c16 = .true.
+        do i = 1, size(x)
+            if (abs(x(i) - y(i)) > abs_tol + rel_tol * abs(y(i))) then
+                almost_equal_c16 = .false.
+                exit
+            end if
+        end do
+    end function
+
 end module mod_compare
+
