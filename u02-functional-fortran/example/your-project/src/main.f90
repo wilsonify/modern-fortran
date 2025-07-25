@@ -6,17 +6,15 @@
 
 program map_square
   use iso_fortran_env, only: i4 => int32
-  use functional           ! Your functional library module
+  use functional             ! Functional Fortran library
   implicit none
 
   integer(i4), dimension(5) :: input_array = [1, 2, 3, 4, 5]
   integer(i4), dimension(5) :: output_array
-  integer :: i
 
-  ! Main program logic
   output_array = map(square, input_array)
 
-  print *, "Input array: ", input_array
+  print *, "Input array:  ", input_array
   print *, "Squared array:", output_array
   print *, "Functional library linked and working successfully!"
 
