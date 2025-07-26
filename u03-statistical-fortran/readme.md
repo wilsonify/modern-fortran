@@ -43,3 +43,14 @@ Fortunately, good programming styles can be taught and learned.
 The purpose of this book is to help a statistician, 
 methodologist, or statistically oriented researcher to write a good Fortran program the first time. 
 We hope to make the experience of developing Fortran applications as quick, painless, and rewarding as possible.
+
+
+
+
+
+
+
+
+
+
+
