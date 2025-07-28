@@ -1,5 +1,5 @@
 !#######################################################################
-program uniform
+program uniform1
   ! Generates random numbers uniformly distributed between a and b
   ! Version 1
   implicit none
@@ -14,5 +14,5 @@ program uniform
     call random_number(u)
     print *, a + u*(b-a)
   end do
-end program uniform
+end program uniform1
 !#######################################################################
