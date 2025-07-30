@@ -1,0 +1,43 @@
+FORMAT OF AN ELOGIT DATA FILE
+-----------------------------
+A rectangular dataset for the ELOGIT program is provided through an
+ASCII file. Case identifier strings are optional.
+COMMENT LINES: An unlimited number of comment lines is allowed at the
+beginning of the data file. Each comment line must begin with an
+asterisk "*". These comment lines are ignored.
+IF NO CASE IDENTIFIER STRINGS ARE PRESENT, then the lines after the
+comments should look like this:
+LINE 1:
+LINE 2:
+.
+.
+.
+LINE ncase:
+Var_1
+Var_1Var_2
+Var_2...
+...Var_nvar
+Var_nvar
+Var_1Var_2...Var_nvar
+The variables on each line may be separated by any amount of blank
+space. Each line must have all variables on it; blank lines between
+cases are not allowed.
+IF CASE IDENTIFIER STRINGS ARE PRESENT, then the lines after the
+comments should look like this:
+LINE 1:
+LINE 2:
+.
+.
+.
+LINE ncase:
+Case_id
+Case_idVar_1
+Var_1Var_2
+Var_2...
+...Var_nvar
+Var_nvar
+Case_idVar_1Var_2...Var_nvar
+The case_id is a character string up to 8 characters long, with no
+embedded spaces. A case_id string should not begin with an asterisk
+"*", because then it might be mistaken for a comment. Blank spaces on
+a line before the case_id string are ignored.

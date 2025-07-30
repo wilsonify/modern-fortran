@@ -18,4 +18,22 @@ LINE 3: names_file_name
     character string giving the name of the optional names file
     If no names file is provided, leave this line blank.
 **********************************************************************
-* We’ll add more information to this file later
+**********************************************************************
+* Model specification section
+* Optional comment lines, followed by:
+LINE 1: by_name, grouped
+by_name = T if the variables will be specified by name,
+F if variables will be specified by number
+grouped = T if an n-variable is present, F otherwise
+LINE 2: yvar, nvar
+yvar = name or number of the response variable
+nvar = name or number of the n-variable, if any (if none,
+leave this blank)
+LINE 3: intercept_present
+T if the model should contain an intercept, F otherwise
+LINE 4: npred
+number of predictors in the model (could be 0); predictors
+do not include the intercept if present
+LINE 5: name or number of the first predictor
+LINE 6: name or number of the second predictor
+and so on...

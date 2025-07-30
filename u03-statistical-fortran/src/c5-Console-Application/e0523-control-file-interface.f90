@@ -11,12 +11,25 @@ module elogit_control_mod
     end type
 
     type :: elogit_ctrlfile_type
+        ! unlike other types, the contents of this one are public
         sequence
+        ! data input section
         integer(kind = our_int) :: ncase = 0, nvar = 0
         logical :: case_id_present = .false., names_file_present = .false.
         character(len = file_name_length) :: data_file_name = "", &
                 names_file_name = ""
+        ! model specification section
+        logical :: by_name = .false., grouped = .false.
+        integer(kind = our_int), pointer :: resp_col(:) => null()
+        character(len = var_name_length), pointer :: resp_name(:) => null()
+        logical :: intercept_present = .false.
+        integer(kind = our_int) :: npred = 0
+        integer(kind = our_int), pointer :: pred_col(:) => null()
+        character(len = var_name_length), pointer :: &
+                pred_names(:) => null()
+        ! We’ll add more components to this type later
     end type elogit_ctrlfile_type
+    !##################################################################
 
 contains
 
@@ -81,7 +94,86 @@ contains
             ctrlfile%names_file_name = adjustl(ctrlfile%names_file_name)
         end if
         !###############################
-        ! We’ll add more code here later
+        !###############################
+        ! Model specification section
+        if(skip_comment_lines(ctrl_file_handle, current_line) &
+                == RETURN_FAIL) goto 900
+        ! read by_name, grouped
+        current_line = current_line + 1
+        read(unit = ctrl_file_handle, fmt = "(A)", err = 900, end = 900) line
+        read(line, *, err = 900, end = 900) ctrlfile%by_name, &
+                ctrlfile%grouped
+        ! read yvar, nvar
+        current_line = current_line + 1
+        read(unit = ctrl_file_handle, fmt = "(A)", err = 900, end = 900) line
+        if(ctrlfile%by_name) then
+            if(ctrlfile%grouped) then
+                if(dyn_alloc(ctrlfile%resp_name, 2, err) == &
+                        RETURN_FAIL) goto 800
+            else
+                if(dyn_alloc(ctrlfile%resp_name, 1, err) == &
+                        RETURN_FAIL) goto 800
+            end if
+            ! set pred_name
+            if(line == "") goto 900
+            line = adjustl(line)
+            posn = index(line, " ")
+            ctrlfile%resp_name(1) = line(:posn - 1)
+            line = line(posn:)
+            if(ctrlfile%grouped) then
+                if(line == "") goto 900
+                line = adjustl(line)
+                posn = index(line, " ")
+                ctrlfile%resp_name(2) = line(:posn - 1)
+            end if
+        else
+            ! set pred_col
+            if(ctrlfile%grouped) then
+                if(dyn_alloc(ctrlfile%resp_col, 2, err) == &
+                        RETURN_FAIL) goto 800
+                read(line, *, err = 900, end = 900) ctrlfile%resp_col(1), &
+                        ctrlfile%resp_col(2)
+
+            else
+                if(dyn_alloc(ctrlfile%resp_col, 1, err) == &
+                        RETURN_FAIL) goto 800
+                read(line, *, err = 900, end = 900) ctrlfile%resp_col(1)
+            end if
+        end if
+        ! read intercept_present
+        current_line = current_line + 1
+        read(unit = ctrl_file_handle, fmt = "(A)", err = 900, end = 900) line
+        read(line, *, err = 900, end = 900) ctrlfile%intercept_present
+        ! read npred
+        current_line = current_line + 1
+        read(unit = ctrl_file_handle, fmt = "(A)", err = 900, end = 900) line
+        read(line, *, err = 900, end = 900) ctrlfile%npred
+        ! read predictor variables, if any
+        if(ctrlfile%npred > 0) then
+            if(ctrlfile%by_name) then
+                if(dyn_alloc(ctrlfile%pred_names, ctrlfile%npred, err) &
+                        == RETURN_FAIL) goto 800
+                do i = 1, ctrlfile%npred
+                    current_line = current_line + 1
+                    read(unit = ctrl_file_handle, fmt = "(A)", err = 900, &
+                            end = 900) line
+                    if(line == "") goto 900
+                    line = adjustl(line)
+                    if(line(1:1) == "*") goto 900
+                    posn = index(line, " ")
+                    ctrlfile%pred_names(i) = line(:posn - 1)
+                end do
+            else
+                if(dyn_alloc(ctrlfile%pred_col, ctrlfile%npred, err) &
+                        == RETURN_FAIL) goto 800
+                do i = 1, ctrlfile%npred
+                    current_line = current_line + 1
+                    read(unit = ctrl_file_handle, fmt = "(A)", err = 900, &
+                            end = 900) line
+                    read(line, *, err = 900, end = 900) ctrlfile%pred_col(i)
+                end do
+            end if
+        end if
         ! normal exit
         close(unit = ctrl_file_handle)
         answer = RETURN_SUCCESS
