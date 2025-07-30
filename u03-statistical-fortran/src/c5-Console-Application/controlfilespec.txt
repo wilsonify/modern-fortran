@@ -1,0 +1,21 @@
+FORMAT OF THE ELOGIT CONTROL FILE
+---------------------------------
+COMMENT LINES: An unlimited number of comment lines is allowed at the
+beginning of the control file, and between each of the sections
+below. Each comment line must begin with (i.e. the first nonblank
+character on the line must be) an asterisk "*". These comment lines
+are ignored.
+**********************************************************************
+* Data input section
+* Optional comment lines, followed by:
+LINE 1: ncase, nvar, case_id_present
+    ncase = number of cases or rows in the dataset
+    nvar = number of variables (excluding case id, if present)
+    case_id_present = T if the first field on each line of the data file is to be interpreted as a case identifier string rather than a variable
+LINE 2: data_file_name
+    character string giving the name of ASCII data file
+LINE 3: names_file_name
+    character string giving the name of the optional names file
+    If no names file is provided, leave this line blank.
+**********************************************************************
+* We’ll add more information to this file later
