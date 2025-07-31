@@ -1,0 +1,53 @@
+###########################################################
+#
+ELOGIT
+#
+#
+A simple program for logistic regression analysis
+#
+#
+Version 1.0 - June, 2004
+#
+#
+Written by J.L. Schafer
+#
+#
+Department of Statistics and The Methodology Center
+#
+#
+The Pennsylvania State University
+#
+###########################################################
+08 June, 2004
+14:52:04
+Data set information
+Number of cases:
+Number of variables:
+Variables
+-------------
+1 LOG_DOSE
+2 N
+3 Y
+Model specification
+
+Response (y):
+Denominator (n):
+Predictors:
+Y
+N
+INTRCPT
+LOG_DOSE
+Iteratively reweighted least-squares algorithm
+Converged at iteration 8
+INTRCPT
+LOG_DOSE
+estimate        std.err.        ratio
+------------    ------------    ------------
+9.5868          3.7067          2.5864
+2.8792          1.1023          2.6121
+
+Summary of model fit
+Loglikelihood: -6.7898028
+Deviance G^2: 0.53470113
+Pearson’s X^2: 0.36098344
+Degrees of freedom: 3
