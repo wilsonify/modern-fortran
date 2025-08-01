@@ -1,0 +1,17 @@
+routine em_exponential_
+module=em_exp
+transpose=yes;
+arg 1 num input byaddr format=ib4.;
+arg 2 num input byaddr format=rb8.;
+arg 3 num input byaddr format=ib4.;
+arg 4 num input byaddr format=rb8.;
+arg 5 num update byaddr format=rb8.;
+arg 6 num update byaddr format=rb8.;
+arg 7 num update byaddr format=rb8.;
+arg 8 num output byaddr format=ib4.;
+arg 9 num output byaddr format=ib2.;
+arg 10 num output byaddr format=rb8.;
+arg 11 num update byaddr format=rb8.;
+arg 12 num update byaddr format=rb8.;
+arg 13 num input byaddr format=ib4.;
+arg 14 char update byaddr format=$CHAR255.;
