@@ -1,10 +1,10 @@
-!#####################################################################
-!### ELOGIT: A simple program for logistic regression analysis #####
-!### written entirely in standard Fortran-95.
-!### For non-PC platforms, the value of "platform" may be
-!### changed to "UNIX" or "MAC", so that carriage returns are
-!### handled correctly.
-!#####################################################################
+
+ ELOGIT: A simple program for logistic regression analysis #####
+ written entirely in standard Fortran-95.
+ For non-PC platforms, the value of "platform" may be
+ changed to "UNIX" or "MAC", so that carriage returns are
+ handled correctly.
+
 program elogit
     use error_handler
     use program_constants
@@ -40,4 +40,3 @@ program elogit
         print "(A)", "OK"
     end if
 end program elogit
-!#######################################################################

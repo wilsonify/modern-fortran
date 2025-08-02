@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(our_int) function put_elogit_response_bycol(col, session, &
         err) result(answer)
     ! Declares which column in the dataset contains the response or
@@ -128,4 +128,3 @@ integer(our_int) function put_elogit_response_bycol(col, session, &
     ijunk = nullify_elogit_session(session, err, &
             save_dataset = .true.)
 end function put_elogit_response_bycol
-!##################################################################

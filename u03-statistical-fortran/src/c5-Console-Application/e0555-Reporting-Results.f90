@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(kind = our_int) function write_elogit_results_to_outfile(&
         output_file_name, session, err) result(answer)
     ! writes a formatted summary of results to the output file
@@ -165,4 +165,3 @@ integer(kind = our_int) function write_elogit_results_to_outfile(&
     close(unit = out_file_handle)
     return
 end function write_elogit_results_to_outfile
-!##################################################################

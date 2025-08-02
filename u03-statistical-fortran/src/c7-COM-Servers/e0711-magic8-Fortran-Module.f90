@@ -1,11 +1,11 @@
-!#######################################################################
+
 module magic8
     implicit none
     private ! by default
     public :: get_magic8_msg
     character(len = *), parameter :: modname = "magic8"
 contains
-    !####################################################################
+
     integer function get_magic8_msg(msg) result(answer)
         implicit none
         ! Generates a random message from the Magic 8-ball. The argument
@@ -71,6 +71,5 @@ contains
         answer = 0
         return
     end function get_magic8_msg
-    !####################################################################
+
 end module magic8
-!#######################################################################

@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(our_int) function int2_alloc(intArray, dim1, dim2, err) &
         result(answer)
     ! Allocates an integer array of rank 2
@@ -27,4 +27,3 @@ integer(our_int) function int2_alloc(intArray, dim1, dim2, err) &
             called_from = subname // " in MOD " // modname)
     return
 end function int2_alloc
-!##################################################################

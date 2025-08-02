@@ -1,4 +1,4 @@
-!#####################################################################
+
 subroutine em_exponential(n, y, maxits, eps, pi, lambda_1, lambda_2, &
         iter, converged, loglik, score, hessian, msg_len, msg)
     !DEC$ ATTRIBUTES DLLEXPORT :: em_exponential
@@ -28,4 +28,3 @@ subroutine em_exponential(n, y, maxits, eps, pi, lambda_1, lambda_2, &
     if(err_msg_present(err)) call err_get_msgs(err, msg, "UNIX")
     return
 end subroutine em_exponential
-!#####################################################################

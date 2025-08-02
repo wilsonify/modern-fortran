@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(our_int) function put_elogit_data_matrix(data_matrix, &
         session, err) result(answer)
     ! Loads a data matrix into an ELOGIT session.
@@ -49,9 +49,9 @@ integer(our_int) function put_elogit_data_matrix(data_matrix, &
             called_from = subname // " in MOD " // modname)
     ijunk = nullify_elogit_session(session, err)
 end function put_elogit_data_matrix
-!##################################################################
 
-!##################################################################
+
+
 subroutine assign_default_var_names(dataset)
     ! assigns default values to dataset%var_names, assuming that
     ! the array has already been allocated
@@ -69,9 +69,9 @@ subroutine assign_default_var_names(dataset)
 
     end do
 end subroutine assign_default_var_names
-!#################################################################
 
-!##################################################################
+
+
 integer(our_int) function put_elogit_var_names(var_names, &
         session, err) result(answer)
     ! Loads an array of variable name strings into an ELOGIT
@@ -114,9 +114,9 @@ integer(our_int) function put_elogit_var_names(var_names, &
             custom_1 = "Size of input array does not conform", &
             custom_2 = "to the current dataset.")
 end function put_elogit_var_names
-!##################################################################
 
-!##################################################################
+
+
 integer(our_int) function get_elogit_var_names(var_names, &
 session, err) result(answer)
 ! Gets the var_names currently stored in an ELOGIT session
@@ -144,4 +144,3 @@ return
 800 call err_handle(err, 1000, &
 called_from = subname//" in MOD "//modname)
 end function get_elogit_var_names
-!##################################################################

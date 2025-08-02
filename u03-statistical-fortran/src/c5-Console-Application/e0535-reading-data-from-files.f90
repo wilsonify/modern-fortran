@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(kind = our_int) function read_elogit_datafile(&
         data_file_name, nkase, nvar, case_id_present, session, err, &
         warn) result(answer)
@@ -114,4 +114,3 @@ integer(kind = our_int) function read_elogit_datafile(&
     ijunk = dyn_dealloc(data_matrix, err)
     ijunk = dyn_dealloc(case_id, err)
 end function read_elogit_datafile
-!##################################################################

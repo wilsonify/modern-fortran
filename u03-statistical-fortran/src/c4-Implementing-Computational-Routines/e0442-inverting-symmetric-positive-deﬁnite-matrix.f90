@@ -1,7 +1,7 @@
-!####################################################################
+
 integer(kind = our_int) function invert_lower(a, err) result(answer)
-    !### Overwrites a lower-triangular matrix a with its inverse
-    !### by forward substitution. The upper triangle is untouched.
+     Overwrites a lower-triangular matrix a with its inverse
+     by forward substitution. The upper triangle is untouched.
     implicit none
     ! declare arguments
     real(kind = our_dble), intent(inout) :: a(:, :)
@@ -38,12 +38,12 @@ integer(kind = our_int) function invert_lower(a, err) result(answer)
             called_from = subname // " in MOD " // modname)
     return
 end function invert_lower
-!####################################################################
-!####################################################################
+
+
 integer(kind = our_int) function premult_lower_by_transpose(a, b, &
         err) result(answer)
-    !### Premultiplies a lower-triangular matrix a by its upper-
-    !### triangular transpose to produce a symmetric matrix b.
+     Premultiplies a lower-triangular matrix a by its upper-
+     triangular transpose to produce a symmetric matrix b.
     implicit none
     ! declare arguments
     real(kind = our_dble), intent(in) :: a(:, :)
@@ -81,4 +81,3 @@ integer(kind = our_int) function premult_lower_by_transpose(a, b, &
             called_from = subname // " in MOD " // modname)
     return
 end function premult_lower_by_transpose
-!####################################################################

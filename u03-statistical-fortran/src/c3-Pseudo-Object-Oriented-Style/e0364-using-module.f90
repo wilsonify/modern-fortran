@@ -1,4 +1,4 @@
-!#######################################################################
+
 module cholesky
     use error_handler
     implicit none
@@ -7,9 +7,9 @@ module cholesky
     character(len = *), parameter :: modname = "cholesky"
 contains
     integer function cholesky_lower(a, err) result(answer)
-        !### Overwrites lower triangle of a symmetric, pos.-def. matrix
-        !### with its cholesky factor. The upper triangle is untouched.
-        !### Returns 0 if successful, 1 if failed.
+         Overwrites lower triangle of a symmetric, pos.-def. matrix
+         with its cholesky factor. The upper triangle is untouched.
+         Returns 0 if successful, 1 if failed.
         implicit none
         ! declare arguments
         double precision, intent(inout) :: a(:, :)
@@ -49,6 +49,5 @@ contains
                 called_from = subname // " in MOD " // modname)
         return
     end function cholesky_lower
-    !####################################################################
+
 end module cholesky
-!#######################################################################

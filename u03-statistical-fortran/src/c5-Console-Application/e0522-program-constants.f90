@@ -1,4 +1,4 @@
-!#####################################################################
+
 module program_constants
     ! Programming constants used throughout the ELOGIT program.
     ! Unlike most modules, everything here is public.
@@ -32,4 +32,3 @@ module program_constants
                     "Department of Statistics and The Methodology Center", &
             program_institution_2 = "The Pennsylvania State University"
 end module program_constants
-!#####################################################################

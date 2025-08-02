@@ -1,4 +1,4 @@
-!##################################################################
+
 module em_exponential_engine
 
     use error_handler
@@ -72,4 +72,4 @@ module em_exponential_engine
 contains
     ! leave empty unless you define any small routines directly here
 end module em_exponential_engine
-!##################################################################
+

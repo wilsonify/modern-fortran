@@ -1,4 +1,4 @@
-!#####################################################################
+
 subroutine em_exponential(n, y, maxits, eps, pi, lambda_1, lambda_2, &
         iter, converged, loglik, score, hessian, error_occurred)
     use error_handler
@@ -35,4 +35,3 @@ subroutine em_exponential(n, y, maxits, eps, pi, lambda_1, lambda_2, &
     end if
     return
 end subroutine em_exponential
-!#####################################################################

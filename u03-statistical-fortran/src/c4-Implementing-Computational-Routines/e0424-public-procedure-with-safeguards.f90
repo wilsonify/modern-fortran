@@ -1,4 +1,5 @@
-!##################################################################
+
+
 integer(kind = our_int) function run_em_exponential(y, &
         pi, lambda_1, lambda_2, iter, converged, loglik, &
         score, hessian, err, maxits, eps) result(answer)
@@ -6,7 +7,10 @@ integer(kind = our_int) function run_em_exponential(y, &
     ! two exponentials,
     !         pi * exponential with mean 1/lambda_1
     ! + (1 - pi) * exponential with mean 1/lambda_2
+    use program_constants
+    use error_handler
     implicit none
+
     ! Input data containing the sample:
     real(kind = our_dble), intent(in) :: y(:)
     ! Starting values for parameters; these will also return
@@ -128,4 +132,3 @@ integer(kind = our_int) function run_em_exponential(y, &
             called_from = subname // " in MOD " // modname)
     return
 end function run_em_exponential
-!###############################################################

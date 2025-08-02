@@ -1,4 +1,4 @@
-!##################################################################
+
 integer(our_int) function run_elogit_modelfit(session, err, &
         warn, maxits, eps) result(answer)
     ! Fits the logistic regression model by iteratively reweighted

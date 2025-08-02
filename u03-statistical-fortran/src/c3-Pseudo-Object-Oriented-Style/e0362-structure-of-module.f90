@@ -1,4 +1,4 @@
-!#######################################################################
+
 module error_handler
     ! Generic error message handler for both console and non-console
     ! applications. The routines in this module do not halt program
@@ -15,14 +15,14 @@ module error_handler
     integer, parameter :: &
             ! max width of any single error message line
             err_msg_width = 70
-    !####################################################################
+
     type :: msg_line_type
         ! Private type for a single node in the linked list
         sequence
         character (len = err_msg_width) :: line = ""
         type(msg_line_type), pointer :: next => null()
     end type msg_line_type
-    !####################################################################
+
     type :: error_type
         ! Public type for holding a linked list of messages
         sequence
@@ -30,11 +30,11 @@ module error_handler
         logical :: msg_present = .false.
         type(msg_line_type), pointer :: head => null(), tail => null()
     end type error_type
-    !####################################################################
+
 contains
-    !####################################################################
+
     ! all subroutines and functions will be placed here
-    !####################################################################
+
     subroutine err_reset(err)
         ! Public: deletes all messages from the list
         implicit none
@@ -50,16 +50,16 @@ contains
         nullify(err%tail)
         err%msg_present = .false.
     end subroutine err_reset
-    !##################################################################
-    !##################################################################
+
+
     logical function err_msg_present(err)
         ! Public: Queries the error_type to see if a message is present
         implicit none
         type(error_type), intent(inout) :: err
         err_msg_present = err%msg_present
     end function err_msg_present
-    !##################################################################
-    !##################################################################
+
+
     subroutine insert_msg_line(text_line, err)
         ! inserts a new message line at the end of the list
         implicit none
@@ -80,9 +80,9 @@ contains
             err%tail%line = text_line
         end if
     end subroutine insert_msg_line
-    !##################################################################
 
-    !##################################################################
+
+
     subroutine err_handle(err, err_code, called_from, file_name, &
             line_no, object_name, custom_1, custom_2, custom_3)
         ! Public: Stores a message in the error handler
@@ -165,8 +165,8 @@ contains
                 call insert_msg_line("OCCURRED IN: " // &
                         trim(called_from), err)
     end subroutine err_handle
-    !##################################################################
-    !##################################################################
+
+
     subroutine err_get_msgs(err, msg_string, platform)
         ! Public: Retrieves all stored messages as a single character
         ! string, with message lines separated by platform-appropriate
@@ -220,8 +220,7 @@ contains
             cur_line => cur_line%next
         end do
     end subroutine err_get_msgs
-    !##################################################################
+
 end module error_handler
 
 
-!#######################################################################

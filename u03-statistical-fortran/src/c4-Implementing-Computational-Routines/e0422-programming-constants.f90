@@ -1,4 +1,4 @@
-!##################################################################
+
 module program_constants
     implicit none
     public
@@ -13,4 +13,3 @@ module program_constants
     integer(kind = our_int), parameter :: RETURN_SUCCESS = 0, &
             RETURN_FAIL = -1
 end module program_constants
-!##################################################################
