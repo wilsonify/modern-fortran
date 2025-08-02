@@ -22,7 +22,9 @@ RUN DEBIAN_FRONTEND=noninteractive transientBuildDeps="file" \
     mpich>=3.2 \
     libmpich-dev>=3.2 \
     ${transientBuildDeps} \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-8 \
+    && update-alternatives \
+    --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 \
+    --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-8 \
     && update-alternatives --set gcc "/usr/bin/gcc-8" \
     && gcc --version \
     && gfortran --version \
@@ -63,7 +65,9 @@ RUN DEBIAN_FRONTEND=noninteractive transientBuildDeps="cmake cmake-data git" \
     && git clone --single-branch https://github.com/sourceryinstitute/OpenCoarrays \
     && mkdir OpenCoarrays/build \
     && cd OpenCoarrays/build \
-    && FC="$(command -v gfortran)" CC="$(command -v gcc)" cmake -DCAF_ENABLE_FAILED_IMAGES=FALSE -DCMAKE_BUILD_TYPE=Release .. \
+    && FC="$(command -v gfortran)" CC="$(command -v gcc)" cmake \
+    -DCAF_ENABLE_FAILED_IMAGES=FALSE \
+    -DCMAKE_BUILD_TYPE=Release .. \
     && make -j "$(nproc)" install \
     && if "${RUN_TESTS}" ; then ctest --output-on-failure ; fi \
     && caf --version \

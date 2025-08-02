@@ -19,7 +19,7 @@ for i in range(0,1100, 100):
     ticks = np.arange(-0.1, 0.11, 0.01)
 
     field[field > 0.0999] = 0.0999
-    field[field <-0.0999] =-0.0999
+    field[field <-0.0999] = -0.0999
 
     fig = plt.figure(figsize=(8, 7))
     ax = fig.add_subplot(111, aspect='equal')

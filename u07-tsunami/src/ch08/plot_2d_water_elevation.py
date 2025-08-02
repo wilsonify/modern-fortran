@@ -25,7 +25,7 @@ for i in range(0, 1000, 1):
     @gif.frame
     def plotter():
         fig = plt.figure(figsize=(8, 7))
-        ax = fig.add_subplot(111, aspect='equal')
+        fig.add_subplot(111, aspect='equal')
         cnt = plt.contourf(x, x, field, ticks, cmap=cm.Spectral)
         for c in cnt.collections:
             c.set_edgecolor('face')

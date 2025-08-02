@@ -1,9 +1,9 @@
 FROM ubuntu:18.04
 ENV USERNAME=backus
-RUN apt-get -yq update && apt-get -yq install sudo 
+RUN apt-get -yq update && apt-get -yq install sudo && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 RUN echo "backus ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN useradd --no-log-init --home-dir /home/$USERNAME --create-home --shell /bin/bash $USERNAME
-RUN adduser $USERNAME sudo
+RUN useradd --no-log-init --home-dir "/home/$USERNAME" --create-home --shell /bin/bash "$USERNAME"
+RUN adduser "$USERNAME" sudo
 USER $USERNAME
 WORKDIR /home/$USERNAME
 RUN sudo apt-get install -yq git curl && \

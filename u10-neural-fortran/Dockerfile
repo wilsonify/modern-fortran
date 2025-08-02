@@ -1,11 +1,9 @@
 
-FROM neural-fortran-builder:latest as builder
+FROM neural-fortran-builder:latest AS builder
 COPY . /usr/src/app
 RUN mkdir -p /usr/src/app/build
 WORKDIR /usr/src/app/build
-RUN cmake .. -DSERIAL=1 -G Ninja
-RUN ninja
-RUN ctest --output-on-failure
+RUN cmake .. -DSERIAL=1 -G Ninja && ninja && ctest --output-on-failure
 
 #FROM neural-fortran-base:latest
 #COPY --from=builder /usr/src/app/build/bin /app/bin
