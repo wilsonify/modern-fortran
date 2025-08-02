@@ -1,9 +1,14 @@
 module elogit_control_mod
     implicit none
-
+    use dynamic_allocation_mod
     integer, parameter :: our_int = selected_int_kind(9)
     integer, parameter :: file_name_length = 256
+    integer, parameter :: var_name_length = 32
+    integer, parameter :: ctrl_line_width = 32
+    integer :: posn = 0
     integer, parameter :: RETURN_SUCCESS = 0
+    integer, parameter :: RETURN_FAIL = -1
+    character(len = *), parameter :: modname = "elogit_control_mod"
 
     type :: error_type
         ! Placeholder — define fields as needed
@@ -32,6 +37,26 @@ module elogit_control_mod
     !##################################################################
 
 contains
+    integer function skip_comment_lines(unit, line_no) result(status)
+        integer, intent(in) :: unit
+        integer, intent(inout) :: line_no
+        character(len = 256) :: line
+        integer :: ios
+
+        do
+            read(unit, '(A)', iostat = ios) line
+            if (ios /= 0) then
+                status = -1  ! or RETURN_FAIL
+                return
+            end if
+            line_no = line_no + 1
+            if (len_trim(line) == 0) cycle  ! skip blank lines
+            if (line(1:1) /= '#') exit      ! found a non-comment line
+        end do
+
+        status = 0  ! RETURN_SUCCESS
+    end function skip_comment_lines
+
 
     integer(our_int) function nullify_elogit_ctrlfile(ctrlfile, err) result(answer)
         implicit none
@@ -56,6 +81,7 @@ contains
         ! returned value is RETURN_FAIL.
         implicit none
         ! declare arguments
+        integer :: ctrl_file_handle, i
         character(len = *), intent(in) :: control_file_name
         type(elogit_ctrlfile_type), intent(out) :: ctrlfile
         type(error_type), intent(inout) :: err
