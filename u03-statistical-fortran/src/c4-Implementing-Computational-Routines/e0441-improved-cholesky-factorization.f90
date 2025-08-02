@@ -1,6 +1,6 @@
 integer(kind = our_int) function cholesky_saxpy(a, err) result(answer)
-    Overwrites lower triangle of a symmetric, pos.-def.
-    matrix a with its Cholesky factor.
+    !Overwrites lower triangle of a symmetric, pos.-def.
+    !matrix a with its Cholesky factor.
     implicit none
     ! declare arguments
     real(kind = our_dble), intent(inout) :: a(:, :)

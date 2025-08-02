@@ -49,7 +49,7 @@ get(h)
 Intel Fortran’s COM tools do not natively support COM **properties**. You must implement them manually using
 getter/setter methods with matching `dispid` values:
 
-```fortran
+```
 subroutine get_myproperty
     (...)
     subroutine put_myproperty(...)
@@ -92,7 +92,7 @@ Avoid naming conflicts when using interface blocks:
 
 Do **not** use an explicit interface block:
 
-```fortran
+```
 module my_mod
 contains
     subroutine S_pol_single_prec
@@ -105,7 +105,7 @@ end module
 
 Use an interface block:
 
-```fortran
+```
 interface
     subroutine S_pol_single_prec
         (...)
@@ -117,7 +117,7 @@ end interface
 
 Use a `use` statement:
 
-```fortran
+```
 use S_pol_gubbins
 ```
 
