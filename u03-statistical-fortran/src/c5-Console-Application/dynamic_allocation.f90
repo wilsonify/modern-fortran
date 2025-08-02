@@ -2,7 +2,7 @@ module dynamic_allocation_mod
     implicit none
 
     integer, parameter :: RETURN_SUCCESS = 0
-    integer, parameter :: RETURN_FAIL    = -1
+    integer, parameter :: RETURN_FAIL = -1
 
     interface dyn_alloc
         module procedure dyn_alloc_int
@@ -24,34 +24,43 @@ module dynamic_allocation_mod
 
 contains
 
-    !====================================================================
-    ! Integer
+    !----------------------------------------
+    ! Allocate integer pointer array
     integer function dyn_alloc_int(ptr, n) result(status)
         integer, pointer :: ptr(:)
         integer, intent(in) :: n
         integer :: stat
+
         status = RETURN_SUCCESS
         if (associated(ptr)) deallocate(ptr)
-        allocate(ptr(n), stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+        end if
     end function dyn_alloc_int
 
+    ! Deallocate integer pointer array
     subroutine dyn_dealloc_int(ptr)
         integer, pointer :: ptr(:)
         if (associated(ptr)) deallocate(ptr)
         nullify(ptr)
     end subroutine dyn_dealloc_int
 
-    !====================================================================
-    ! Real
+    !----------------------------------------
+    ! Allocate real pointer array
     integer function dyn_alloc_real(ptr, n) result(status)
         real, pointer :: ptr(:)
         integer, intent(in) :: n
         integer :: stat
+
         status = RETURN_SUCCESS
         if (associated(ptr)) deallocate(ptr)
-        allocate(ptr(n), stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+        end if
     end function dyn_alloc_real
 
     subroutine dyn_dealloc_real(ptr)
@@ -60,16 +69,20 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_real
 
-    !====================================================================
-    ! Double
+    !----------------------------------------
+    ! Allocate double precision pointer array
     integer function dyn_alloc_double(ptr, n) result(status)
         double precision, pointer :: ptr(:)
         integer, intent(in) :: n
         integer :: stat
+
         status = RETURN_SUCCESS
         if (associated(ptr)) deallocate(ptr)
-        allocate(ptr(n), stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+        end if
     end function dyn_alloc_double
 
     subroutine dyn_dealloc_double(ptr)
@@ -78,16 +91,20 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_double
 
-    !====================================================================
-    ! Logical
+    !----------------------------------------
+    ! Allocate logical pointer array
     integer function dyn_alloc_logical(ptr, n) result(status)
         logical, pointer :: ptr(:)
         integer, intent(in) :: n
         integer :: stat
+
         status = RETURN_SUCCESS
         if (associated(ptr)) deallocate(ptr)
-        allocate(ptr(n), stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+        end if
     end function dyn_alloc_logical
 
     subroutine dyn_dealloc_logical(ptr)
@@ -96,40 +113,46 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_logical
 
-    !====================================================================
-    ! Character (allocatable deferred-length)
+    !----------------------------------------
+    ! Allocate allocatable character array with deferred length
     integer function dyn_alloc_char(ptr, n, lenval) result(status)
-        character(len=:), allocatable :: ptr(:)
+        character(len = :), allocatable :: ptr(:)
         integer, intent(in) :: n, lenval
         integer :: stat
-        character(len=lenval) :: mold_var
+        character(len = lenval) :: mold_var
 
         status = RETURN_SUCCESS
         if (allocated(ptr)) deallocate(ptr)
-        allocate(ptr(n), mold=mold_var, stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), mold = mold_var, stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            if (allocated(ptr)) deallocate(ptr)
+        end if
     end function dyn_alloc_char
 
     subroutine dyn_dealloc_char(ptr)
-        character(len=:), allocatable :: ptr(:)
+        character(len = :), allocatable :: ptr(:)
         if (allocated(ptr)) deallocate(ptr)
     end subroutine dyn_dealloc_char
 
-    !====================================================================
-    ! Character (fixed-length pointer, len=32)
+    !----------------------------------------
+    ! Allocate fixed-length (len=32) character pointer array
     integer function dyn_alloc_char_fixed32(ptr, n) result(status)
-        character(len=32), pointer :: ptr(:)
+        character(len = 32), pointer :: ptr(:)
         integer, intent(in) :: n
         integer :: stat
 
         status = RETURN_SUCCESS
         if (associated(ptr)) deallocate(ptr)
-        allocate(ptr(n), stat=stat)
-        if (stat /= 0) status = RETURN_FAIL
+        allocate(ptr(n), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+        end if
     end function dyn_alloc_char_fixed32
 
     subroutine dyn_dealloc_char_fixed32(ptr)
-        character(len=32), pointer :: ptr(:)
+        character(len = 32), pointer :: ptr(:)
         if (associated(ptr)) deallocate(ptr)
         nullify(ptr)
     end subroutine dyn_dealloc_char_fixed32
