@@ -28,6 +28,15 @@ module elogit_control_mod
 
 contains
 
+    ! Minimal stub for error handler - replace with real implementation
+    subroutine err_handle(err, err_code, called_from, file_name, line_no, custom_1)
+        type(error_type), intent(inout) :: err
+        integer, intent(in), optional :: err_code, line_no
+        character(len=*), intent(in), optional :: called_from, file_name, custom_1
+        ! This is a placeholder to silence calls
+        err%dummy = 1
+    end subroutine err_handle
+
     ! Skip blank and comment lines (starting with '#').
     integer function skip_comment_lines(unit, line_no) result(status)
         integer, intent(in) :: unit
@@ -61,18 +70,10 @@ contains
         ctrlfile%names_file_name = ""
 
         ! Deallocate pointers safely if allocated
-        if (associated(ctrlfile%resp_col)) then
-            call dyn_dealloc_int(ctrlfile%resp_col)
-        end if
-        if (associated(ctrlfile%resp_name)) then
-            call dyn_dealloc_char_fixed32(ctrlfile%resp_name)
-        end if
-        if (associated(ctrlfile%pred_col)) then
-            call dyn_dealloc_int(ctrlfile%pred_col)
-        end if
-        if (associated(ctrlfile%pred_names)) then
-            call dyn_dealloc_char_fixed32(ctrlfile%pred_names)
-        end if
+        if (associated(ctrlfile%resp_col)) call dyn_dealloc_int(ctrlfile%resp_col)
+        if (associated(ctrlfile%resp_name)) call dyn_dealloc_char_fixed32(ctrlfile%resp_name)
+        if (associated(ctrlfile%pred_col)) call dyn_dealloc_int(ctrlfile%pred_col)
+        if (associated(ctrlfile%pred_names)) call dyn_dealloc_char_fixed32(ctrlfile%pred_names)
 
         answer = RETURN_SUCCESS
     end function nullify_elogit_ctrlfile
@@ -83,13 +84,14 @@ contains
         type(elogit_ctrlfile_type), intent(out) :: ctrlfile
         type(error_type), intent(inout) :: err
 
-        integer :: ios, unit, current_line, i
+        integer :: ios, unit, current_line, i, posn, alloc_status
         character(len=ctrl_line_width) :: line
-        integer :: alloc_status
-        logical :: file_opened
+        logical :: file_opened, read_failed
 
         answer = RETURN_FAIL
         file_opened = .false.
+        read_failed = .false.
+        current_line = 0
 
         ! Check filename presence
         if (trim(control_file_name) == "") then
@@ -105,154 +107,156 @@ contains
             return
         end if
         file_opened = .true.
-        current_line = 0
 
-        ! Begin reading control file within block for cleanup on error
-        block
-            ! Skip comments and blank lines
-            if (skip_comment_lines(unit, current_line) /= RETURN_SUCCESS) then
-                call err_handle(err, 3, called_from="read_elogit_ctrlfile in MOD "//modname, &
-                    file_name=control_file_name, line_no=current_line)
-                exit
-            end if
+        ! Begin reading control file
+        if (skip_comment_lines(unit, current_line) /= RETURN_SUCCESS) then
+            call err_handle(err, 3, called_from="read_elogit_ctrlfile in MOD "//modname, &
+                file_name=control_file_name, line_no=current_line)
+            read_failed = .true.
+            goto 999
+        end if
 
-            ! Read ncase, nvar, case_id_present
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-            read(line, *, iostat=ios) ctrlfile%ncase, ctrlfile%nvar, ctrlfile%case_id_present
-            if (ios /= 0) exit
+        ! Read ncase, nvar, case_id_present
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) line
+        if (ios /= 0) then ;            read_failed = .true.;            goto 999;            end if
+        read(line, *, iostat=ios) ctrlfile%ncase, ctrlfile%nvar, ctrlfile%case_id_present
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
 
-            ! Read data file name (left-justified)
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) ctrlfile%data_file_name
-            if (ios /= 0) exit
-            ctrlfile%data_file_name = adjustl(ctrlfile%data_file_name)
+        ! Read data file name (left-justified)
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) ctrlfile%data_file_name
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        ctrlfile%data_file_name = adjustl(ctrlfile%data_file_name)
 
-            ! Read names file name and set flag
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) ctrlfile%names_file_name
-            if (ios /= 0) exit
-            if (trim(ctrlfile%names_file_name) == "") then
-                ctrlfile%names_file_present = .false.
+        ! Read names file name and set flag
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) ctrlfile%names_file_name
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        if (trim(ctrlfile%names_file_name) == "") then
+            ctrlfile%names_file_present = .false.
+        else
+            ctrlfile%names_file_present = .true.
+            ctrlfile%names_file_name = adjustl(ctrlfile%names_file_name)
+        end if
+
+        ! Skip comments before model specification
+        if (skip_comment_lines(unit, current_line) /= RETURN_SUCCESS) then
+            call err_handle(err, 3, called_from="read_elogit_ctrlfile in MOD "//modname, &
+                file_name=control_file_name, line_no=current_line)
+            read_failed = .true.
+            goto 999
+        end if
+
+        ! Read by_name and grouped flags
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) line
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        read(line, *, iostat=ios) ctrlfile%by_name, ctrlfile%grouped
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+
+        ! Read response variable(s)
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) line
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+
+        if (ctrlfile%by_name) then
+            if (ctrlfile%grouped) then
+                alloc_status = dyn_alloc_char_fixed32(ctrlfile%resp_name, 2)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
             else
-                ctrlfile%names_file_present = .true.
-                ctrlfile%names_file_name = adjustl(ctrlfile%names_file_name)
+                alloc_status = dyn_alloc_char_fixed32(ctrlfile%resp_name, 1)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
             end if
 
-            ! Skip comments again before model specification section
-            if (skip_comment_lines(unit, current_line) /= RETURN_SUCCESS) then
-                call err_handle(err, 3, called_from="read_elogit_ctrlfile in MOD "//modname, &
-                    file_name=control_file_name, line_no=current_line)
-                exit
-            end if
+            if (trim(line) == "") then; read_failed = .true.; goto 999; end if
 
-            ! Read by_name and grouped flags
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-            read(line, *, iostat=ios) ctrlfile%by_name, ctrlfile%grouped
-            if (ios /= 0) exit
-
-            ! Read response variable(s)
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-
-            if (ctrlfile%by_name) then
+            line = adjustl(line)
+            posn = index(line, " ")
+            if (posn == 0) then
+                ctrlfile%resp_name(1) = trim(line)
                 if (ctrlfile%grouped) then
-                    alloc_status = dyn_alloc_char_fixed32(ctrlfile%resp_name, 2)
-                    if (alloc_status /= RETURN_SUCCESS) exit
-                else
-                    alloc_status = dyn_alloc_char_fixed32(ctrlfile%resp_name, 1)
-                    if (alloc_status /= RETURN_SUCCESS) exit
+                    read_failed = .true.
+                    goto 999
                 end if
-
-                if (trim(line) == "") exit
-
-                line = adjustl(line)
-                posn = index(line, " ")
-                if (posn == 0) then
-                    ctrlfile%resp_name(1) = trim(line)
-                    if (ctrlfile%grouped) exit
-                else
-                    ctrlfile%resp_name(1) = trim(line(:posn-1))
-                    line = adjustl(line(posn+1:))
-                    if (ctrlfile%grouped) then
-                        posn = index(line, " ")
-                        if (posn == 0) then
-                            ctrlfile%resp_name(2) = trim(line)
-                        else
-                            ctrlfile%resp_name(2) = trim(line(:posn-1))
-                        end if
+            else
+                ctrlfile%resp_name(1) = trim(line(:posn-1))
+                line = adjustl(line(posn+1:))
+                if (ctrlfile%grouped) then
+                    posn = index(line, " ")
+                    if (posn == 0) then
+                        ctrlfile%resp_name(2) = trim(line)
+                    else
+                        ctrlfile%resp_name(2) = trim(line(:posn-1))
                     end if
                 end if
+            end if
 
+        else
+            if (ctrlfile%grouped) then
+                alloc_status = dyn_alloc_int(ctrlfile%resp_col, 2)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
+                read(line, *, iostat=ios) ctrlfile%resp_col(1), ctrlfile%resp_col(2)
             else
-                if (ctrlfile%grouped) then
-                    alloc_status = dyn_alloc_int(ctrlfile%resp_col, 2)
-                    if (alloc_status /= RETURN_SUCCESS) exit
-                    read(line, *, iostat=ios) ctrlfile%resp_col(1), ctrlfile%resp_col(2)
-                else
-                    alloc_status = dyn_alloc_int(ctrlfile%resp_col, 1)
-                    if (alloc_status /= RETURN_SUCCESS) exit
-                    read(line, *, iostat=ios) ctrlfile%resp_col(1)
-                end if
-                if (ios /= 0) exit
+                alloc_status = dyn_alloc_int(ctrlfile%resp_col, 1)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
+                read(line, *, iostat=ios) ctrlfile%resp_col(1)
             end if
+            if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        end if
 
-            ! Read intercept_present
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-            read(line, *, iostat=ios) ctrlfile%intercept_present
-            if (ios /= 0) exit
+        ! Read intercept_present
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) line
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        read(line, *, iostat=ios) ctrlfile%intercept_present
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
 
-            ! Read npred
-            current_line = current_line + 1
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-            read(line, *, iostat=ios) ctrlfile%npred
-            if (ios /= 0) exit
+        ! Read npred
+        current_line = current_line + 1
+        read(unit, '(A)', iostat=ios) line
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
+        read(line, *, iostat=ios) ctrlfile%npred
+        if (ios /= 0) then; read_failed = .true.; goto 999; end if
 
-            ! Read predictor variables if any
-            if (ctrlfile%npred > 0) then
-                if (ctrlfile%by_name) then
-                    alloc_status = dyn_alloc_char_fixed32(ctrlfile%pred_names, ctrlfile%npred)
-                    if (alloc_status /= RETURN_SUCCESS) exit
-                    do i = 1, ctrlfile%npred
-                        current_line = current_line + 1
-                        read(unit, '(A)', iostat=ios) line
-                        if (ios /= 0) exit
-                        if (trim(line) == "") exit
-                        line = adjustl(line)
-                        if (line(1:1) == "*") exit
-                        posn = index(line, " ")
-                        if (posn == 0) then
-                            ctrlfile%pred_names(i) = trim(line)
-                        else
-                            ctrlfile%pred_names(i) = trim(line(:posn-1))
-                        end if
-                    end do
-                else
-                    alloc_status = dyn_alloc_int(ctrlfile%pred_col, ctrlfile%npred)
-                    if (alloc_status /= RETURN_SUCCESS) exit
-                    do i = 1, ctrlfile%npred
-                        current_line = current_line + 1
-                        read(unit, '(A)', iostat=ios) line
-                        if (ios /= 0) exit
-                        read(line, *, iostat=ios) ctrlfile%pred_col(i)
-                        if (ios /= 0) exit
-                    end do
-                end if
+        ! Read predictor variables if any
+        if (ctrlfile%npred > 0) then
+            if (ctrlfile%by_name) then
+                alloc_status = dyn_alloc_char_fixed32(ctrlfile%pred_names, ctrlfile%npred)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
+                do i = 1, ctrlfile%npred
+                    current_line = current_line + 1
+                    read(unit, '(A)', iostat=ios) line
+                    if (ios /= 0) then; read_failed = .true.; goto 999; end if
+                    if (trim(line) == "") then; read_failed = .true.; goto 999; end if
+                    line = adjustl(line)
+                    if (line(1:1) == "*") then; read_failed = .true.; goto 999; end if
+                    posn = index(line, " ")
+                    if (posn == 0) then
+                        ctrlfile%pred_names(i) = trim(line)
+                    else
+                        ctrlfile%pred_names(i) = trim(line(:posn-1))
+                    end if
+                end do
+            else
+                alloc_status = dyn_alloc_int(ctrlfile%pred_col, ctrlfile%npred)
+                if (alloc_status /= RETURN_SUCCESS) then; read_failed = .true.; goto 999; end if
+                do i = 1, ctrlfile%npred
+                    current_line = current_line + 1
+                    read(unit, '(A)', iostat=ios) line
+                    if (ios /= 0) then; read_failed = .true.; goto 999; end if
+                    read(line, *, iostat=ios) ctrlfile%pred_col(i)
+                    if (ios /= 0) then; read_failed = .true.; goto 999; end if
+                end do
             end if
+        end if
 
-            ! Success: set return code
-            answer = RETURN_SUCCESS
-        end block
+        ! Success: set return code
+        answer = RETURN_SUCCESS
 
+999     continue
         if (file_opened) close(unit)
-        if (answer /= RETURN_SUCCESS) then
+        if (read_failed) then
             call nullify_elogit_ctrlfile(ctrlfile, err)
             call err_handle(err, 3, called_from="read_elogit_ctrlfile in MOD "//modname, &
                 file_name=control_file_name, line_no=current_line)
