@@ -1,13 +1,11 @@
 module elogit_control_mod
-    implicit none
     use dynamic_allocation_mod
+    implicit none
     integer, parameter :: our_int = selected_int_kind(9)
     integer, parameter :: file_name_length = 256
     integer, parameter :: var_name_length = 32
     integer, parameter :: ctrl_line_width = 32
     integer :: posn = 0
-    integer, parameter :: RETURN_SUCCESS = 0
-    integer, parameter :: RETURN_FAIL = -1
     character(len = *), parameter :: modname = "elogit_control_mod"
 
     type :: error_type
