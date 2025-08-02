@@ -1,4 +1,3 @@
-
 module error_handler
     ! Generic error message handler for both console and non-console
     ! applications. The routines in this module do not halt program
@@ -80,7 +79,6 @@ contains
             err%tail%line = text_line
         end if
     end subroutine insert_msg_line
-
 
 
     subroutine err_handle(err, err_code, called_from, file_name, &

@@ -1,4 +1,3 @@
-
 integer(our_int) function put_elogit_response_bycol(col, session, &
         err) result(answer)
     ! Declares which column in the dataset contains the response or

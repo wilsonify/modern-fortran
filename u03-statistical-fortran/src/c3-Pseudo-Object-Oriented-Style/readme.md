@@ -1,4 +1,5 @@
 # 3 A Pseudo Object-Oriented Style
+
 3.1 Basic Concepts of Object-Oriented Programming
 3.1.1 Objects and Classes
 3.1.2 Properties

@@ -22,13 +22,13 @@ contains
 
     subroutine put_elogit_response_bycol(model, y_col, n_col)
         type(model_type), intent(inout) :: model
-        integer(kind=our_int), intent(in) :: y_col, n_col
+        integer(kind = our_int), intent(in) :: y_col, n_col
         ! Implementation here...
     end subroutine put_elogit_response_bycol
 
     subroutine put_elogit_response_byname(model, y_name, n_name)
         type(model_type), intent(inout) :: model
-        character(len=*), intent(in) :: y_name, n_name
+        character(len = *), intent(in) :: y_name, n_name
         ! Implementation here...
     end subroutine put_elogit_response_byname
 

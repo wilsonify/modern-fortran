@@ -1,4 +1,5 @@
 # 4 Implementing Computational Routines
+
 4.1 Issues of Numerical Accuracy
 4.1.1 Accuracy Is Crucial
 4.1.2 Floating-Point Approximation

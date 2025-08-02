@@ -1,4 +1,3 @@
-
 subroutine fill_with_uniforms(vec_len, vec, lower, upper)
     ! Fills the rank-one array vec with random numbers uniformly
     ! distributed from lower to upper

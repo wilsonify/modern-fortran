@@ -1,5 +1,3 @@
-
-
 integer(kind = our_int) function run_em_exponential(y, &
         pi, lambda_1, lambda_2, iter, converged, loglik, &
         score, hessian, err, maxits, eps) result(answer)

@@ -1,4 +1,3 @@
-
 module program_constants
     ! Programming constants used throughout the ELOGIT program.
     ! Unlike most modules, everything here is public.

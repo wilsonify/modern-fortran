@@ -1,4 +1,3 @@
-
 module em_exponential_engine
 
     use error_handler
@@ -39,7 +38,7 @@ module em_exponential_engine
         subroutine cholesky_saxpy(a, n, info)
             import :: our_dble
             import
-            real(our_dble), intent(inout) :: a(n,n)
+            real(our_dble), intent(inout) :: a(n, n)
             integer, intent(in) :: n
             integer, intent(out) :: info
         end subroutine cholesky_saxpy
@@ -47,7 +46,7 @@ module em_exponential_engine
         subroutine invert_lower(l, n, info)
             import :: our_dble
             import
-            real(our_dble), intent(inout) :: l(n,n)
+            real(our_dble), intent(inout) :: l(n, n)
             integer, intent(in) :: n
             integer, intent(out) :: info
         end subroutine invert_lower
@@ -55,7 +54,7 @@ module em_exponential_engine
         subroutine premult_lower_by_transpose(l, b, n)
             import :: our_dble
             import
-            real(our_dble), intent(in) :: l(n,n)
+            real(our_dble), intent(in) :: l(n, n)
             real(our_dble), intent(inout) :: b(n)
             integer, intent(in) :: n
         end subroutine premult_lower_by_transpose

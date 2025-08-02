@@ -1,4 +1,3 @@
-
 module my_mod
     ! A simple module that contains one subroutine
 contains
@@ -24,7 +23,6 @@ contains
     end subroutine fill_with_uniforms
 
 end module my_mod
-
 
 
 program uniform4

@@ -1,4 +1,5 @@
 # 5 Developing a Console Application
+
 5.1 A Program for Logistic Regression
 5.1.1 The logistic regression model
 5.1.2 Motivation for the ELOGIT Console Program

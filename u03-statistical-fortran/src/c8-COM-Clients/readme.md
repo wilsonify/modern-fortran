@@ -1,4 +1,5 @@
 # 8 Creating COM Clients
+
 8.1 An Improved Client for Excel
 8.1.1 Excel As a Graphical User Interface
 8.1.2 Starting to Write the Client

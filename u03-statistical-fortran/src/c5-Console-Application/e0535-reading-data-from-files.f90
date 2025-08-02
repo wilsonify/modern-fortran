@@ -1,4 +1,3 @@
-
 integer(kind = our_int) function read_elogit_datafile(&
         data_file_name, nkase, nvar, case_id_present, session, err, &
         warn) result(answer)

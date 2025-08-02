@@ -1,4 +1,3 @@
-
 module magic8
     implicit none
     private ! by default

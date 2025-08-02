@@ -1,4 +1,3 @@
-
 integer(our_int) function put_elogit_data_matrix(data_matrix, &
         session, err) result(answer)
     ! Loads a data matrix into an ELOGIT session.
@@ -51,7 +50,6 @@ integer(our_int) function put_elogit_data_matrix(data_matrix, &
 end function put_elogit_data_matrix
 
 
-
 subroutine assign_default_var_names(dataset)
     ! assigns default values to dataset%var_names, assuming that
     ! the array has already been allocated
@@ -69,7 +67,6 @@ subroutine assign_default_var_names(dataset)
 
     end do
 end subroutine assign_default_var_names
-
 
 
 integer(our_int) function put_elogit_var_names(var_names, &
@@ -116,31 +113,30 @@ integer(our_int) function put_elogit_var_names(var_names, &
 end function put_elogit_var_names
 
 
-
 integer(our_int) function get_elogit_var_names(var_names, &
-session, err) result(answer)
-! Gets the var_names currently stored in an ELOGIT session
-implicit none
-! declare arguments
-character(len=var_name_length), pointer :: var_names(:)
-type(elogit_session_type), intent(in) :: session
-type(error_type), intent(inout) :: err
-! declare local variables and parameters
-character(len=*), parameter :: subname = "get_elogit_var_names"
-! begin
-answer = RETURN_FAIL
-if( session%dataset%is_null ) goto 700
-if( dyn_alloc(var_names, session%dataset%nvar, err) &
-== RETURN_FAIL ) goto 800
-var_names = session%dataset%var_names
-! normal exit
-answer = RETURN_SUCCESS
-return
-! error traps
-700 call err_handle(err, 1000, &
-called_from = subname//" in MOD "//modname, &
-custom_1 = "No dataset has been loaded yet.")
-return
-800 call err_handle(err, 1000, &
-called_from = subname//" in MOD "//modname)
+        session, err) result(answer)
+    ! Gets the var_names currently stored in an ELOGIT session
+    implicit none
+    ! declare arguments
+    character(len = var_name_length), pointer :: var_names(:)
+    type(elogit_session_type), intent(in) :: session
+    type(error_type), intent(inout) :: err
+    ! declare local variables and parameters
+    character(len = *), parameter :: subname = "get_elogit_var_names"
+    ! begin
+    answer = RETURN_FAIL
+    if(session%dataset%is_null) goto 700
+    if(dyn_alloc(var_names, session%dataset%nvar, err) &
+            == RETURN_FAIL) goto 800
+    var_names = session%dataset%var_names
+    ! normal exit
+    answer = RETURN_SUCCESS
+    return
+    ! error traps
+    700 call err_handle(err, 1000, &
+            called_from = subname // " in MOD " // modname, &
+            custom_1 = "No dataset has been loaded yet.")
+    return
+    800 call err_handle(err, 1000, &
+            called_from = subname // " in MOD " // modname)
 end function get_elogit_var_names

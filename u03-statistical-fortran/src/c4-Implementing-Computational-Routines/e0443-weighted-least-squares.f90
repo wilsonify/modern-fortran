@@ -1,4 +1,3 @@
-
 integer(kind = our_int) function fit_wls(x, y, w, beta, &
         cov_unscaled, scale, err) result(answer)
     ! Regresses y on x, using weights in w.

@@ -1,4 +1,3 @@
-
 subroutine em_exponential(n, y, maxits, eps, pi, lambda_1, lambda_2, &
         iter, converged, loglik, score, hessian, msg_len, msg)
     !DEC$ ATTRIBUTES DLLEXPORT :: em_exponential

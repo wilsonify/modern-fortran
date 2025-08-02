@@ -1,4 +1,3 @@
-
 integer function add_suffix(file_name, suffix) result(answer)
     ! Returns 0 if operation is successful, 1 otherwise.
     implicit none

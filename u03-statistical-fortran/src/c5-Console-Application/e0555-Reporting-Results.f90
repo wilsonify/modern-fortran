@@ -1,4 +1,3 @@
-
 integer(kind = our_int) function write_elogit_results_to_outfile(&
         output_file_name, session, err) result(answer)
     ! writes a formatted summary of results to the output file
