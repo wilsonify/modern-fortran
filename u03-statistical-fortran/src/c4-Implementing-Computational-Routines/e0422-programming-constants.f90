@@ -9,6 +9,5 @@ module program_constants
             our_dble = selected_real_kind(15, 307)
     ! Common integer values returned by all functions to indicate
     ! success or failure:
-    integer(kind = our_int), parameter :: RETURN_SUCCESS = 0, &
-            RETURN_FAIL = -1
+    integer(kind = our_int), parameter :: RETURN_SUCCESS = 0, RETURN_FAIL = -1
 end module program_constants
