@@ -1,5 +1,9 @@
 integer(our_int) function put_elogit_data_matrix(data_matrix, &
         session, err) result(answer)
+    use program_constants
+    use error_handler
+    use elogit_data_mod
+
     ! Loads a data matrix into an ELOGIT session.
     ! When the data matrix is loaded, var_names and case_id are
     ! initialized to default values. If the loading fails for any

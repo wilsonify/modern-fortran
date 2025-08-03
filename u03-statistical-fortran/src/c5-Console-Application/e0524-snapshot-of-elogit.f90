@@ -5,9 +5,10 @@
 !handled correctly.
 
 program elogit
-use error_handler
+use error_handler, only: error_type, err_handle, err_msg_present, err_get_msgs
+
 use program_constants
-use elogit_ctrlfile
+use elogit_control_mod
 implicit none
 ! declare instances of various types
 type(error_type) :: err

@@ -1,6 +1,7 @@
 module elogit_control_mod
     use iso_fortran_env, only : int32
     use dynamic_allocation_mod
+    use error_handler
     implicit none
 
     private
@@ -36,12 +37,7 @@ module elogit_control_mod
         character(len = var_name_length), pointer :: pred_names(:) => null()
     end type elogit_ctrlfile_type
 
-    type :: error_type
-        ! Define your error tracking structure here
-        ! Placeholder for demo purposes
-        integer :: code
-        character(len = 128) :: message
-    end type error_type
+
 
 contains
 
@@ -138,19 +134,7 @@ contains
         answer = RETURN_FAIL
     end function read_elogit_ctrlfile
 
-    !-------------------------------
-    ! Dummy error handler
-    !-------------------------------
-    subroutine err_handle(err, code, called_from, custom_1, file_name, line_no)
-        type(error_type), intent(inout) :: err
-        integer, intent(in) :: code
-        character(len = *), intent(in) :: called_from
-        character(len = *), optional :: custom_1, file_name
-        integer, optional :: line_no
 
-        err%code = code
-        write(err%message, '(A)') "Error in " // called_from
-    end subroutine err_handle
 
     !-------------------------------
     ! Dummy comment skipper
