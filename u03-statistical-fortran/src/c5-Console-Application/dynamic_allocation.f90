@@ -156,5 +156,37 @@ contains
         if (associated(ptr)) deallocate(ptr)
         nullify(ptr)
     end subroutine dyn_dealloc_char_fixed32
+    !----------------------------------------
+    ! Nullify ELOGIT session
+    integer function nullify_elogit_session(session, err) result(status)
+        use iso_fortran_env, only : int32
+        implicit none
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer :: stat
+
+        status = RETURN_SUCCESS
+
+        ! Nullify dataset (or other allocatables/pointers inside session)
+        if (associated(session%case_ids)) then
+            deallocate(session%case_ids, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+            nullify(session%case_ids)
+        end if
+
+        if (allocated(session%var_names)) then
+            deallocate(session%var_names, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+        end if
+
+        if (associated(session%data)) then
+            deallocate(session%data, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+            nullify(session%data)
+        end if
+
+        ! Future-proofing: Reset other session fields if added
+        session%is_null = .true.
+    end function nullify_elogit_session
 
 end module dynamic_allocation_mod

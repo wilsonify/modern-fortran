@@ -3,6 +3,8 @@ module elogit_data_mod
     private
     public :: dataset_type, elogit_session_type
     public :: assign_default_var_names
+    public :: var_name_length
+    public :: elogit_session_type
 
     integer, parameter :: our_int = selected_int_kind(9)
     integer, parameter :: our_dble = selected_real_kind(15, 307)
