@@ -1,15 +1,16 @@
 module elogit_control_mod
     use iso_fortran_env, only : int32
+    use program_constants
     use dynamic_allocation_mod
     use error_handler
     implicit none
 
     private
     public :: elogit_ctrlfile_type, nullify_elogit_ctrlfile, read_elogit_ctrlfile
-    public :: our_int, file_name_length, var_name_length, ctrl_line_width
+    public :: file_name_length, var_name_length, ctrl_line_width
 
     ! Configuration parameters
-    integer, parameter :: our_int = selected_int_kind(9)
+
     integer, parameter :: file_name_length = 256
     integer, parameter :: var_name_length = 32
     integer, parameter :: ctrl_line_width = 256

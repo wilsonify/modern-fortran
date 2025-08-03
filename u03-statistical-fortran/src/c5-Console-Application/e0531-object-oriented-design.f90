@@ -1,13 +1,15 @@
 module elogit_data_mod
+    use program_constants
+    use error_handler
     implicit none
+
     private
     public :: dataset_type, elogit_session_type
     public :: assign_default_var_names
     public :: var_name_length
-    public :: elogit_session_type
 
-    integer, parameter :: our_int = selected_int_kind(9)
-    integer, parameter :: our_dble = selected_real_kind(15, 307)
+
+
     integer, parameter :: var_name_length = 64
     integer, parameter :: case_id_length = 64
 
@@ -39,5 +41,42 @@ contains
             dataset%var_names(var) = "VAR_" // trim(sInt)
         end do
     end subroutine assign_default_var_names
+
+    integer function nullify_elogit_session(session, err) result(status)
+        implicit none
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer :: stat
+
+        status = RETURN_SUCCESS
+
+        ! Nullify dataset components
+        if (associated(session%dataset%case_id)) then
+            deallocate(session%dataset%case_id, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+            nullify(session%dataset%case_id)
+        end if
+
+        if (associated(session%dataset%var_names)) then
+            deallocate(session%dataset%var_names, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+            nullify(session%dataset%var_names)
+        end if
+
+        if (associated(session%dataset%data_matrix)) then
+            deallocate(session%dataset%data_matrix, stat = stat)
+            if (stat /= 0) status = RETURN_FAIL
+            nullify(session%dataset%data_matrix)
+        end if
+
+        ! Reset the dataset's logical flag and counts
+        session%dataset%is_null = .true.
+        session%dataset%ncase = 0
+        session%dataset%nvar = 0
+
+        ! Reset session's null flag
+        session%is_null = .true.
+
+    end function nullify_elogit_session
 
 end module elogit_data_mod
