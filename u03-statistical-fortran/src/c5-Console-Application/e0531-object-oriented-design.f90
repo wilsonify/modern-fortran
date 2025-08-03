@@ -8,8 +8,6 @@ module elogit_data_mod
     public :: assign_default_var_names
     public :: var_name_length
 
-
-
     integer, parameter :: var_name_length = 64
     integer, parameter :: case_id_length = 64
 
@@ -27,6 +25,13 @@ module elogit_data_mod
         logical :: is_null = .true.
         type(dataset_type) :: dataset
     end type elogit_session_type
+
+    interface
+        integer function nullify_elogit_session(session, err) result(status)
+            type(elogit_session_type), intent(inout) :: session
+            type(error_type), intent(inout) :: err
+        end function nullify_elogit_session
+    end interface
 
 contains
 
@@ -46,37 +51,52 @@ contains
         implicit none
         type(elogit_session_type), intent(inout) :: session
         type(error_type), intent(inout) :: err
-        integer :: stat
 
+        integer :: stat
         status = RETURN_SUCCESS
 
-        ! Nullify dataset components
+        ! Deallocate and nullify case_id
         if (associated(session%dataset%case_id)) then
             deallocate(session%dataset%case_id, stat = stat)
-            if (stat /= 0) status = RETURN_FAIL
+            if (stat /= 0) then
+                status = RETURN_FAIL
+                call err_handle(err, 201, custom_1 = "Failed to deallocate case_id array", &
+                        called_from = "nullify_elogit_session in elogit_data_mod")
+            end if
             nullify(session%dataset%case_id)
         end if
 
+        ! Deallocate and nullify var_names
         if (associated(session%dataset%var_names)) then
             deallocate(session%dataset%var_names, stat = stat)
-            if (stat /= 0) status = RETURN_FAIL
+            if (stat /= 0) then
+                status = RETURN_FAIL
+                call err_handle(err, 201, custom_1 = "Failed to deallocate var_names array", &
+                        called_from = "nullify_elogit_session in elogit_data_mod")
+            end if
             nullify(session%dataset%var_names)
         end if
 
+        ! Deallocate and nullify data_matrix
         if (associated(session%dataset%data_matrix)) then
             deallocate(session%dataset%data_matrix, stat = stat)
-            if (stat /= 0) status = RETURN_FAIL
+            if (stat /= 0) then
+                status = RETURN_FAIL
+                call err_handle(err, 201, custom_1 = "Failed to deallocate data_matrix", &
+                        called_from = "nullify_elogit_session in elogit_data_mod")
+            end if
             nullify(session%dataset%data_matrix)
         end if
 
-        ! Reset the dataset's logical flag and counts
+        ! Reset dataset flags and counters
         session%dataset%is_null = .true.
         session%dataset%ncase = 0
         session%dataset%nvar = 0
 
-        ! Reset session's null flag
+        ! Reset session flag
         session%is_null = .true.
 
     end function nullify_elogit_session
+
 
 end module elogit_data_mod

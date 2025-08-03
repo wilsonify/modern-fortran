@@ -1,14 +1,14 @@
 function put_elogit_data_matrix(data_matrix, session, err) result(answer)
     use program_constants
     use error_handler
-    use elogit_data_mod
     use dynamic_allocation_mod
+    use elogit_data_mod
+
     implicit none
     integer(our_int) :: answer
     real(kind = our_dble), pointer :: data_matrix(:, :)
     type(elogit_session_type), intent(inout) :: session
     type(error_type), intent(inout) :: err
-
 
     integer(kind = our_int) :: ijunk
     character(len = *), parameter :: subname = "put_elogit_data_matrix"
@@ -32,10 +32,10 @@ function put_elogit_data_matrix(data_matrix, session, err) result(answer)
     answer = RETURN_SUCCESS
     return
 
-700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", custom_1 = "Input array is null.")
+    700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", custom_1 = "Input array is null.")
     ijunk = nullify_elogit_session(session, err)
     return
-800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod")
+    800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod")
     ijunk = nullify_elogit_session(session, err)
 end function put_elogit_data_matrix
 
@@ -64,14 +64,14 @@ function put_elogit_var_names(var_names, session, err) result(answer)
     answer = RETURN_SUCCESS
     return
 
-700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
-    custom_1 = "You cannot load var_name strings", custom_2 = "until a data matrix has been loaded.")
+    700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
+            custom_1 = "You cannot load var_name strings", custom_2 = "until a data matrix has been loaded.")
     return
-800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
-    custom_1 = "Input array is null.")
+    800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
+            custom_1 = "Input array is null.")
     return
-810 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
-    custom_1 = "Size of input array does not conform", custom_2 = "to the current dataset.")
+    810 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
+            custom_1 = "Size of input array does not conform", custom_2 = "to the current dataset.")
 end function put_elogit_var_names
 
 
@@ -95,8 +95,8 @@ function get_elogit_var_names(var_names, session, err) result(answer)
     answer = RETURN_SUCCESS
     return
 
-700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
-    custom_1 = "No dataset has been loaded yet.")
+    700 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod", &
+            custom_1 = "No dataset has been loaded yet.")
     return
-800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod")
+    800 call err_handle(err, 1000, called_from = subname // " in MOD elogit_data_mod")
 end function get_elogit_var_names
