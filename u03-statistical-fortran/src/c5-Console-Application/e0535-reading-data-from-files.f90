@@ -1,6 +1,9 @@
 integer(kind = our_int) function read_elogit_datafile(&
         data_file_name, nkase, nvar, case_id_present, session, err, &
         warn) result(answer)
+    use program_constants
+    use error_handler
+    use elogit_data_mod
     ! Reads a data matrix from a data file and stores it in an
     ! ELOGIT session. If the operation fails for any reason, the
     ! session is nullified and the returned value is RETURN_FAIL.
