@@ -1,7 +1,6 @@
 module elogit_control_mod
     use iso_fortran_env, only : int32
     use program_constants
-    use dynamic_allocation_mod
     use error_handler
     implicit none
 
