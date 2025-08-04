@@ -4,9 +4,11 @@ module elogit_data_mod
     implicit none
 
     private
-    public :: dataset_type, elogit_session_type
+    public :: dataset_type
+    public :: elogit_session_type
     public :: assign_default_var_names
     public :: var_name_length
+    public :: nullify_elogit_session
 
     integer, parameter :: var_name_length = 64
     integer, parameter :: case_id_length = 64
@@ -26,12 +28,6 @@ module elogit_data_mod
         type(dataset_type) :: dataset
     end type elogit_session_type
 
-    interface
-        integer function nullify_elogit_session(session, err) result(status)
-            type(elogit_session_type), intent(inout) :: session
-            type(error_type), intent(inout) :: err
-        end function nullify_elogit_session
-    end interface
 
 contains
 

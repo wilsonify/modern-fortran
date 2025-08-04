@@ -1,21 +1,23 @@
 module dynamic_allocation_mod
     use program_constants
+    use error_handler
     implicit none
-
 
     interface dyn_alloc
         module procedure dyn_alloc_int
         module procedure dyn_alloc_real
         module procedure dyn_alloc_double
+        module procedure dyn_alloc_double_2d
         module procedure dyn_alloc_logical
-        module procedure dyn_alloc_char          ! allocatable character(:)
-        module procedure dyn_alloc_char_fixed32  ! pointer character(:), len=32
+        module procedure dyn_alloc_char
+        module procedure dyn_alloc_char_fixed32
     end interface
 
     interface dyn_dealloc
         module procedure dyn_dealloc_int
         module procedure dyn_dealloc_real
         module procedure dyn_dealloc_double
+        module procedure dyn_dealloc_double_2d
         module procedure dyn_dealloc_logical
         module procedure dyn_dealloc_char
         module procedure dyn_dealloc_char_fixed32
@@ -24,10 +26,11 @@ module dynamic_allocation_mod
 contains
 
     !----------------------------------------
-    ! Allocate integer pointer array
-    integer function dyn_alloc_int(ptr, n) result(status)
+    ! Allocate integer pointer array (1D)
+    integer function dyn_alloc_int(ptr, n, err) result(status)
         integer, pointer :: ptr(:)
         integer, intent(in) :: n
+        type(error_type), intent(inout) :: err
         integer :: stat
 
         status = RETURN_SUCCESS
@@ -36,21 +39,25 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             nullify(ptr)
+            call err_handle(err, 1001, custom_1 = "Allocation failed for integer pointer array", &
+                    called_from = "dyn_alloc_int in dynamic_allocation_mod")
         end if
     end function dyn_alloc_int
 
-    ! Deallocate integer pointer array
+    ! Deallocate integer pointer array (1D)
     subroutine dyn_dealloc_int(ptr)
         integer, pointer :: ptr(:)
         if (associated(ptr)) deallocate(ptr)
         nullify(ptr)
     end subroutine dyn_dealloc_int
 
+
     !----------------------------------------
-    ! Allocate real pointer array
-    integer function dyn_alloc_real(ptr, n) result(status)
+    ! Allocate real pointer array (1D)
+    integer function dyn_alloc_real(ptr, n, err) result(status)
         real, pointer :: ptr(:)
         integer, intent(in) :: n
+        type(error_type), intent(inout) :: err
         integer :: stat
 
         status = RETURN_SUCCESS
@@ -59,6 +66,8 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             nullify(ptr)
+            call err_handle(err, 1002, custom_1 = "Allocation failed for real pointer array", &
+                    called_from = "dyn_alloc_real in dynamic_allocation_mod")
         end if
     end function dyn_alloc_real
 
@@ -68,11 +77,13 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_real
 
+
     !----------------------------------------
-    ! Allocate double precision pointer array
-    integer function dyn_alloc_double(ptr, n) result(status)
+    ! Allocate double precision pointer array (1D)
+    integer function dyn_alloc_double(ptr, n, err) result(status)
         double precision, pointer :: ptr(:)
         integer, intent(in) :: n
+        type(error_type), intent(inout) :: err
         integer :: stat
 
         status = RETURN_SUCCESS
@@ -81,6 +92,8 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             nullify(ptr)
+            call err_handle(err, 1003, custom_1 = "Allocation failed for double precision pointer array", &
+                    called_from = "dyn_alloc_double in dynamic_allocation_mod")
         end if
     end function dyn_alloc_double
 
@@ -90,11 +103,39 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_double
 
+
     !----------------------------------------
-    ! Allocate logical pointer array
-    integer function dyn_alloc_logical(ptr, n) result(status)
+    ! Allocate double precision pointer array (2D)
+    integer function dyn_alloc_double_2d(ptr, n1, n2, err) result(status)
+        double precision, pointer :: ptr(:, :)
+        integer, intent(in) :: n1, n2
+        type(error_type), intent(inout) :: err
+        integer :: stat
+
+        status = RETURN_SUCCESS
+        if (associated(ptr)) deallocate(ptr)
+        allocate(ptr(n1, n2), stat = stat)
+        if (stat /= 0) then
+            status = RETURN_FAIL
+            nullify(ptr)
+            call err_handle(err, 1004, custom_1 = "Allocation failed for 2D double precision pointer array", &
+                    called_from = "dyn_alloc_double_2d in dynamic_allocation_mod")
+        end if
+    end function dyn_alloc_double_2d
+
+    subroutine dyn_dealloc_double_2d(ptr)
+        double precision, pointer :: ptr(:, :)
+        if (associated(ptr)) deallocate(ptr)
+        nullify(ptr)
+    end subroutine dyn_dealloc_double_2d
+
+
+    !----------------------------------------
+    ! Allocate logical pointer array (1D)
+    integer function dyn_alloc_logical(ptr, n, err) result(status)
         logical, pointer :: ptr(:)
         integer, intent(in) :: n
+        type(error_type), intent(inout) :: err
         integer :: stat
 
         status = RETURN_SUCCESS
@@ -103,6 +144,8 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             nullify(ptr)
+            call err_handle(err, 1005, custom_1 = "Allocation failed for logical pointer array", &
+                    called_from = "dyn_alloc_logical in dynamic_allocation_mod")
         end if
     end function dyn_alloc_logical
 
@@ -112,11 +155,13 @@ contains
         nullify(ptr)
     end subroutine dyn_dealloc_logical
 
+
     !----------------------------------------
-    ! Allocate allocatable character array with deferred length
-    integer function dyn_alloc_char(ptr, n, lenval) result(status)
+    ! Allocate allocatable character array with deferred length (1D)
+    integer function dyn_alloc_char(ptr, n, lenval, err) result(status)
         character(len = :), allocatable :: ptr(:)
         integer, intent(in) :: n, lenval
+        type(error_type), intent(inout) :: err
         integer :: stat
         character(len = lenval) :: mold_var
 
@@ -126,6 +171,8 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             if (allocated(ptr)) deallocate(ptr)
+            call err_handle(err, 1006, custom_1 = "Allocation failed for allocatable character array", &
+                    called_from = "dyn_alloc_char in dynamic_allocation_mod")
         end if
     end function dyn_alloc_char
 
@@ -134,11 +181,13 @@ contains
         if (allocated(ptr)) deallocate(ptr)
     end subroutine dyn_dealloc_char
 
+
     !----------------------------------------
-    ! Allocate fixed-length (len=32) character pointer array
-    integer function dyn_alloc_char_fixed32(ptr, n) result(status)
+    ! Allocate fixed-length (len=32) character pointer array (1D)
+    integer function dyn_alloc_char_fixed32(ptr, n, err) result(status)
         character(len = 32), pointer :: ptr(:)
         integer, intent(in) :: n
+        type(error_type), intent(inout) :: err
         integer :: stat
 
         status = RETURN_SUCCESS
@@ -147,6 +196,8 @@ contains
         if (stat /= 0) then
             status = RETURN_FAIL
             nullify(ptr)
+            call err_handle(err, 1007, custom_1 = "Allocation failed for fixed-length character array", &
+                    called_from = "dyn_alloc_char_fixed32 in dynamic_allocation_mod")
         end if
     end function dyn_alloc_char_fixed32
 
