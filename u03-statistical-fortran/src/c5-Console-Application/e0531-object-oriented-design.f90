@@ -11,7 +11,7 @@ module elogit_data_mod
     public :: nullify_elogit_session
 
     integer, parameter :: var_name_length = 64
-    integer, parameter :: case_id_length = 64
+    integer, parameter :: case_id_length = 1024
 
     type :: dataset_type
         sequence
@@ -24,8 +24,19 @@ module elogit_data_mod
 
     type :: elogit_session_type
         sequence
+
+        ! Session state
         logical :: is_null = .true.
+
+        ! Main data container
         type(dataset_type) :: dataset
+
+        ! Metadata
+        character(len = 64) :: session_name = "unnamed_session"
+        character(len = 64) :: user_id = "unknown_user"
+        character(len = 32) :: date_created = "unknown_date"
+        character(len = 32) :: date_modified = "unknown_date"
+        integer(kind = our_int) :: version = 1
     end type elogit_session_type
 
 

@@ -3,6 +3,7 @@ module elogit_data_io_mod
     use error_handler
     use elogit_data_mod
     use elogit_control_mod
+    use elogit_session_load_mod
     implicit none
     private
 
@@ -76,8 +77,8 @@ contains
             if (kase == nkase) exit
         end do
 
-        ! ! Store matrix and case IDs into session object
-        if (put_elogit_data_matrix(data_matrix, session, err) == RETURN_FAIL) goto 800
+        ! Store matrix and case IDs into session object
+        if (put_elogit_data_matrix(data_matrix, nkase, nvar, session, err) == RETURN_FAIL) goto 800
         if (case_id_present) then
             if (put_elogit_case_id(case_id, session, err) == RETURN_FAIL) goto 800
         end if

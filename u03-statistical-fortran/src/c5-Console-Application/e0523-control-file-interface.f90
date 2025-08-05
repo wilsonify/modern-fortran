@@ -7,6 +7,7 @@ module elogit_control_mod
     private
     public :: elogit_ctrlfile_type, nullify_elogit_ctrlfile, read_elogit_ctrlfile
     public :: file_name_length, var_name_length, ctrl_line_width
+    public :: skip_comment_lines
 
     ! Configuration parameters
 
@@ -36,7 +37,6 @@ module elogit_control_mod
         integer(our_int), pointer :: pred_col(:) => null()
         character(len = var_name_length), pointer :: pred_names(:) => null()
     end type elogit_ctrlfile_type
-
 
 
 contains
@@ -135,9 +135,8 @@ contains
     end function read_elogit_ctrlfile
 
 
-
     !-------------------------------
-    ! Dummy comment skipper
+    ! comment skipper
     !-------------------------------
     integer(our_int) function skip_comment_lines(unit, current_line) result(answer)
         integer, intent(in) :: unit
