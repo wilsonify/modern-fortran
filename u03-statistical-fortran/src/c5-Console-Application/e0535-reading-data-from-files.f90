@@ -9,6 +9,7 @@ module elogit_data_io_mod
 
     ! Make public what you want others to access
     public :: read_elogit_datafile
+    public :: read_elogit_namesfile
 
     ! Module name for error tracking
     character(len = *), parameter :: modname = "elogit_data_io_mod"
@@ -128,5 +129,88 @@ contains
         close(unit = data_file_handle)
         if (answer == RETURN_FAIL) ijunk = nullify_elogit_session(session, err)
     end function read_elogit_datafile
+
+    integer(kind = our_int) function read_elogit_namesfile(&
+            names_file_name, nvar, session, err, warn) result(answer)
+        implicit none
+
+        ! Constants
+        integer, parameter :: file_name_length = 1024
+        integer, parameter :: var_name_length = 32
+        integer, parameter :: names_line_width = 1024
+        integer, parameter :: names_file_handle = 43
+
+        ! Inputs
+        character(len = file_name_length), intent(in) :: names_file_name
+        integer(kind = our_int), intent(in) :: nvar
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        type(error_type), intent(inout), optional :: warn
+
+        ! Locals
+        character(len = var_name_length) :: var_names(nvar)
+        character(len = names_line_width) :: line
+        integer(kind = our_int) :: ivar, current_line, ijunk
+        logical :: truncate_warn
+        character(len = *), parameter :: subname = "read_elogit_namesfile"
+
+        ! Init
+        answer = RETURN_FAIL
+        truncate_warn = .false.
+
+        if (names_file_name == "") goto 700
+        if (nvar <= 0) goto 710
+
+        ! Open file
+        open(unit = names_file_handle, file = names_file_name, status = "old", err = 800)
+        current_line = 0
+
+        ! Skip comments
+        if (skip_comment_lines(names_file_handle, current_line) == RETURN_FAIL) goto 900
+
+        ! Read nvar names
+        do ivar = 1, nvar
+            current_line = current_line + 1
+            read(names_file_handle, "(A)", err = 900, end = 900) line
+            line = adjustl(line)
+            if (len_trim(line) > var_name_length) truncate_warn = .true.
+            var_names(ivar) = line(1:min(len_trim(line), var_name_length))
+        end do
+
+        ! Store names in session
+        if (put_elogit_var_names(var_names, session, err) == RETURN_FAIL) goto 800
+
+        ! Optional truncation warning
+        if (present(warn)) then
+            if (truncate_warn) then
+                call err_handle(warn, 1000, &
+                        called_from = subname // " in MOD " // modname, &
+                        custom_1 = "One or more variable names were truncated.")
+            end if
+        end if
+
+        answer = RETURN_SUCCESS
+        goto 999
+
+        700     call err_handle(err, 1000, called_from = subname // " in MOD " // modname, &
+                custom_1 = "No names file name specified.")
+        goto 999
+
+        710     call err_handle(err, 1000, called_from = subname // " in MOD " // modname, &
+                custom_1 = "Number of variables not positive.")
+        goto 999
+
+        800     call err_handle(err, 1, called_from = subname // " in MOD " // modname, &
+                file_name = names_file_name)
+        goto 999
+
+        900     call err_handle(err, 3, called_from = subname // " in MOD " // modname, &
+                file_name = names_file_name, line_no = current_line)
+        goto 999
+
+        999     continue
+        close(unit = names_file_handle)
+        if (answer == RETURN_FAIL) ijunk = nullify_elogit_session(session, err)
+    end function read_elogit_namesfile
 
 end module elogit_data_io_mod

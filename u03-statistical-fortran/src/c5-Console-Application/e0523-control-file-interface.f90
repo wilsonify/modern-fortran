@@ -11,7 +11,7 @@ module elogit_control_mod
 
     ! Configuration parameters
 
-    integer, parameter :: file_name_length = 256
+    integer, parameter :: file_name_length = 1024
     integer, parameter :: var_name_length = 32
     integer, parameter :: ctrl_line_width = 256
 

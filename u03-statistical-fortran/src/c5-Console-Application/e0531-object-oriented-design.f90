@@ -20,6 +20,7 @@ module elogit_data_mod
         real(kind = our_dble), pointer :: data_matrix(:, :) => null()
         character(len = var_name_length), pointer :: var_names(:) => null()
         character(len = case_id_length), pointer :: case_id(:) => null()
+        integer(kind = our_int) :: response_var_index = 0
     end type dataset_type
 
     type :: elogit_session_type

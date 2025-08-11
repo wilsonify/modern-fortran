@@ -9,11 +9,18 @@ module elogit_session_load_mod
     public :: put_elogit_data_matrix
     public :: put_elogit_var_names
     public :: put_elogit_case_id
+    public :: put_elogit_response
     character(len = 20), parameter :: modname = "elogit_data_load_mod"
     integer, parameter :: max_cases = 1000
     integer, parameter :: max_vars = 100
     integer, parameter :: case_id_length = 1024
 
+    interface put_elogit_response
+        module procedure put_elogit_response_idx
+        module procedure put_elogit_response_idx_array
+        module procedure put_elogit_response_name
+        module procedure put_elogit_response_name_array
+    end interface
 
 contains
 
@@ -142,4 +149,109 @@ contains
         answer = RETURN_SUCCESS
     end function put_elogit_case_id
 
+    ! -------------------------
+    ! integer scalar version
+    ! -------------------------
+    function put_elogit_response_idx(resp_idx, session, err) result(answer)
+        implicit none
+        integer(kind = our_int), intent(in) :: resp_idx
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer(kind = our_int) :: answer
+        character(len = *), parameter :: subname = "put_elogit_response_idx"
+
+        answer = RETURN_FAIL
+        if (session%dataset%is_null) then
+            call err_handle(err, 1000, called_from = subname, &
+                    custom_1 = "Cannot set response variable before loading data.")
+            return
+        end if
+
+        if (resp_idx < 1 .or. resp_idx > session%dataset%nvar) then
+            call err_handle(err, 1000, called_from = subname, &
+                    custom_1 = "Response variable column index out of range.")
+            return
+        end if
+
+        session%dataset%response_var_index = resp_idx
+        answer = RETURN_SUCCESS
+    end function put_elogit_response_idx
+
+    ! -------------------------
+    ! integer array version (uses first element)
+    ! -------------------------
+    function put_elogit_response_idx_array(resp_idx_arr, session, err) result(answer)
+        implicit none
+        integer(kind = our_int), intent(in) :: resp_idx_arr(:)
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer(kind = our_int) :: answer
+
+        if (size(resp_idx_arr) < 1) then
+            call err_handle(err, 1000, called_from = "put_elogit_response_idx_array", &
+                    custom_1 = "Empty resp_col array.")
+            answer = RETURN_FAIL
+            return
+        end if
+
+        answer = put_elogit_response_idx(resp_idx_arr(1), session, err)
+    end function put_elogit_response_idx_array
+
+    ! -------------------------
+    ! name scalar version
+    ! -------------------------
+    function put_elogit_response_name(resp_name, session, err) result(answer)
+        implicit none
+        character(len = *), intent(in) :: resp_name
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer(kind = our_int) :: answer
+        integer :: i
+        integer :: idx
+        character(len = *), parameter :: subname = "put_elogit_response_name"
+
+        answer = RETURN_FAIL
+        if (session%dataset%is_null) then
+            call err_handle(err, 1000, called_from = subname, &
+                    custom_1 = "Cannot set response variable before loading data.")
+            return
+        end if
+
+        idx = 0
+        do i = 1, session%dataset%nvar
+            if (trim(session%dataset%var_names(i)) == trim(resp_name)) then
+                idx = i
+                exit
+            end if
+        end do
+
+        if (idx == 0) then
+            call err_handle(err, 1000, called_from = subname, &
+                    custom_1 = "Response variable name not found in dataset.")
+            return
+        end if
+
+        session%dataset%response_var_index = idx
+        answer = RETURN_SUCCESS
+    end function put_elogit_response_name
+
+    ! -------------------------
+    ! name array version (uses first element)
+    ! -------------------------
+    function put_elogit_response_name_array(resp_name_arr, session, err) result(answer)
+        implicit none
+        character(len = *), intent(in) :: resp_name_arr(:)
+        type(elogit_session_type), intent(inout) :: session
+        type(error_type), intent(inout) :: err
+        integer(kind = our_int) :: answer
+
+        if (size(resp_name_arr) < 1) then
+            call err_handle(err, 1000, called_from = "put_elogit_response_name_array", &
+                    custom_1 = "Empty resp_name array.")
+            answer = RETURN_FAIL
+            return
+        end if
+
+        answer = put_elogit_response_name(resp_name_arr(1), session, err)
+    end function put_elogit_response_name_array
 end module elogit_session_load_mod
